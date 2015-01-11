@@ -1,0 +1,16 @@
+PODS:
+  - INTULocationManager (1.2.0)
+  - IQKeyboardManager (3.2.0.3)
+  - THLabel (1.4.6)
+
+DEPENDENCIES:
+  - INTULocationManager
+  - IQKeyboardManager
+  - THLabel (~> 1.4.6)
+
+SPEC CHECKSUMS:
+  INTULocationManager: 596c57e35a00ca1ee9d59bf4cc2b63dc299b580e
+  IQKeyboardManager: e0b33a5d821ab36ec47ce8ca9dc520030d6aac52
+  THLabel: 1cf3bad0f33c2bcdee075ce2e4f080791a374d95
+
+COCOAPODS: 0.35.0

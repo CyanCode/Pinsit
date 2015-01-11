@@ -1,0 +1,25 @@
+#Swift Files
+Pinsit/ServerSend.swift
+Pinsit/FriendData.swift
+Pinsit/Email.swift
+Pinsit/LoginUser.swift
+Pinsit/PostCredentials.swift
+Pinsit/ReportUser.swift
+Pinsit/VerifyNumber.swift
+Pinsit/StoreManage.swift
+Pinsit/File.swift
+Pinsit/ListWriter.swift
+Pinsit/PinVideo.swift
+Pinsit/MapViewController.swift
+Pinsit/AppDelegate.swift
+Pinsit/Pinsit/
+
+#Project Files
+*.xcodeproj
+*.xcworkspace
+
+#Dependencies
+Pods/
+
+#Misc
+Pinsit/tos.txt
