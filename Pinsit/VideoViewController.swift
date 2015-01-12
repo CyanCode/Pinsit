@@ -67,6 +67,7 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
 //            map.insertSubview(effect, aboveSubview: map)
 //        }
         
+        AppDelegate.loginCheck(self)
         self.view.bringSubviewToFront(recordBtn)
         self.view.bringSubviewToFront(switchCamBtn)
         self.view.bringSubviewToFront(torchBtn)

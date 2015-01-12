@@ -23,10 +23,13 @@ class AccountViewController: UIViewController, MKMapViewDelegate, CLLocationMana
         Styling.patternView(self.view)
         
         super.viewDidLoad()
-        
         map.delegate = self
         map.userInteractionEnabled = false
         startLocating()
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        AppDelegate.loginCheck(self)
     }
     
     func prepareInterface() {

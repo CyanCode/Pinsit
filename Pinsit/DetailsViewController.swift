@@ -27,6 +27,10 @@ class DetailsViewController: UIViewController, UIGestureRecognizerDelegate, UITe
         let img = Image()
         thumbnail = img.generateThumbnail()
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        AppDelegate.loginCheck(self)
+    }
 
     var zoom: ZoomMap!
     var effect: UIVisualEffectView!

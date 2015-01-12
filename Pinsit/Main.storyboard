@@ -213,7 +213,7 @@
         <!--Details View Controller-->
         <scene sceneID="E9d-9J-ftT">
             <objects>
-                <viewController id="Wvj-DK-BQ8" customClass="DetailsViewController" customModule="Pinsit" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="main" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Wvj-DK-BQ8" customClass="DetailsViewController" customModule="Pinsit" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="FqA-X0-aRb"/>
                         <viewControllerLayoutGuide type="bottom" id="tin-7E-uCq"/>

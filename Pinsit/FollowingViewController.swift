@@ -19,6 +19,10 @@ class FollowingViewController: UIViewController, UITableViewDelegate, UITableVie
         tableView.delegate = self
         tableView.registerClass(CustomCell.self, forHeaderFooterViewReuseIdentifier: "cell")
     }
+
+    override func viewDidAppear(animated: Bool) {
+        AppDelegate.loginCheck(self)
+    }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return names.count

@@ -15,6 +15,10 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var avatarView: UIImageView!
     @IBOutlet var videoDescription: UITextView!
     
+    override func viewDidAppear(animated: Bool) {
+        AppDelegate.loginCheck(self)
+    }
+    
     @IBAction func downloadButton(sender: AnyObject) {
         
     }

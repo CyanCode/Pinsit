@@ -6,6 +6,7 @@ target 'Pinsit' do
 pod 'IQKeyboardManager'
 pod 'THLabel', '~> 1.4.6'
 pod 'INTULocationManager'
+pod 'JVFloatLabeledTextField'
 
 end
 
