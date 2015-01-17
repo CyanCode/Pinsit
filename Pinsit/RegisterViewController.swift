@@ -41,7 +41,12 @@ class RegisterViewController: UIViewController {
                 PFUser.logInWithUsername(self.username.text, password: self.password.text, error: &error)
                 
                 if error == nil {
-                    //segue
+                    let f = File()
+                    if f.tosConfirmed() == false {
+                        self.performSegueWithIdentifier("tos", sender: self)
+                    } else {
+                        //Segue to Main
+                    }
                 }
             }
         })
