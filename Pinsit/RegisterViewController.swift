@@ -35,20 +35,43 @@ class RegisterViewController: UIViewController {
             return
         }
         
+        if number.text == "" || email.text == "" {
+            let alert = UIAlertController(title: "Almost", message: "It looks like you might have left some fields blank, care to try again?", preferredStyle: .Alert)
+            let action = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
+            alert.addAction(action)
+            self.presentViewController(alert, animated: true, completion: nil)
+            return
+        }
+        
+        let button = sender as UIButton
+        button.enabled = false
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             if cred.usernameAvailable(self) {
                 var error: NSError?
-                PFUser.logInWithUsername(self.username.text, password: self.password.text, error: &error)
+                var newUser = PFUser()
+                newUser.username = self.username.text
+                newUser.email = self.email.text
+                newUser.password = self.password.text
+                newUser["phone"] = self.number.text
+                
+                newUser.signUp(&error)
                 
                 if error == nil {
                     let f = File()
                     if f.tosConfirmed() == false {
                         self.performSegueWithIdentifier("tos", sender: self)
                     } else {
-                        //Segue to Main
+                        StoryboardManager.segueMain(self)
                     }
+                } else {
+                    let controller = UIAlertController(title: "Uh Oh", message: "We couldn't create your account, are you sure you're connected to the internet?", preferredStyle: .Alert)
+                    let cancel = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
+                    controller.addAction(cancel)
+                    self.presentViewController(controller, animated: true, completion: nil)
                 }
             }
+            
+            button.enabled = true
         })
     }
 }

@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14A386b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="RJe-zK-kE3">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -135,12 +136,12 @@
                                             <exclude reference="Ndt-dq-7rO"/>
                                         </mask>
                                         <mask key="constraints">
+                                            <exclude reference="985-MC-vKO"/>
+                                            <exclude reference="E7S-pE-we7"/>
                                             <exclude reference="Bxc-vp-Jcy"/>
                                             <exclude reference="OL0-gy-K2G"/>
                                             <exclude reference="T9z-Ag-L0N"/>
                                             <exclude reference="eSx-Ci-T3i"/>
-                                            <exclude reference="985-MC-vKO"/>
-                                            <exclude reference="E7S-pE-we7"/>
                                             <exclude reference="Pzc-9H-im7"/>
                                             <exclude reference="zTO-TY-eoo"/>
                                             <exclude reference="AsO-eN-T5C"/>
@@ -157,12 +158,12 @@
                                             <include reference="Ndt-dq-7rO"/>
                                         </mask>
                                         <mask key="constraints">
+                                            <include reference="985-MC-vKO"/>
+                                            <include reference="E7S-pE-we7"/>
                                             <include reference="Bxc-vp-Jcy"/>
                                             <include reference="OL0-gy-K2G"/>
                                             <include reference="T9z-Ag-L0N"/>
                                             <include reference="eSx-Ci-T3i"/>
-                                            <include reference="985-MC-vKO"/>
-                                            <include reference="E7S-pE-we7"/>
                                             <include reference="Pzc-9H-im7"/>
                                             <include reference="zTO-TY-eoo"/>
                                             <include reference="AsO-eN-T5C"/>
@@ -238,6 +239,7 @@
                         <viewControllerLayoutGuide type="bottom" id="DB2-dg-qSm"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="StL-iA-bzK">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0a4-H1-aZb">
@@ -273,9 +275,9 @@
                                 <exclude reference="scv-Iv-C8z"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="Brf-Q9-PaG"/>
                                 <exclude reference="H5t-9r-Oav"/>
                                 <exclude reference="YnY-VK-2LX"/>
-                                <exclude reference="Brf-Q9-PaG"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -284,9 +286,9 @@
                                 <include reference="scv-Iv-C8z"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Brf-Q9-PaG"/>
                                 <include reference="H5t-9r-Oav"/>
                                 <include reference="YnY-VK-2LX"/>
-                                <include reference="Brf-Q9-PaG"/>
                             </mask>
                         </variation>
                     </view>
@@ -304,6 +306,7 @@
                         <viewControllerLayoutGuide type="bottom" id="mFc-CP-uDW"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="gZ7-aV-0st">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="space.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="7AU-xo-HdR">
@@ -315,26 +318,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Password" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Q3T-Bs-Wcs" customClass="FormTextField" customModule="Pinsit" customModuleProvider="target">
-                                            <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="40" id="Yfr-41-P9k"/>
-                                            </constraints>
-                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                            <textInputTraits key="textInputTraits"/>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="Yfr-41-P9k"/>
-                                                </mask>
-                                            </variation>
-                                            <variation key="widthClass=compact">
-                                                <mask key="constraints">
-                                                    <include reference="Yfr-41-P9k"/>
-                                                </mask>
-                                            </variation>
-                                        </textField>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Email" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="egz-Vx-iSg" customClass="FormTextField" customModule="Pinsit" customModuleProvider="target">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="egz-Vx-iSg" customClass="FormTextField" customModule="Pinsit" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="40" id="m48-5z-fxV"/>
@@ -353,7 +337,7 @@
                                                 </mask>
                                             </variation>
                                         </textField>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Username" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5SG-p1-fOt" customClass="FormTextField" customModule="Pinsit" customModuleProvider="target">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="5SG-p1-fOt" customClass="FormTextField" customModule="Pinsit" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="40" id="QfK-mq-qzW"/>
@@ -422,7 +406,7 @@
                                                 <action selector="registerPressed:" destination="M9L-AG-ooH" eventType="touchUpInside" id="Pp8-oK-R1f"/>
                                             </connections>
                                         </button>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Phone Number" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qOT-F7-F4Z" customClass="FormTextField" customModule="Pinsit" customModuleProvider="target">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Phone Number" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="qOT-F7-F4Z" customClass="FormTextField" customModule="Pinsit" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="40" id="YLp-JI-8R4"/>
@@ -467,6 +451,25 @@
                                                 <action selector="infoPressed:" destination="M9L-AG-ooH" eventType="touchUpInside" id="ax8-Qj-KhB"/>
                                             </connections>
                                         </button>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Q3T-Bs-Wcs" customClass="FormTextField" customModule="Pinsit" customModuleProvider="target">
+                                            <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="40" id="Yfr-41-P9k"/>
+                                            </constraints>
+                                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="Yfr-41-P9k"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <mask key="constraints">
+                                                    <include reference="Yfr-41-P9k"/>
+                                                </mask>
+                                            </variation>
+                                        </textField>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="5SG-p1-fOt" firstAttribute="leading" secondItem="uOO-Bb-Ykn" secondAttribute="leading" constant="8" id="7UL-aL-K5K"/>
@@ -493,29 +496,29 @@
                                     </constraints>
                                     <variation key="default">
                                         <mask key="subviews">
-                                            <exclude reference="Q3T-Bs-Wcs"/>
                                             <exclude reference="egz-Vx-iSg"/>
                                             <exclude reference="5SG-p1-fOt"/>
                                             <exclude reference="sEW-75-kXJ"/>
                                             <exclude reference="qTE-tf-uv0"/>
                                             <exclude reference="qOT-F7-F4Z"/>
                                             <exclude reference="ki4-ay-idI"/>
+                                            <exclude reference="Q3T-Bs-Wcs"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <exclude reference="9na-8u-X5a"/>
-                                            <exclude reference="dR5-io-wer"/>
-                                            <exclude reference="Jqo-Y2-NY8"/>
-                                            <exclude reference="MtD-Vc-WKB"/>
-                                            <exclude reference="WHK-Ne-Pen"/>
-                                            <exclude reference="H6O-TT-7ws"/>
-                                            <exclude reference="IMj-pb-ajs"/>
-                                            <exclude reference="SDc-vs-Ihd"/>
                                             <exclude reference="7UL-aL-K5K"/>
                                             <exclude reference="9JR-Oz-No8"/>
                                             <exclude reference="yJU-Qe-OeO"/>
                                             <exclude reference="NGP-DY-NxM"/>
                                             <exclude reference="Oe8-gm-euD"/>
                                             <exclude reference="WPv-Pc-kFP"/>
+                                            <exclude reference="H6O-TT-7ws"/>
+                                            <exclude reference="IMj-pb-ajs"/>
+                                            <exclude reference="SDc-vs-Ihd"/>
+                                            <exclude reference="Jqo-Y2-NY8"/>
+                                            <exclude reference="MtD-Vc-WKB"/>
+                                            <exclude reference="WHK-Ne-Pen"/>
+                                            <exclude reference="9na-8u-X5a"/>
+                                            <exclude reference="dR5-io-wer"/>
                                             <exclude reference="F87-od-dg8"/>
                                             <exclude reference="H84-RM-yfH"/>
                                             <exclude reference="Sh8-35-z7p"/>
@@ -527,29 +530,29 @@
                                     </variation>
                                     <variation key="widthClass=compact">
                                         <mask key="subviews">
-                                            <include reference="Q3T-Bs-Wcs"/>
                                             <include reference="egz-Vx-iSg"/>
                                             <include reference="5SG-p1-fOt"/>
                                             <include reference="sEW-75-kXJ"/>
                                             <include reference="qTE-tf-uv0"/>
                                             <include reference="qOT-F7-F4Z"/>
                                             <include reference="ki4-ay-idI"/>
+                                            <include reference="Q3T-Bs-Wcs"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <include reference="9na-8u-X5a"/>
-                                            <include reference="dR5-io-wer"/>
-                                            <include reference="Jqo-Y2-NY8"/>
-                                            <include reference="MtD-Vc-WKB"/>
-                                            <include reference="WHK-Ne-Pen"/>
-                                            <include reference="H6O-TT-7ws"/>
-                                            <include reference="IMj-pb-ajs"/>
-                                            <include reference="SDc-vs-Ihd"/>
                                             <include reference="7UL-aL-K5K"/>
                                             <include reference="9JR-Oz-No8"/>
                                             <include reference="yJU-Qe-OeO"/>
                                             <include reference="NGP-DY-NxM"/>
                                             <include reference="Oe8-gm-euD"/>
                                             <include reference="WPv-Pc-kFP"/>
+                                            <include reference="H6O-TT-7ws"/>
+                                            <include reference="IMj-pb-ajs"/>
+                                            <include reference="SDc-vs-Ihd"/>
+                                            <include reference="Jqo-Y2-NY8"/>
+                                            <include reference="MtD-Vc-WKB"/>
+                                            <include reference="WHK-Ne-Pen"/>
+                                            <include reference="9na-8u-X5a"/>
+                                            <include reference="dR5-io-wer"/>
                                             <include reference="F87-od-dg8"/>
                                             <include reference="H84-RM-yfH"/>
                                             <include reference="Sh8-35-z7p"/>
@@ -625,6 +628,7 @@
                         <viewControllerLayoutGuide type="bottom" id="060-h3-3Vd"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="f2q-ot-rfK">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="space.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="8w7-Dr-HaF">
@@ -636,7 +640,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Email" placeholder="Username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HRJ-jW-WdU" customClass="FormTextField" customModule="Pinsit" customModuleProvider="target">
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HRJ-jW-WdU" customClass="FormTextField" customModule="Pinsit" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="-30" width="97" height="30"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="40" id="xgT-Wo-eq0"/>
@@ -727,13 +731,13 @@
                                             <exclude reference="1k6-V5-rqh"/>
                                             <exclude reference="KiI-9V-pqr"/>
                                             <exclude reference="vg5-gY-fJw"/>
-                                            <exclude reference="ON7-Y2-odu"/>
-                                            <exclude reference="cne-u1-GTi"/>
-                                            <exclude reference="ezg-mi-Qkm"/>
                                             <exclude reference="5Ch-sm-rM0"/>
                                             <exclude reference="H3q-hT-1Vo"/>
                                             <exclude reference="nro-Kv-49C"/>
                                             <exclude reference="ohk-p1-S7Y"/>
+                                            <exclude reference="ON7-Y2-odu"/>
+                                            <exclude reference="cne-u1-GTi"/>
+                                            <exclude reference="ezg-mi-Qkm"/>
                                         </mask>
                                     </variation>
                                     <variation key="widthClass=compact">
@@ -746,13 +750,13 @@
                                             <include reference="1k6-V5-rqh"/>
                                             <include reference="KiI-9V-pqr"/>
                                             <include reference="vg5-gY-fJw"/>
-                                            <include reference="ON7-Y2-odu"/>
-                                            <include reference="cne-u1-GTi"/>
-                                            <include reference="ezg-mi-Qkm"/>
                                             <include reference="5Ch-sm-rM0"/>
                                             <include reference="H3q-hT-1Vo"/>
                                             <include reference="nro-Kv-49C"/>
                                             <include reference="ohk-p1-S7Y"/>
+                                            <include reference="ON7-Y2-odu"/>
+                                            <include reference="cne-u1-GTi"/>
+                                            <include reference="ezg-mi-Qkm"/>
                                         </mask>
                                     </variation>
                                 </view>
@@ -776,14 +780,14 @@
                                 <exclude reference="Khc-N4-oaC"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="Emy-Si-rgG"/>
+                                <exclude reference="som-gv-wgJ"/>
                                 <exclude reference="OX4-Yz-row"/>
                                 <exclude reference="agR-NE-jzD"/>
                                 <exclude reference="avz-WV-SRW"/>
                                 <exclude reference="QSR-ya-QdK"/>
                                 <exclude reference="RcZ-OH-obc"/>
                                 <exclude reference="yRB-xB-Zm8"/>
-                                <exclude reference="Emy-Si-rgG"/>
-                                <exclude reference="som-gv-wgJ"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -792,14 +796,14 @@
                                 <include reference="Khc-N4-oaC"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="Emy-Si-rgG"/>
+                                <include reference="som-gv-wgJ"/>
                                 <include reference="OX4-Yz-row"/>
                                 <include reference="agR-NE-jzD"/>
                                 <include reference="avz-WV-SRW"/>
                                 <include reference="QSR-ya-QdK"/>
                                 <include reference="RcZ-OH-obc"/>
                                 <include reference="yRB-xB-Zm8"/>
-                                <include reference="Emy-Si-rgG"/>
-                                <include reference="som-gv-wgJ"/>
                             </mask>
                         </variation>
                     </view>
