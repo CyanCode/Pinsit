@@ -10,13 +10,20 @@ import UIKit
 
 class CustomTabBar: UITabBarController {
     override func viewDidLoad() {
-        tabBar.barTintColor = UIColor(string: "#242B2D")
+        tabBar.barTintColor = UIColor(string: "#252B2D")
         tabBar.tintColor = UIColor(string: "#FF2951")
         tabBar.selectedImageTintColor = UIColor(string: "#FF2951")
         
-//        for item in (tabBar.items as [UITabBarItem]) {
-//            let itemImg = item.image
-//            
-//        }
+        //Unselected text color
+        let unselected = UIColor.whiteColor()
+        let colorDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        
+        UITabBarItem.appearance().setTitleTextAttributes(colorDict, forState: .Normal)
+        UITabBarItem.appearance().setTitleTextAttributes(colorDict, forState: .Selected)
+        
+        //Unselected image color
+        for item in tabBar.items as [UITabBarItem] {
+            item.image = item.image?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+        }
     }
 }

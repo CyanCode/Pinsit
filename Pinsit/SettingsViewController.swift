@@ -9,19 +9,21 @@
 import UIKit
 import Social
 
-class SettingsViewController: UIViewController, UITableViewDelegate {
+class SettingsViewController: UITableViewController {
     @IBOutlet var upgrade: UITableViewCell!
     @IBOutlet var facebook: UITableViewCell!
     @IBOutlet var twitter: UITableViewCell!
     @IBOutlet var logout: UITableViewCell!
     @IBOutlet var removeAccount: UITableViewCell!
-    @IBOutlet var tableView: UITableView!
+    
+    var options: [String]!
     
     override func viewDidLoad() {
         self.tableView.delegate = self
+        self.tableView.tableFooterView = UIView(frame: CGRectZero)
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let tapped = self.tableView.cellForRowAtIndexPath(indexPath)!
         
         switch tapped {
@@ -35,7 +37,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
     }
     
     private func upgradeAccount() {
-        
+        let manager = StoreManager(responseV: self)
+        manager.startPurchase()
     }
     
     private func social(type: SocialType) {
@@ -45,7 +48,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
                 fb.setInitialText("Follow me on Pinsit @" + PFUser.currentUser().username)
                 self.presentViewController(fb, animated: true, completion: nil)
             } else {
-                let alert = UIAlertController(title: "Somethings Missing", message: "Make sure you have Facebook setup in your settings", preferredStyle: .Alert)
+                let alert = UIAlertController(title: "Somethings Missing", message: "Make sure you have Twitter setup in your settings", preferredStyle: .Alert)
                 let cancel = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
                 alert.addAction(cancel)
                 self.presentViewController(alert, animated: true, completion: nil)
@@ -56,7 +59,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate {
                 fb.setInitialText("Follow me on Pinsit @" + PFUser.currentUser().username)
                 self.presentViewController(fb, animated: true, completion: nil)
             } else {
-                let alert = UIAlertController(title: "Somethings Missing", message: "Make sure you have Twitter setup in your settings", preferredStyle: .Alert)
+                let alert = UIAlertController(title: "Somethings Missing", message: "Make sure you have Facebook setup in your settings", preferredStyle: .Alert)
                 let cancel = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
                 alert.addAction(cancel)
                 self.presentViewController(alert, animated: true, completion: nil)

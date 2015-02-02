@@ -12,9 +12,9 @@ import UIKit
 class StoreManager: NSObject {
     var productID: NSString?
     var purchase: Purchase?
-    var responseView: UIView
+    var responseView: UIViewController
     
-    init(responseV: UIView) {
+    init(responseV: UIViewController) {
         self.responseView = responseV
         self.productID = "com.walkerchristie.Pinit.Pro"
     }
