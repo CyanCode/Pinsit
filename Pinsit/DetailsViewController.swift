@@ -41,7 +41,7 @@ class DetailsViewController: UIViewController, UIGestureRecognizerDelegate, UITe
         }
         
         if effect == nil {
-            effect = UIVisualEffectView(effect: UIBlurEffect(style: .Dark))
+            effect = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
             effect.frame = map.bounds
             map.insertSubview(effect, aboveSubview: map)
         }
