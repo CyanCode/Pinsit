@@ -36,7 +36,5 @@ class Coordinate {
         alertView.addAction(cancel)
         
         return alertView
-    }
-    
-    
+    } 
 }

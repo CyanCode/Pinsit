@@ -19,7 +19,7 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
         tableData = [String]() //Default value
         userFollowing = [String]() //Default value
         followingValues = [Bool]()
-
+        
         userSearch.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
@@ -40,6 +40,8 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
         
         cell?.userLabel.text = tableData[indexPath.row]
         cell?.isFollowing = followingValues[indexPath.row]
+        cell?.followerButton.tag = indexPath.row
+        cell?.followerButton.addTarget(self, action: "cellButtonTapped:", forControlEvents: UIControlEvents.TouchUpInside)
         
         if followingValues[indexPath.row] == true {
             cell?.followerButton.imageView?.image = UIImage(named: "remove")
@@ -122,10 +124,69 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
         }
     }
     
+    ///Removes user from followers list, updates to server
+    private func removeFollowing(user: String) {
+        var index: Int!
+        
+        for var i = 0; i < countElements(userFollowing); i++ {
+            if user == userFollowing[i] {
+                index = i
+                break
+            }
+        }
+        
+        userFollowing.removeAtIndex(index)
+        
+        var query = PFQuery(className: "Followers")
+        query.whereKey("username", equalTo: PFUser.currentUser().username)
+        query.findObjectsInBackgroundWithBlock { (objects: [AnyObject]!, error: NSError!) -> Void in
+            let object = objects[0] as PFObject
+            object["following"] = self.userFollowing
+            object.saveInBackground()
+            self.tableView.reloadData()
+        }
+    }
     
+    ///Adds user to followers list, updates to server
+    private func addFollowing(user: String) {
+        userFollowing.append(user)
+        
+        var query = PFQuery(className: "Followers")
+        query.whereKey("username", equalTo: PFUser.currentUser().username)
+        query.findObjectsInBackgroundWithBlock { (objects: [AnyObject]!, error: NSError!) -> Void in
+            let object = objects[0] as PFObject
+            object["following"] = self.userFollowing
+            object.saveInBackground()
+            self.tableView.reloadData()
+        }
+    }
+    
+    ///MARK: Selector methods
+    ///Called when UITableView is tapped
     func tableTapped(gesture: UITapGestureRecognizer) {
         userSearch.resignFirstResponder()
         userSearch.text = ""
         self.updateWithUserFollowing()
+    }
+    
+    ///Called when a specific FollowersCell is tapped
+    func cellButtonTapped(sender: UIButton) {
+        let cell = tableView.cellForRowAtIndexPath(NSIndexPath(forRow: sender.tag, inSection: 0)) as FollowersCell
+        let following = followingValues[sender.tag]
+        cell.followerButton.imageView?.image = following ? UIImage(named: "add") : UIImage(named: "remove")
+        
+        if following == true {
+            let confirmation = UIAlertController(title: "Really?", message: "Are you sure you would like to remove \(cell.userLabel.text!) from your following list?", preferredStyle: .Alert)
+            let cancel = UIAlertAction(title: "Nevermind", style: .Cancel, handler: nil)
+            let confirm = UIAlertAction(title: "Yes", style: .Default, handler: { (action) -> Void in
+                self.followingValues[sender.tag] = false
+                self.removeFollowing(cell.userLabel.text!)
+            })
+            confirmation.addAction(cancel); confirmation.addAction(confirm)
+            self.presentViewController(confirmation, animated: true, completion: nil)
+        } else {
+            followingValues[sender.tag] = true
+            self.addFollowing(cell.userLabel.text!)
+        }
     }
 }
