@@ -468,7 +468,9 @@
                                     <constraint firstItem="QpT-KY-pXA" firstAttribute="leading" secondItem="CaG-0T-U3a" secondAttribute="trailing" id="EgR-WT-QkS"/>
                                     <constraint firstAttribute="bottom" secondItem="QpT-KY-pXA" secondAttribute="bottom" id="PgZ-aa-2XD"/>
                                     <constraint firstItem="CaG-0T-U3a" firstAttribute="leading" secondItem="WjD-sa-i9K" secondAttribute="leading" id="XeS-Ts-5lj"/>
-                                    <constraint firstAttribute="height" constant="72" id="v6f-7F-Zhr"/>
+                                    <constraint firstAttribute="height" constant="72" id="v6f-7F-Zhr">
+                                        <variation key="widthClass=compact" constant="64"/>
+                                    </constraint>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="subviews">

@@ -27,22 +27,24 @@ class PinController {
             INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(INTULocationAccuracy.House, timeout: 5) { (location, accuracy, status) -> Void in
                 if status == .Success {
                     self.query = PFQuery(className: "SentData")
-                    self.query?.whereKey("location", nearGeoPoint: PFGeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude))
-                    let objects = self.query?.findObjects()
-                    for obj in objects as [PFObject] {
-                        annotations.append(self.objectToAnnotation(obj))
-                    }
-                    
-                    completion(annotations: annotations)
+                    self.query!.whereKey("location", nearGeoPoint: PFGeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude))
+                    self.query!.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
+                        for obj in objects as [PFObject] {
+                            annotations.append(self.objectToAnnotation(obj))
+                        }
+                        
+                        completion(annotations: annotations)
+                    })
                 }
             }
         } else {
-            let objects = query!.findObjects()
-            for obj in objects as [PFObject] {
-                annotations.append(self.objectToAnnotation(obj))
-            }
-            
-            completion(annotations: annotations)
+            query!.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
+                for obj in objects as [PFObject] {
+                    annotations.append(self.objectToAnnotation(obj))
+                }
+                
+                completion(annotations: annotations)
+            })
         }
     }
     

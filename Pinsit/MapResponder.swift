@@ -25,6 +25,7 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
         self.coordinate = CLLocationCoordinate2DMake(0, 0)
     }
     
+    ///MARK: Delegate methods
     func mapViewDidFailLoadingMap(mapView: MKMapView!, withError error: NSError!) {
         println("Error loading map")
     }
@@ -63,6 +64,11 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
         return annView
     }
     
+    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    ///MARK: Responder
     var yPos: CGFloat!
     func mapTapped(tap: UITapGestureRecognizer) {
         let toolbar = self.viewControl.currentMap.toolbar
@@ -71,25 +77,30 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
             yPos = 0.0
             toolbar.hidden = false
         } else {
-            yPos = -77.0
+            yPos = -64.0
         }
         
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             toolbar.frame = CGRectMake(0, self.yPos, toolbar.frame.width, toolbar.frame.height)
             }) { (finished) -> Void in
-                if self.yPos == -77 { toolbar.hidden = true }
+                self.viewControl.currentMap.searchBar.resignFirstResponder() //Close the search first
+                if self.yPos == -64 { toolbar.hidden = true }
         }
     }
     
-    func gestureRecognizer(gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWithGestureRecognizer otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
+    ///MARK: Methods
     func addAnnotations(annotations: [PAnnotation]) {
         self.viewControl.currentMap.mapView.addAnnotations(annotations)
     }
     
     func removeAnnotations() {
         self.viewControl.currentMap.mapView.removeAnnotations(self.viewControl.currentMap.mapView.annotations)
+    }
+    
+    func zoomCurrentLocation() {
+        INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(.House, timeout: 5) { (location, accuracy, status) -> Void in
+            let region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(0.05, 0.05))
+            self.viewControl.currentMap.mapView.setRegion(region, animated: true)
+        }
     }
 }
