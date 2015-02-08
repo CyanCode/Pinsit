@@ -44,10 +44,9 @@ class PAnnotation: NSObject, MKAnnotation {
                 let send = ServerSend(ann: ann, vc: vc)
                 send.sendDataAsync()
             } else {
-                let okay = UIAlertAction(title: "Try Again", style: .Default, handler: { (action) in
-                    PAnnotation.constructAnnotation(vc) })
                 let alert = Coordinate.locationError()
-                alert.addAction(okay)
+                alert.addAction(UIAlertAction(title: "Try Again", style: .Default, handler: { (action) in
+                    PAnnotation.constructAnnotation(vc) }))
                 vc.presentViewController(alert, animated: true, completion: nil)
             }
         }

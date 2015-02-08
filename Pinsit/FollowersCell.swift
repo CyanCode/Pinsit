@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FollowersCell: PFTableViewCell {
+class FollowersCell: UITableViewCell {
     @IBOutlet var userLabel: UILabel!
     @IBOutlet var followerButton: UIButton!
     var isFollowing: Bool!

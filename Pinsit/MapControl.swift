@@ -23,19 +23,31 @@ class MapControl {
         
     }
     
-    ///Populates map view with default pins
+    ///Starts populating mapView with default pins
     func startMapPopulation() {
-        
+        self.searchWithSortQuery(nil) //Pass nil to search with default query
     }
     
     ///Pulls pins with specified sort query
+    ///
+    ///* If query is nil default pins are pulled
+    ///* Else queried pins are pulled
+    ///
+    ///:param: query PFQuery that is to be searched for and added
     func searchWithSortQuery(query: PFQuery?) {
         dispatch_async(dispatch_get_main_queue()) { //Return to the main queue
-            if query != nil {
-                query?.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
-                    //Pins
-                })
+            self.currentMap.responder.removeAnnotations()
+            var control: PinController
+            
+            if query == nil {
+                control = PinController()
+            } else {
+                control = PinController(query: query!)
             }
+            
+            control.annotationsFromQuery({ (annotations) -> Void in
+                self.currentMap.responder.addAnnotations(annotations)
+            })
         }
     }
     
@@ -44,7 +56,7 @@ class MapControl {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             let sheet = UIAlertController(title: "Sorting", message: "Use the power of sorting to find great pins!  Feel free to choose one of the options below.", preferredStyle: .ActionSheet)
             sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-            sheet.addAction(UIAlertAction(title: "Friends", style: .Default, handler: { (action) -> Void in
+            sheet.addAction(UIAlertAction(title: "Following", style: .Default, handler: { (action) -> Void in
                 self.searchWithSortQuery(self.getFriendQuery())
             }))
             sheet.addAction(UIAlertAction(title: "Trending", style: .Default, handler: { (action) -> Void in

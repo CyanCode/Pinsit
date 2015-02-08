@@ -142,8 +142,9 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
         query.findObjectsInBackgroundWithBlock { (objects: [AnyObject]!, error: NSError!) -> Void in
             let object = objects[0] as PFObject
             object["following"] = self.userFollowing
-            object.saveInBackground()
-            self.tableView.reloadData()
+            object.saveInBackgroundWithBlock({ (success, error) -> Void in
+                self.tableView.reloadData()
+            })
         }
     }
     
@@ -156,8 +157,9 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
         query.findObjectsInBackgroundWithBlock { (objects: [AnyObject]!, error: NSError!) -> Void in
             let object = objects[0] as PFObject
             object["following"] = self.userFollowing
-            object.saveInBackground()
-            self.tableView.reloadData()
+            object.saveInBackgroundWithBlock({ (success, error) -> Void in
+                self.tableView.reloadData()
+            })
         }
     }
     

@@ -415,39 +415,139 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="jEU-St-r2P">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                             </mapView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WjD-sa-i9K" userLabel="toolbar">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QpT-KY-pXA">
+                                        <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="1QV-mE-rXn"/>
+                                            <constraint firstAttribute="width" constant="44" id="pSE-DN-iAA"/>
+                                        </constraints>
+                                        <state key="normal" title="Button" image="reload.png">
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="1QV-mE-rXn"/>
+                                                <exclude reference="pSE-DN-iAA"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="widthClass=compact">
+                                            <mask key="constraints">
+                                                <include reference="1QV-mE-rXn"/>
+                                                <include reference="pSE-DN-iAA"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <action selector="refreshPressed:" destination="Mco-Fr-BgA" eventType="touchUpInside" id="kiv-zg-g15"/>
+                                        </connections>
+                                    </button>
+                                    <searchBar contentMode="redraw" searchBarStyle="minimal" translatesAutoresizingMaskIntoConstraints="NO" id="CaG-0T-U3a">
+                                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="44" id="W2e-p4-s5W"/>
+                                        </constraints>
+                                        <textInputTraits key="textInputTraits"/>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="W2e-p4-s5W"/>
+                                            </mask>
+                                        </variation>
+                                        <variation key="widthClass=compact">
+                                            <mask key="constraints">
+                                                <include reference="W2e-p4-s5W"/>
+                                            </mask>
+                                        </variation>
+                                    </searchBar>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="CaG-0T-U3a" secondAttribute="bottom" id="4y2-86-mc8"/>
+                                    <constraint firstAttribute="trailing" secondItem="QpT-KY-pXA" secondAttribute="trailing" id="91W-Ic-P76"/>
+                                    <constraint firstItem="QpT-KY-pXA" firstAttribute="leading" secondItem="CaG-0T-U3a" secondAttribute="trailing" id="EgR-WT-QkS"/>
+                                    <constraint firstAttribute="bottom" secondItem="QpT-KY-pXA" secondAttribute="bottom" id="PgZ-aa-2XD"/>
+                                    <constraint firstItem="CaG-0T-U3a" firstAttribute="leading" secondItem="WjD-sa-i9K" secondAttribute="leading" id="XeS-Ts-5lj"/>
+                                    <constraint firstAttribute="height" constant="72" id="v6f-7F-Zhr"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="QpT-KY-pXA"/>
+                                        <exclude reference="CaG-0T-U3a"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <exclude reference="v6f-7F-Zhr"/>
+                                        <exclude reference="4y2-86-mc8"/>
+                                        <exclude reference="XeS-Ts-5lj"/>
+                                        <exclude reference="91W-Ic-P76"/>
+                                        <exclude reference="EgR-WT-QkS"/>
+                                        <exclude reference="PgZ-aa-2XD"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="subviews">
+                                        <include reference="QpT-KY-pXA"/>
+                                        <include reference="CaG-0T-U3a"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <include reference="v6f-7F-Zhr"/>
+                                        <include reference="4y2-86-mc8"/>
+                                        <include reference="XeS-Ts-5lj"/>
+                                        <include reference="91W-Ic-P76"/>
+                                        <include reference="EgR-WT-QkS"/>
+                                        <include reference="PgZ-aa-2XD"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstAttribute="trailingMargin" secondItem="jEU-St-r2P" secondAttribute="trailing" constant="-16" id="6oM-jj-GtE"/>
+                            <constraint firstItem="WjD-sa-i9K" firstAttribute="leading" secondItem="sNM-Mj-wvo" secondAttribute="leadingMargin" constant="-16" id="OB3-8a-K8G"/>
                             <constraint firstItem="jEU-St-r2P" firstAttribute="top" secondItem="sNM-Mj-wvo" secondAttribute="topMargin" id="Vhy-G2-tfx"/>
+                            <constraint firstItem="WjD-sa-i9K" firstAttribute="top" secondItem="sNM-Mj-wvo" secondAttribute="topMargin" id="W8K-sP-ERX"/>
                             <constraint firstItem="jEU-St-r2P" firstAttribute="leading" secondItem="sNM-Mj-wvo" secondAttribute="leadingMargin" constant="-16" id="Xa2-82-iFH"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="WjD-sa-i9K" secondAttribute="trailing" constant="-16" id="ujm-Hs-Fwr"/>
                             <constraint firstItem="8fU-87-1r8" firstAttribute="top" secondItem="jEU-St-r2P" secondAttribute="bottom" id="vwN-mv-UUY"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="jEU-St-r2P"/>
+                                <exclude reference="WjD-sa-i9K"/>
                             </mask>
                             <mask key="constraints">
-                                <exclude reference="vwN-mv-UUY"/>
+                                <exclude reference="OB3-8a-K8G"/>
+                                <exclude reference="W8K-sP-ERX"/>
+                                <exclude reference="ujm-Hs-Fwr"/>
                                 <exclude reference="6oM-jj-GtE"/>
                                 <exclude reference="Vhy-G2-tfx"/>
                                 <exclude reference="Xa2-82-iFH"/>
+                                <exclude reference="vwN-mv-UUY"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="jEU-St-r2P"/>
+                                <include reference="WjD-sa-i9K"/>
                             </mask>
                             <mask key="constraints">
-                                <include reference="vwN-mv-UUY"/>
+                                <include reference="OB3-8a-K8G"/>
+                                <include reference="W8K-sP-ERX"/>
+                                <include reference="ujm-Hs-Fwr"/>
                                 <include reference="6oM-jj-GtE"/>
                                 <include reference="Vhy-G2-tfx"/>
                                 <include reference="Xa2-82-iFH"/>
+                                <include reference="vwN-mv-UUY"/>
                             </mask>
                         </variation>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="map.png" id="R9c-BJ-nS1"/>
+                    <connections>
+                        <outlet property="mapView" destination="jEU-St-r2P" id="eZW-wa-PmC"/>
+                        <outlet property="searchBar" destination="CaG-0T-U3a" id="GgE-X0-oSf"/>
+                        <outlet property="toolbar" destination="WjD-sa-i9K" id="X4Y-hH-HCD"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hUL-8T-l7V" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1001,6 +1101,7 @@
         <image name="map.png" width="30" height="30"/>
         <image name="post.png" width="30" height="30"/>
         <image name="record-inactive.png" width="80" height="80"/>
+        <image name="reload.png" width="80" height="80"/>
         <image name="remove.png" width="80" height="80"/>
         <image name="settings.png" width="30" height="30"/>
         <image name="switch.png" width="45" height="45"/>
