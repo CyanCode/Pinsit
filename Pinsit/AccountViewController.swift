@@ -10,77 +10,89 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class AccountViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate, UIGestureRecognizerDelegate {
+class AccountViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var map: MKMapView!
     @IBOutlet var karmaLabel: UILabel!
     @IBOutlet var followingLabel: UILabel!
-    @IBOutlet var followersLabel: UILabel!
+    @IBOutlet var postAmountLabel: UILabel!
+    @IBOutlet var usernameLabel: UILabel!
     var locationManager: CLLocationManager!
+    var detailManager: AccountDetails!
     
     override func viewDidLoad() {
-        prepareInterface()
-        Styling.patternView(self.view)
+        self.detailManager = AccountDetails(viewController: self)
         
         super.viewDidLoad()
-        map.delegate = self
         map.userInteractionEnabled = false
+        loadInformation()
+        toggleHiddenLabels(true)
+        readyButtons()
         startLocating()
+        prepareInterface()
     }
     
     override func viewDidAppear(animated: Bool) {
         AppDelegate.loginCheck(self)
     }
     
+    override func viewDidLayoutSubviews() {
+        //        let cover = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+        //        cover.frame = map.frame
+        //        map.addSubview(cover)
+    }
+    
+    func toggleHiddenLabels(hidden: Bool) {
+        for label in [followingLabel, karmaLabel, postAmountLabel] {
+            label.hidden = hidden
+        }
+    }
+    
+    func readyButtons() {
+        for label in [followingLabel, karmaLabel, postAmountLabel] {
+            label.backgroundColor = UIColor(red: 255/255, green: 41/255, blue: 81/255, alpha: 1)
+            label.layer.cornerRadius = 3
+            label.textColor = UIColor.whiteColor()
+            label.layer.masksToBounds = true
+            self.view.sendSubviewToBack(label)
+        }
+    }
+    
     func prepareInterface() {
-        let details = AccountDetails()
-        profileImage.image = details.loadImage()
+        profileImage.image = detailManager.loadImage()
         profileImage.layer.masksToBounds = true
         profileImage.layer.cornerRadius = 3
         profileImage.layer.borderWidth = 1
-        profileImage.layer.borderColor = UIColor(string: "#E6E5E7").CGColor
+        profileImage.layer.borderColor = UIColor(string: "#FF2951").CGColor
         profileImage.alpha = 1.0
         
         var imageTap = UITapGestureRecognizer(target: self, action: Selector("profileTapped:"))
-        imageTap.numberOfTapsRequired = 1
         profileImage.userInteractionEnabled = true
         profileImage.addGestureRecognizer(imageTap)
     }
     
-    func startLocating() {
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.distanceFilter = kCLDistanceFilterNone
-        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        locationManager.startUpdatingLocation()
-    }
-    
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        let location = locations.last as CLLocation
+    func loadInformation() {
+        self.usernameLabel.text = PFUser.currentUser().username
+        let progress = JGProgressHUD(style: .Dark)
+        progress.textLabel.text = "Loading"
+        progress.showInView(self.view, animated: true)
+        self.view.bringSubviewToFront(progress)
         
-        //.05 = all of nahant
-        //.005 = our street
-        var span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-        var region = MKCoordinateRegionMake(location.coordinate, span)
-        map.setRegion(region, animated: true)
-    }
-    
-    func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        if status == CLAuthorizationStatus.NotDetermined && manager.respondsToSelector("requestAlwaysAuthorization") {
-            manager.requestAlwaysAuthorization()
+        detailManager.setAccountDetails { () -> Void in
+            progress.dismiss()
+            self.toggleHiddenLabels(false)
         }
     }
     
-    //MARK: Toggle Menu
-    func addGesture() {
-        var edge = UIScreenEdgePanGestureRecognizer(target: self, action: "toggleMenu:")
-        edge.edges = UIRectEdge.Right
-        edge.delegate = self
-        self.view.addGestureRecognizer(edge)
+    func startLocating() {
+        INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(.House, timeout: 5) { (location, accuracy, status) -> Void in
+            let span = MKCoordinateSpanMake(0.05, 0.05)
+            let region = MKCoordinateRegionMake(location.coordinate, span)
+            self.map.setRegion(region, animated: true)
+        }
     }
     
-    func toggleMenu(sender: UIGestureRecognizer) {
-        let control = tabBarController
-        (tabBarController as SidebarController).sidebar.showInViewController(self, animated: true)
+    func profileTapped(gesture: UITapGestureRecognizer) {
+        
     }
 }

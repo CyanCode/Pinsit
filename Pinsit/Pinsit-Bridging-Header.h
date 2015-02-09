@@ -11,3 +11,4 @@
 #import "IQKeyboardManager.h"
 #import "THLabel.h"
 #import "INTULocationManager.h"
+#import "JGProgressHUD.h"

@@ -9,9 +9,11 @@
 import Foundation
 
 class AccountDetails {
+    var viewController: AccountViewController!
     var path: NSString!
-    
-    init() {
+
+    init(viewController: AccountViewController) {
+        self.viewController = viewController
         let fm = NSFileManager.defaultManager()
         path = File().documentsPath().stringByAppendingPathComponent("account.plist")
         
@@ -20,22 +22,33 @@ class AccountDetails {
         }
     }
     
-    func setDetails(karma: NSNumber, followers: NSNumber, following: NSNumber) {
-        let keys = NSArray(objects: "karma", "followers", "following")
-        let values = NSArray(objects: karma, followers, following)
-        let dict = NSDictionary(objects: values, forKeys: keys)
+    ///Sets following, active posts, and karma level from the server
+    ///
+    ///:params: completion Called when account details have been updated
+    func setAccountDetails(completion: () -> Void) {
+        var error: NSError?
+        let followQuery = PFQuery(className: "Followers")
+        followQuery.whereKey("username", equalTo: PFUser.currentUser().username)
 
-        dict.writeToFile(path, atomically: true)
-    }
-    
-    func loadDetails() -> (karma: NSNumber, followers: NSNumber, following: NSNumber) {
-        let details = NSDictionary(contentsOfFile: path)
-        
-        let karma = details?.valueForKey("karma") as NSNumber
-        let followers = details?.valueForKey("followers") as NSNumber
-        let following = details?.valueForKey("following") as NSNumber
-        
-        return (karma, followers, following)
+        followQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
+            if countElements(objects) > 0 {
+                let amount = countElements(objects[0]["following"] as [String])
+                self.viewController.followingLabel.text = amount == 1 ? "Following \(amount) User" : "Following \(amount) Users"
+            } else {
+                self.viewController.followingLabel.text = "Following 0 Users"
+            }
+            
+            PFUser.currentUser().fetchInBackgroundWithBlock({ (object, error) -> Void in
+                var postAmt = object["postAmount"] as NSNumber?
+                var karma = object["karma"] as NSNumber?
+                postAmt = postAmt == nil ? 0 : postAmt
+                karma = karma == nil ? 0 : karma
+                
+                self.viewController.postAmountLabel.text = postAmt! == 1 ? "\(postAmt!) Active Post" : "\(postAmt!) Active Posts"
+                self.viewController.karmaLabel.text = "Karma Level \(karma!)"
+                completion()
+            })
+        }
     }
     
     func loadImage() -> UIImage {

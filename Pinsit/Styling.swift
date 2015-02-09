@@ -12,7 +12,7 @@ import UIKit
 class Styling {
     var obj: AnyObject!
     
-    init(manipulate: AnyObject) {
+    init(manipulate: UIView) {
         self.obj = manipulate
     }
     

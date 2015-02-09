@@ -51,6 +51,9 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
                 returnedImg = pointAnn!.thumbnail
             }
             
+            let following = viewControl.isFollowingCurrentUser(annotation.title!)
+            annView.pinColor = following ? .Green : .Red //If user is following, make pin green
+            
             let style = Styling(manipulate: UIButton())
             var pushButton = style.encircleButton(returnedImg)
             
@@ -73,18 +76,18 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
     func mapTapped(tap: UITapGestureRecognizer) {
         let toolbar = self.viewControl.currentMap.toolbar
         
-        if toolbar.hidden == true {
-            yPos = 0.0
+        if toolbar.hidden {
+            yPos = 0
             toolbar.hidden = false
         } else {
-            yPos = -64.0
+            yPos = -64
         }
         
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             toolbar.frame = CGRectMake(0, self.yPos, toolbar.frame.width, toolbar.frame.height)
-            }) { (finished) -> Void in
-                self.viewControl.currentMap.searchBar.resignFirstResponder() //Close the search first
-                if self.yPos == -64 { toolbar.hidden = true }
+        }) { (finished) -> Void in
+            self.viewControl.currentMap.searchBar.resignFirstResponder()
+            if self.yPos == -64 { toolbar.hidden = true }
         }
     }
     
