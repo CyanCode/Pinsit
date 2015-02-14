@@ -2,18 +2,18 @@ PODS:
   - INTULocationManager (2.0.2)
   - IQKeyboardManager (3.2.1.0)
   - JGProgressHUD (1.2.3)
-  - THLabel (1.4.6)
+  - XLForm (2.1.0)
 
 DEPENDENCIES:
   - INTULocationManager
   - IQKeyboardManager
   - JGProgressHUD
-  - THLabel (~> 1.4.6)
+  - XLForm
 
 SPEC CHECKSUMS:
   INTULocationManager: 83bec34472a706e178face50a4e5e21ca986b7d2
   IQKeyboardManager: 167388b27d0194abc50b2ffc3cc16b881a8227df
   JGProgressHUD: 733523c80f69b6dfc41b88a0f33883a89a8b4c3b
-  THLabel: 1cf3bad0f33c2bcdee075ce2e4f080791a374d95
+  XLForm: 7d6855fe88df37b44ea00da80cc0cf3a945cfb1b
 
 COCOAPODS: 0.35.0

@@ -29,13 +29,13 @@ class LoginViewController: UIViewController {
         button.enabled = false
         PFUser.logInWithUsernameInBackground(usernameField.text, password: passwordField.text) { (user, error) -> Void in
             button.enabled = true
-            if error == nil {
+            if error != nil {
                 let alert = UIAlertController(title: "Oops", message: "Double check your username and password, make sure you are connected to the internet", preferredStyle: .Alert)
                 let cancel = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
                 alert.addAction(cancel)
                 self.presentViewController(alert, animated: true, completion: nil)
             } else {
-                //segue
+                StoryboardManager.segueMain(self)
             }
         }
     }

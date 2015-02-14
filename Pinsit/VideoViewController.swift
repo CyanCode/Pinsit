@@ -169,20 +169,10 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
         return true
     }
     
-    //MARK: Toggle Menu & Toggle Video Playback
+    //MARK: Toggle Video Playback
     func addGesture() {
-        var edge = UIScreenEdgePanGestureRecognizer(target: self, action: "toggleMenu:")
-        edge.edges = UIRectEdge.Right
-        edge.delegate = self
-        self.view.addGestureRecognizer(edge)
-        
         let tap = UITapGestureRecognizer(target: self, action: "togglePlayback:")
         videoView.addGestureRecognizer(tap)
-    }
-    
-    func toggleMenu(sender: UIGestureRecognizer) {
-        let control = tabBarController
-        (tabBarController as SidebarController).sidebar.showInViewController(self, animated: true)
     }
     
     func togglePlayback(tap: UITapGestureRecognizer) {

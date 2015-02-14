@@ -23,19 +23,6 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         
     }
     
-    //MARK: Toggle Menu
-    func addGesture() {
-        var edge = UIScreenEdgePanGestureRecognizer(target: self, action: "toggleMenu:")
-        edge.edges = UIRectEdge.Right
-        edge.delegate = self
-        self.view.addGestureRecognizer(edge)
-    }
-    
-    func toggleMenu(sender: UIGestureRecognizer) {
-        let control = tabBarController
-        (tabBarController as SidebarController).sidebar.showInViewController(self, animated: true)
-    }
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
     //    let vc =
     }

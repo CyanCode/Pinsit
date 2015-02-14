@@ -64,16 +64,4 @@ class Styling {
         view.opaque = false
         view.layer.opaque = false
     }
-    
-    ///Blurs sent UIView
-    class func blurView(view: UIView) {
-        let blurView = ILTranslucentView(frame: view.frame)
-        
-        blurView.backgroundColor = UIColor.clearColor()
-        blurView.translucentAlpha = 0.8
-        blurView.translucentStyle = UIBarStyle.Default
-        blurView.translucentTintColor = UIColor.clearColor()
-        
-        view.addSubview(blurView)
-    }
 }

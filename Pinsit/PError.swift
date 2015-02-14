@@ -16,15 +16,16 @@ class PError {
         case PReadingError = 1001
         case PDeletingError = 1002
         case PVideoSaveError = 1003
+        case PCoordinateFindError = 1004
+        case PUserDoesNotExistError = 1005
     }
     
     func constructErrorWithCode(code: NSNumber) -> NSError {
-        let errors = NSDictionary(contentsOfFile: "errors.plist")
-        var value = errors?.objectForKey(code) as String
+        let errors = NSDictionary(contentsOfFile: NSBundle.mainBundle().pathForResource("errors", ofType: "plist")!)
+        var value = errors?.objectForKey(code.stringValue) as String
         var error: NSError?
-
-        var details = NSMutableDictionary()
-        details.setValue(value, forKey: NSLocalizedDescriptionKey)
+        
+        let details = [value : NSLocalizedDescriptionKey]
         
         return NSError(domain: errorDomain, code: code.integerValue, userInfo: details)
     }

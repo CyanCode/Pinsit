@@ -29,12 +29,16 @@ class PAnnotation: NSObject, MKAnnotation {
         self.coordinate = CLLocationCoordinate2DMake(0, 0)
     }
     
-    class func constructAnnotation(vc: DetailsViewController) {
+    ///Posts generated PAnnotation to server
+    ///
+    ///:param: vc DetailsViewController instance responsible for annotation creation
+    ///:param: completion Called when video has finished attempting to post
+    ///:param: error Error pointer if an issue occurs, nil if successful
+    class func postAnnotation(vc: DetailsViewController, completion: (error: NSError?) -> Void) {
         var ann = PAnnotation()
-        let loc = INTULocationManager.sharedInstance()
         
-        loc.requestLocationWithDesiredAccuracy(INTULocationAccuracy.House, timeout: 5) { (location, accuracy, status) -> Void in
-            if status == INTULocationStatus.Success || status == INTULocationStatus.TimedOut {
+        INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(.House, timeout: 5) { (location, accuracy, status) -> Void in
+            if status == .Success {
                 ann.subtitle = vc.descriptionView.text
                 ann.coord = Coordinate(lat: location.coordinate.latitude, lon: location.coordinate.longitude)
                 ann.allowsDownloading = vc.downloadToggle.on
@@ -42,13 +46,31 @@ class PAnnotation: NSObject, MKAnnotation {
                 ann.videoData = NSData(contentsOfURL: RecordingProgress.videoLocation())
                 
                 let send = ServerSend(ann: ann, vc: vc)
-                send.sendDataAsync()
+                send.sendDataWithBlock({ (error) -> Void in
+                    completion(error: error)
+                })
             } else {
-                let alert = Coordinate.locationError()
-                alert.addAction(UIAlertAction(title: "Try Again", style: .Default, handler: { (action) in
-                    PAnnotation.constructAnnotation(vc) }))
-                vc.presentViewController(alert, animated: true, completion: nil)
+                let error = PError()
+                completion(error: error.constructErrorWithCode(1004))
             }
         }
+    }
+    
+    ///MARK: Posting errors
+    class func unverifiedEmailError() -> UIAlertController {
+        let controller = UIAlertController(title: "Not So Fast", message: "Your email address is not verified, would you like us to resend your verification email?", preferredStyle: .Alert)
+        controller.addAction(UIAlertAction(title: "Nope", style: .Cancel, handler: nil))
+        controller.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) -> Void in
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+                let send = Email()
+                send.resendVerification({ (error) -> Void in
+                    if error != nil {
+                        println("Sending error")
+                    }
+                })
+            })
+        }))
+        
+        return controller
     }
 }

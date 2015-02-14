@@ -4,9 +4,9 @@
 target 'Pinsit' do
 
 pod 'IQKeyboardManager'
-pod 'THLabel', '~> 1.4.6'
 pod 'INTULocationManager'
 pod 'JGProgressHUD'
+pod 'XLForm'
 
 end
 

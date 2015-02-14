@@ -25,5 +25,7 @@ class CustomTabBar: UITabBarController {
         for item in tabBar.items as [UITabBarItem] {
             item.image = item.image?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
         }
+        
+        tabBarController?.selectedIndex = 0
     }
 }

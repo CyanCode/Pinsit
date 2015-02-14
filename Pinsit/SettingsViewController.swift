@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import Social
 
-class SettingsViewController: UITableViewController {
+class SettingsViewController: XLFormViewController {
     @IBOutlet var upgrade: UITableViewCell!
     @IBOutlet var facebook: UITableViewCell!
     @IBOutlet var twitter: UITableViewCell!
@@ -19,52 +18,32 @@ class SettingsViewController: UITableViewController {
     var options: [String]!
     
     override func viewDidLoad() {
-        self.tableView.delegate = self
-        self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        self.createTableForm()
+        super.viewDidLoad()
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let tapped = self.tableView.cellForRowAtIndexPath(indexPath)!
-        
-        switch tapped {
-        case upgrade: upgradeAccount(); break
-        case facebook: social(SocialType.Facebook); break
-        case twitter: social(SocialType.Twitter); break
-        case logout: logoutUser(); break
-        case removeAccount: deleteAccount(); break
-        default: break
-        }
-    }
+//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        let tapped = self.tableView.cellForRowAtIndexPath(indexPath)!
+//        
+//        switch tapped {
+//        case upgrade: upgradeAccount(); break
+//        case facebook: social(SocialType.Facebook); break
+//        case twitter: social(SocialType.Twitter); break
+//        case logout: logoutUser(); break
+//        case removeAccount: deleteAccount(); break
+//        default: break
+//        }
+//    }
     
+    ///MARK: Button Selectors
     private func upgradeAccount() {
         let manager = StoreManager(responseV: self)
         manager.startPurchase()
     }
     
     private func social(type: SocialType) {
-        if type == SocialType.Twitter {
-            if SLComposeViewController.isAvailableForServiceType(SLServiceTypeTwitter) {
-                var fb = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
-                fb.setInitialText("Follow me on Pinsit @" + PFUser.currentUser().username)
-                self.presentViewController(fb, animated: true, completion: nil)
-            } else {
-                let alert = UIAlertController(title: "Somethings Missing", message: "Make sure you have Twitter setup in your settings", preferredStyle: .Alert)
-                let cancel = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
-                alert.addAction(cancel)
-                self.presentViewController(alert, animated: true, completion: nil)
-            }
-        } else {
-            if SLComposeViewController.isAvailableForServiceType(SLServiceTypeFacebook) {
-                var fb = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-                fb.setInitialText("Follow me on Pinsit @" + PFUser.currentUser().username)
-                self.presentViewController(fb, animated: true, completion: nil)
-            } else {
-                let alert = UIAlertController(title: "Somethings Missing", message: "Make sure you have Facebook setup in your settings", preferredStyle: .Alert)
-                let cancel = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
-                alert.addAction(cancel)
-                self.presentViewController(alert, animated: true, completion: nil)
-            }
-        }
+        let manager = SocialManager(vc: self)
+        manager.displayShareDialog(type)
     }
     
     private func logoutUser() {
@@ -76,9 +55,96 @@ class SettingsViewController: UITableViewController {
     private func deleteAccount() {
         
     }
+    
+    private func emailVerification() {
+        let recover = RecoverAccount(vc: self)
+        recover.reverifyEmailAddress { () -> Void in
+            println("Finished verifying email")
+        }
+    }
+    
+    private func numberVerification() {
+        let recover = RecoverAccount(vc: self)
+        recover.reverifyPhoneNumber { () -> Void in
+            println("Finished verifying phone")
+        }
+    }
+    
+    private func reportUser() {
+        
+    }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let row = self.form.formRowAtIndex(indexPath)
+        
+        switch row.tag as Tags.RawValue {
+        case Tags.Upgrade.rawValue: self.upgradeAccount()
+        case Tags.Facebook.rawValue: self.social(.Facebook)
+        case Tags.Twitter.rawValue: self.social(.Twitter)
+        case Tags.Email.rawValue: self.emailVerification()
+        case Tags.Phone.rawValue: self.numberVerification()
+        case Tags.Report.rawValue: self.reportUser()
+        case Tags.Logout.rawValue: self.logoutUser()
+        case Tags.Delete.rawValue: self.deleteAccount()
+        default: println("Selection index error")
+        }
+    }
+    
+    ///MARK: Settings form
+    private func createTableForm() {
+        //Form builder requirements
+        var form: XLFormDescriptor!
+        var section: XLFormSectionDescriptor!
+        var row: XLFormRowDescriptor!
+        
+        form = XLFormDescriptor(title: "Settings") //Main descriptor
+        
+        //"Pinsit" section
+        section = XLFormSectionDescriptor.formSectionWithTitle("Pinsit") as XLFormSectionDescriptor
+        form.addFormSection(section)
+        row = XLFormRowDescriptor(tag: Tags.Upgrade.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Upgrade Account")
+        section.addFormRow(row)
+        
+        row = XLFormRowDescriptor(tag: Tags.Facebook.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Share on Facebook")
+        section.addFormRow(row)
+        
+        row = XLFormRowDescriptor(tag: Tags.Twitter.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Share on Twitter")
+        section.addFormRow(row)
+        
+        //Verification section
+        section = XLFormSectionDescriptor.formSectionWithTitle("Verification") as XLFormSectionDescriptor
+        form.addFormSection(section)
+        row = XLFormRowDescriptor(tag: Tags.Email.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Resend Email Verification")
+        section.addFormRow(row)
+        
+        row = XLFormRowDescriptor(tag: Tags.Phone.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Resend Number Verification")
+        section.addFormRow(row)
+        
+        //Account section
+        section = XLFormSectionDescriptor.formSectionWithTitle("Account") as XLFormSectionDescriptor
+        form.addFormSection(section)
+        row = XLFormRowDescriptor(tag: Tags.Report.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Report User")
+        section.addFormRow(row)
+        
+        row = XLFormRowDescriptor(tag: Tags.Logout.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Logout")
+        section.addFormRow(row)
+        
+        row = XLFormRowDescriptor(tag: Tags.Delete.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Delete Account")
+        section.addFormRow(row)
+        
+        row.action
+        
+        self.form = form
+    }
 }
 
-enum SocialType {
-    case Facebook
-    case Twitter
+enum Tags: String {
+    case Upgrade = "upgrade"
+    case Facebook = "facebook"
+    case Twitter = "twitter"
+    case Email = "email"
+    case Phone = "phone"
+    case Report = "report"
+    case Logout = "logout"
+    case Delete = "delete"
 }

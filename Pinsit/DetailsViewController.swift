@@ -13,14 +13,12 @@ class DetailsViewController: UIViewController, UIGestureRecognizerDelegate, UITe
     @IBOutlet var downloadToggle: UISwitch!
     @IBOutlet var descriptionView: UITextView!
     @IBOutlet var map: MKMapView!
-    
     var thumbnail: UIImage!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         descriptionView.delegate = self
-        addGesture()
         fillerText()
         setupSwitches()
         
@@ -84,16 +82,15 @@ class DetailsViewController: UIViewController, UIGestureRecognizerDelegate, UITe
         }
     }
     
-    //MARK: Action
+    //MARK: Actions
     @IBAction func postButton(sender: AnyObject) {
-        if descriptionSet == false {
-            descriptionView.text = ""
-            
-            PAnnotation.constructAnnotation(self)
-        } else {
-            PAnnotation.constructAnnotation(self)
-        }
+        self.postVideo()
     }
+    
+    @IBAction func cancelButton(sender: AnyObject) {
+        
+    }
+    
 
 //    @IBAction func switchTapped(sender: AnyObject) {
 //        if downloadToggle.enabled == false {
@@ -105,17 +102,31 @@ class DetailsViewController: UIViewController, UIGestureRecognizerDelegate, UITe
 //        }
 //    }
     
-    //MARK: Toggle Menu
-    func addGesture() {
-        var edge = UIScreenEdgePanGestureRecognizer(target: self, action: "toggleMenu:")
-        edge.edges = UIRectEdge.Right
-        edge.delegate = self
-        self.view.addGestureRecognizer(edge)
+    private func postVideo() {
+        if descriptionSet == false {
+            descriptionView.text = ""
+        }
+        
+        let postingProgress = JGProgressHUD(frame: self.view.frame)
+        postingProgress.textLabel.text = "Posting"
+        PAnnotation.postAnnotation(self, completion: { (error) -> Void in
+            postingProgress.dismiss()
+            
+            if error != nil {
+                self.postingError()
+            } else {
+                //Transition
+            }
+        })
     }
     
-    func toggleMenu(sender: UIGestureRecognizer) {
-        let control = tabBarController
-        (tabBarController as SidebarController).sidebar.showInViewController(self, animated: true)
+    private func postingError() {
+        let alert = UIAlertController(title: "Oops", message: "Your video didn't post successfully, would you like to try again?", preferredStyle: .Alert)
+        alert.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) -> Void in
+            self.postVideo()
+        }))
+        alert.addAction(UIAlertAction(title: "Nope", style: .Cancel, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
     }
     
     override func didReceiveMemoryWarning() {

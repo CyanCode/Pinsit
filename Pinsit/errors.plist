@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>1005</key>
+	<string>Could not find user in Verification or PFUser database</string>
+	<key>1004</key>
+	<string>Could not get current location</string>
 	<key>1003</key>
 	<string>Could not save file</string>
 	<key>1002</key>
