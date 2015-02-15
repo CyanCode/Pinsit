@@ -22,21 +22,29 @@ class RecoverAccount {
     
     func reverifyEmailAddress(completion: () -> Void) {
         let email = Email()
-        email.resendVerification { (error) -> Void in
-            completion()
-        }
+        
+        email.isEmailVerified({ (confirmed) -> Void in
+            if confirmed == true {
+                Email.emailVerifiedMessage()
+                completion()
+            }
+            
+            email.resendVerification ({ (error) -> Void in
+                if error != nil {
+                    completion()
+                } else {
+                    let controller = UIAlertController(title: "Success", message: "Your recovery email has been sent, please check your email!", preferredStyle: .Alert)
+                    controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
+                    self.viewController.presentViewController(controller, animated: true, completion: nil)
+                    completion()
+                }
+            })
+        })
     }
     
     func recoverPassword(email: String, completion: (error: NSError?) -> Void) {
         PFUser.requestPasswordResetForEmailInBackground(email, block: { (success, error) -> Void in
             completion(error: error)
         })
-    }
-    
-    private func phoneCodePrompt() {
-        let controller = UIAlertController(title: "Almost There", message: "Your text has been sent, please enter your received verification code below!", preferredStyle: .Alert)
-        controller.addTextFieldWithConfigurationHandler { (textField) -> Void in
-            
-        }
     }
 }
