@@ -88,19 +88,13 @@ class DetailsViewController: UIViewController, UIGestureRecognizerDelegate, UITe
     }
     
     @IBAction func cancelButton(sender: AnyObject) {
-        
+        let controller = UIAlertController(title: "Really?", message: "Are you sure you would like to cancel posting your video?", preferredStyle: .Alert)
+        controller.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: nil))
+        controller.addAction(UIAlertAction(title: "Yes", style: .Default, handler: { (action) -> Void in
+            self.performSegueWithIdentifier("postedModal", sender: self)
+        }))
+        self.presentViewController(controller, animated: true, completion: nil)
     }
-    
-
-//    @IBAction func switchTapped(sender: AnyObject) {
-//        if downloadToggle.enabled == false {
-//            let action = UIAlertController(title: "Not so fast!", message: "In order to disable video downloading, you must have an upgraded Pinsit account!", preferredStyle: .ActionSheet)
-//            let cancel = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
-//            
-//            action.addAction(cancel)
-//            self.presentViewController(action, animated: true, completion: nil)
-//        }
-//    }
     
     private func postVideo() {
         if descriptionSet == false {
@@ -115,7 +109,7 @@ class DetailsViewController: UIViewController, UIGestureRecognizerDelegate, UITe
             if error != nil {
                 self.postingError()
             } else {
-                //Transition
+                self.performSegueWithIdentifier("postedModal", sender: self)
             }
         })
     }

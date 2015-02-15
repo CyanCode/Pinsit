@@ -70,7 +70,7 @@ class SettingsViewController: XLFormViewController {
         }
     }
     
-    private func reportUser() {
+    private func showTermsOfService() {
         
     }
     
@@ -83,7 +83,7 @@ class SettingsViewController: XLFormViewController {
         case Tags.Twitter.rawValue: self.social(.Twitter)
         case Tags.Email.rawValue: self.emailVerification()
         case Tags.Phone.rawValue: self.numberVerification()
-        case Tags.Report.rawValue: self.reportUser()
+        case Tags.TOS.rawValue: self.showTermsOfService()
         case Tags.Logout.rawValue: self.logoutUser()
         case Tags.Delete.rawValue: self.deleteAccount()
         default: println("Selection index error")
@@ -123,7 +123,7 @@ class SettingsViewController: XLFormViewController {
         //Account section
         section = XLFormSectionDescriptor.formSectionWithTitle("Account") as XLFormSectionDescriptor
         form.addFormSection(section)
-        row = XLFormRowDescriptor(tag: Tags.Report.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Report User")
+        row = XLFormRowDescriptor(tag: Tags.TOS.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Terms of Service")
         section.addFormRow(row)
         
         row = XLFormRowDescriptor(tag: Tags.Logout.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Logout")
@@ -144,7 +144,7 @@ enum Tags: String {
     case Twitter = "twitter"
     case Email = "email"
     case Phone = "phone"
-    case Report = "report"
+    case TOS = "tos"
     case Logout = "logout"
     case Delete = "delete"
 }
