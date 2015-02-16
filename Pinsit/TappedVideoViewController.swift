@@ -10,20 +10,28 @@ import UIKit
 
 class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var videoView: UIView!
-    @IBOutlet var viewsLabel: UILabel!
-    @IBOutlet var downloadsLabel: UILabel!
-    @IBOutlet var avatarView: UIImageView!
-    @IBOutlet var videoDescription: UITextView!
+    @IBOutlet var profileImage: UIImageView!
+    @IBOutlet var likesTableView: UITableView!
+    var videoObject: PFObject!
     
+
     override func viewDidAppear(animated: Bool) {
-        AppDelegate.loginCheck(self)
+        
     }
     
     @IBAction func downloadButton(sender: AnyObject) {
         
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
-    //    let vc =
+    @IBAction func likeVideoButton(sender: AnyObject) {
+    
+    }
+    
+    @IBAction func followButton(sender: AnyObject) {
+        
+    }
+    
+    @IBAction func reportButton(sender: AnyObject) {
+        
     }
 }
