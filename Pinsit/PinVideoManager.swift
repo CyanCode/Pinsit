@@ -69,9 +69,15 @@ class PinVideoManager {
     }
     
     private func playerFromData(data: NSData) -> AVPlayer {
-        let directory = NSTemporaryDirectory().stringByAppendingPathComponent("pulledVideo.mp4")
-        data.writeToFile(directory, atomically: true)
+        let directory = File.pulledVideoPath()
+        data.writeToFile(File.pulledVideoPath(), atomically: true)
         
         return AVPlayer(URL: NSURL(fileURLWithPath: directory))
+    }
+}
+
+extension File {
+    class func pulledVideoPath() -> String {
+        return NSTemporaryDirectory().stringByAppendingPathComponent("pulledVideo.mp4")
     }
 }
