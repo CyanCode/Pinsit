@@ -5,7 +5,6 @@
 #import <Parse/Parse.h>
 
 #import "ColorUtils.h"
-#import "UIImage+StackBlur.h"
 #import "DBAccess/DBAccess.h"
 #import "IQKeyboardManager.h"
 #import "INTULocationManager.h"

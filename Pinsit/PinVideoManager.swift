@@ -47,7 +47,9 @@ class PinVideoManager {
         let gesture = UITapGestureRecognizer(target: self, action: "viewTapped:")
         videoView.addGestureRecognizer(gesture)
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "itemFinished:", name: AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem)
+        NSNotificationCenter.defaultCenter().addObserverForName(AVPlayerItemDidPlayToEndTimeNotification, object: player.currentItem, queue: nil) { (notification) -> Void in
+            self.videoEnded = true
+        }
     }
     
     ///Called when videoView is tapped
@@ -64,10 +66,6 @@ class PinVideoManager {
         } else { //Video playing: pause
             player.pause()
         }
-    }
-    
-    func itemFinished(notification: NSNotification) {
-        videoEnded = true
     }
     
     private func playerFromData(data: NSData) -> AVPlayer {
