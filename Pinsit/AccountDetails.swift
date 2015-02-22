@@ -15,7 +15,7 @@ class AccountDetails {
     init(viewController: AccountViewController) {
         self.viewController = viewController
         let fm = NSFileManager.defaultManager()
-        path = File().documentsPath().stringByAppendingPathComponent("account.plist")
+        path = File.documentsPath().stringByAppendingPathComponent("account.plist")
         
         if (!fm.fileExistsAtPath(path)) {
             fm.createFileAtPath(path, contents: nil, attributes: nil)
@@ -52,7 +52,7 @@ class AccountDetails {
     }
     
     func loadImage() -> UIImage {
-        let imgLoc = File().documentsPath().stringByAppendingPathComponent("profilePicture.png")
+        let imgLoc = File.documentsPath().stringByAppendingPathComponent("profilePicture.png")
         let img = UIImage(contentsOfFile: imgLoc)
         
         if (img == nil) {
@@ -66,7 +66,7 @@ class AccountDetails {
     }
     
     func setImage(img: UIImage) {
-        let imgLoc = File().documentsPath().stringByAppendingPathComponent("profilePicture.png")
+        let imgLoc = File.documentsPath().stringByAppendingPathComponent("profilePicture.png")
         UIImagePNGRepresentation(img).writeToFile(imgLoc, atomically: true)
     }
 }

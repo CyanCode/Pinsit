@@ -11,4 +11,12 @@ import UIKit
 class TappedPinLikesCell: UITableViewCell {
     @IBOutlet var username: UILabel!
     @IBOutlet var profileImage: UIImageView!
+    
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
 }
