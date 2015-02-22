@@ -15,24 +15,21 @@ class Scrubbing: UIView {
     
     ///Initializer without video location, default temporary directory used
     override init() {
-        let file = File()
-        self.videoLocation = file.getVideoPathURL()
+        self.videoLocation = File.getVideoPathURL()
         super.init()
     }
 
     ///Initializer without video location, default temporary directory used
     ///Used in Storyboard subclassing
     required init(coder aDecoder: NSCoder) {
-        let file = File()
-        self.videoLocation = file.getVideoPathURL()
+        self.videoLocation = File.getVideoPathURL()
         super.init(coder: aDecoder)
     }
     
     ///Initializer without video location, default temporary directory used
     ///Used in programmatically subclassing
     override init(frame: CGRect) {
-        let file = File()
-        self.videoLocation = file.getVideoPathURL()
+        self.videoLocation = File.getVideoPathURL()
         super.init(frame: frame)
     }
     

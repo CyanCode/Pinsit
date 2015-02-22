@@ -12,13 +12,15 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var videoView: UIView!
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var likesTableView: UITableView!
-
+    @IBOutlet var tableView: PinVideoTableView!
+    
     var videoObject: PFObject!
     private var dataHandler: PinVideoData!
     
     override func viewDidLoad() {
         self.startPlaying()
         self.dataHandler = PinVideoData(viewController: self)
+        self.tableView = PinVideoTableView(pinObject: self.videoObject)
     }
     
     @IBAction func downloadButton(sender: AnyObject) {
@@ -26,7 +28,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func likeVideoButton(sender: AnyObject) {
-        self.dataHandler.addLike(videoObject["objectId"] as String, button: sender as UIButton)
+        self.dataHandler.addLike(videoObject.objectId, button: sender as UIButton)
     }
     
     @IBAction func followButton(sender: AnyObject) {
@@ -34,7 +36,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func reportButton(sender: AnyObject) {
-        self.dataHandler.reportUser(videoObject["username"] as String, videoId: videoObject["objectId"] as String)
+        self.dataHandler.reportUser(videoObject["username"] as String, videoId: videoObject.objectId)
     }
     
     private func startPlaying() {

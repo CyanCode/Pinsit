@@ -22,8 +22,7 @@ class Stream {
     }
     
     func writeVideo() {
-        let file = File()
-        let vidPath = file.getVideoPathString()
+        let vidPath = File.getVideoPathString()
         let fManager = NSFileManager.defaultManager()
         
         if (fManager.fileExistsAtPath(vidPath)) {
@@ -36,8 +35,7 @@ class Stream {
     }
     
     func writeVideoFromCache() {
-        let file = File()
-        let vidPath = file.getVideoPathString()
+        let vidPath = File.getVideoPathString()
         let fManager = NSFileManager.defaultManager()
         
         if (fManager.fileExistsAtPath(vidPath)) {

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14A386b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="PostDetailsView" customModule="Pinsit" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="350" height="242"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ulJ-YH-xuc">
+                    <rect key="frame" x="0.0" y="207" width="350" height="35"/>
+                    <color key="backgroundColor" red="0.62352941176470589" green="0.84313725490196079" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="q7R-eT-RGe"/>
+                    </constraints>
+                    <state key="normal" title="Post">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="postPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="foB-0O-1Bm"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ds3-sL-Rkn">
+                    <rect key="frame" x="0.0" y="172" width="350" height="35"/>
+                    <color key="backgroundColor" red="1" green="0.16078431372549021" blue="0.31764705882352939" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="35" id="c56-ni-tFp"/>
+                    </constraints>
+                    <state key="normal" title="Cancel">
+                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="cancelPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="bom-Wm-Eps"/>
+                    </connections>
+                </button>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="esU-ua-V8d">
+                    <rect key="frame" x="8" y="133" width="51" height="31"/>
+                </switch>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable Downloading" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1I1-j7-g3i">
+                    <rect key="frame" x="65" y="133" width="277" height="31"/>
+                    <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ON9-Fy-4g8">
+                    <rect key="frame" x="0.0" y="0.0" width="350" height="125"/>
+                    <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="125" id="jhK-NL-TKg"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                </textView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="1I1-j7-g3i" firstAttribute="leading" secondItem="esU-ua-V8d" secondAttribute="trailing" constant="8" id="4yO-e2-r1Z"/>
+                <constraint firstItem="ds3-sL-Rkn" firstAttribute="top" secondItem="esU-ua-V8d" secondAttribute="bottom" constant="8" id="6yd-1H-FyU"/>
+                <constraint firstItem="ON9-Fy-4g8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Cm1-5k-yNS"/>
+                <constraint firstItem="1I1-j7-g3i" firstAttribute="top" secondItem="ON9-Fy-4g8" secondAttribute="bottom" constant="8" id="CmB-X8-dNQ"/>
+                <constraint firstItem="ON9-Fy-4g8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="H3U-4s-ZrO"/>
+                <constraint firstAttribute="trailing" secondItem="1I1-j7-g3i" secondAttribute="trailing" constant="8" id="P5n-wb-pkv"/>
+                <constraint firstItem="esU-ua-V8d" firstAttribute="top" secondItem="ON9-Fy-4g8" secondAttribute="bottom" constant="8" id="TSa-33-r7S"/>
+                <constraint firstAttribute="trailing" secondItem="ds3-sL-Rkn" secondAttribute="trailing" id="USe-o5-ZHq"/>
+                <constraint firstItem="ds3-sL-Rkn" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="WQd-Af-XG3"/>
+                <constraint firstItem="ulJ-YH-xuc" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="XJf-Ea-3rp"/>
+                <constraint firstItem="esU-ua-V8d" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="fPi-1h-H9b"/>
+                <constraint firstAttribute="bottom" secondItem="ulJ-YH-xuc" secondAttribute="bottom" id="gjx-LR-Qk7"/>
+                <constraint firstItem="1I1-j7-g3i" firstAttribute="leading" secondItem="esU-ua-V8d" secondAttribute="trailing" constant="8" id="glS-Di-sw3"/>
+                <constraint firstAttribute="trailing" secondItem="ulJ-YH-xuc" secondAttribute="trailing" id="i9q-AN-uvn"/>
+                <constraint firstItem="ds3-sL-Rkn" firstAttribute="top" secondItem="1I1-j7-g3i" secondAttribute="bottom" constant="8" id="kZ0-Ry-HOK"/>
+                <constraint firstAttribute="trailing" secondItem="ON9-Fy-4g8" secondAttribute="trailing" id="mVP-w3-knb"/>
+                <constraint firstItem="ulJ-YH-xuc" firstAttribute="top" secondItem="ds3-sL-Rkn" secondAttribute="bottom" id="txe-g4-sNG"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="cancelButton" destination="ds3-sL-Rkn" id="Tsg-em-btN"/>
+                <outlet property="descriptionView" destination="ON9-Fy-4g8" id="OOv-i5-tle"/>
+                <outlet property="downloadSwitch" destination="esU-ua-V8d" id="Et4-n5-kvy"/>
+                <outlet property="postButton" destination="ulJ-YH-xuc" id="8Hy-Wc-kUd"/>
+            </connections>
+            <point key="canvasLocation" x="388" y="367"/>
+        </view>
+    </objects>
+</document>

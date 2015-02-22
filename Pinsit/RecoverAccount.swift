@@ -21,24 +21,22 @@ class RecoverAccount {
     }
     
     func reverifyEmailAddress(completion: () -> Void) {
-        let email = Email()
-        
-        email.isEmailVerified({ (confirmed) -> Void in
+        Email().isEmailVerified({ (confirmed) -> Void in
             if confirmed == true {
                 Email.emailVerifiedMessage()
                 completion()
+            } else {
+                Email().resendVerification ({ (error) -> Void in
+                    if error != nil {
+                        completion()
+                    } else {
+                        let controller = UIAlertController(title: "Success", message: "Your recovery email has been sent, please check your email!", preferredStyle: .Alert)
+                        controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
+                        self.viewController.presentViewController(controller, animated: true, completion: nil)
+                        completion()
+                    }
+                })
             }
-            
-            email.resendVerification ({ (error) -> Void in
-                if error != nil {
-                    completion()
-                } else {
-                    let controller = UIAlertController(title: "Success", message: "Your recovery email has been sent, please check your email!", preferredStyle: .Alert)
-                    controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
-                    self.viewController.presentViewController(controller, animated: true, completion: nil)
-                    completion()
-                }
-            })
         })
     }
     

@@ -62,7 +62,7 @@ class PinController {
         annotation.allowsDownloading = downloading.boolValue
         annotation.thumbnail = UIImage(data: NSData(contentsOfURL: NSURL(string: thumbnail.url)!)!)
         annotation.videoURL = NSURL(string: thumbnail.url)
-        annotation.dataID = obj["objectId"] as String
+        annotation.dataID = obj.objectId
         
         return annotation
     }

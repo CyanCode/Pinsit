@@ -43,18 +43,18 @@ class PinVideoData {
     }
     
     func addLike(videoId: String, button: UIButton) {
-        let query = PFQuery(className: "SentData")
-        query.whereKey("objectId", equalTo: videoId)
-        
+        let query = PFQuery(className: "Likes")
+        query.whereKey("username", equalTo: PFUser.currentUser().username)
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error == nil && countElements(objects) > 0 {
-                let likes = objects[0]["likes"] as [String]
+            if error == nil && countElements(objects) == 0 {
+                var likeObj = PFObject(className: "Likes")
+                likeObj["username"] = PFUser.currentUser().username
+                likeObj["videoId"] = videoId
                 
-                if self.likesExist(PFUser.currentUser().username, likesList: likes) == false {
-                    objects[0].addObject(PFUser.currentUser().username, forKey: "likes")
-                    objects[0].saveInBackgroundWithBlock(nil)
-                    button.userInteractionEnabled = false
-                } else { button.userInteractionEnabled = false }
+                let profileFile = PFUser.currentUser()["profileImage"] as PFFile
+                likeObj["profileURL"] = profileFile.url
+                
+                likeObj.saveInBackgroundWithBlock(nil)
             }
         }
     }
@@ -89,6 +89,19 @@ class PinVideoData {
     
     private func likesExist(name: String, likesList: [String]) -> Bool {
         return followerExists(name, currentUserList: likesList)
+    }
+    
+    private func videoStillActive(objectId: String, completion: (active: Bool) -> Void) {
+        let query = PFQuery(className: "SentData")
+        query.whereKey("objectId", equalTo: objectId)
+        
+        query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
+            if countElements(objects) > 0 {
+                completion(active: true)
+            } else {
+                completion(active: false)
+            }
+        }
     }
     
     ///MARK: Alert Controllers

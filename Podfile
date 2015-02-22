@@ -7,6 +7,9 @@ pod 'IQKeyboardManager'
 pod 'INTULocationManager'
 pod 'JGProgressHUD'
 pod 'XLForm'
+pod 'SVPullToRefresh'
+pod 'SDWebImage'
+pod 'KLCPopup'
 
 end
 

@@ -103,7 +103,10 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
     
     @IBAction func commitVideo(sender: AnyObject) {
         if inPlaybackMode != nil && inPlaybackMode == true {
-            self.performSegueWithIdentifier("detail", sender: self)
+            let setDetails = UIView.detailViewFromNib()
+            setDetails.presentViewInController(self, popupPoint: CGPointMake(recordBtn.center.x, recordBtn.center.y + 23))
+            
+            //self.performSegueWithIdentifier("detail", sender: self)
         }
     }
     
