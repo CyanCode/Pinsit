@@ -88,8 +88,10 @@ class PostDetailsView: UIView, UITextViewDelegate {
             descriptionView.text = ""
         }
         
+        popup.dismiss(true)
         let postingProgress = JGProgressHUD(frame: self.frame)
         postingProgress.textLabel.text = "Posting"
+        postingProgress.showInView(responder.view)
         PAnnotation().postAnnotation(self, completion: { (error) -> Void in
             postingProgress.dismiss()
             
