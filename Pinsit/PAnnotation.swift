@@ -90,7 +90,7 @@ class PAnnotation: NSObject, MKAnnotation {
             if amount == nil {
                 completion(valid: false, error: NSError())
             } else {
-                if amount >= 3 {
+                if amount?.integerValue >= 3 {
                     completion(valid: false, error: nil)
                 } else {
                     completion(valid: true, error: nil)
