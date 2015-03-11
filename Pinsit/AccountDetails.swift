@@ -39,14 +39,15 @@ class AccountDetails {
             }
             
             PFUser.currentUser().fetchInBackgroundWithBlock({ (object, error) -> Void in
-                var postAmt = object["postAmount"] as NSNumber?
-                var karma = object["karma"] as NSNumber?
-                postAmt = postAmt == nil ? 0 : postAmt
-                karma = karma == nil ? 0 : karma
-                
-                self.viewController.postAmountLabel.text = postAmt! == 1 ? "\(postAmt!) Active Post" : "\(postAmt!) Active Posts"
-                self.viewController.karmaLabel.text = "Karma Level \(karma!)"
-                completion()
+                AccountDetails.findPostAmount({ (amount) -> Void in
+                    var postAmt = amount == nil ?  0 : amount!
+                    var karma = object["karma"] as NSNumber?
+                    karma = karma == nil ? 0 : karma
+
+                    self.viewController.postAmountLabel.text = postAmt == 1 ? "\(postAmt) Active Post" : "\(postAmt) Active Posts"
+                    self.viewController.karmaLabel.text = "Karma Level \(karma!)"
+                    completion()
+                })
             })
         }
     }
@@ -68,5 +69,21 @@ class AccountDetails {
     func setImage(img: UIImage) {
         let imgLoc = File.documentsPath().stringByAppendingPathComponent("profilePicture.png")
         UIImagePNGRepresentation(img).writeToFile(imgLoc, atomically: true)
+    }
+    
+    ///Locates the amount of posts currently on the server
+    ///
+    ///:param: amount Amount of posts currently active, nil if error occurs
+    class func findPostAmount(completion: (amount: NSNumber?) -> Void) {
+        var query = PFQuery(className: "SentData")
+        query.whereKey("username", equalTo: PFUser.currentUser().username)
+        
+        query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
+            if error != nil {
+                completion(amount: nil)
+            } else {
+                completion(amount: NSNumber(integer: countElements(objects)))
+            }
+        }
     }
 }

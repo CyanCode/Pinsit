@@ -10,6 +10,7 @@ pod 'XLForm'
 pod 'SVPullToRefresh'
 pod 'SDWebImage'
 pod 'KLCPopup'
+pod 'FCCurrentLocationGeocoder'
 
 end
 

@@ -12,6 +12,7 @@
 #import "XLForm.h"
 #import "UIImageView+WebCache.h"
 #import "KLCPopup.h"
+#import "FCCurrentLocationGeocoder.h"
 
 //Pull to refresh
 #import "UIScrollView+SVPullToRefresh.h"

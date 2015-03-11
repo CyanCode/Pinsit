@@ -1,4 +1,7 @@
 PODS:
+  - FCCurrentLocationGeocoder (1.1.10):
+    - FCIPAddressGeocoder (~> 1.0.0)
+  - FCIPAddressGeocoder (1.0.2)
   - INTULocationManager (2.0.2)
   - IQKeyboardManager (3.2.1.0)
   - JGProgressHUD (1.2.3)
@@ -10,6 +13,7 @@ PODS:
   - XLForm (2.1.0)
 
 DEPENDENCIES:
+  - FCCurrentLocationGeocoder
   - INTULocationManager
   - IQKeyboardManager
   - JGProgressHUD
@@ -19,6 +23,8 @@ DEPENDENCIES:
   - XLForm
 
 SPEC CHECKSUMS:
+  FCCurrentLocationGeocoder: d14471750ab1a9b8d486b5a848c7a07d8d66af27
+  FCIPAddressGeocoder: 52525f87f237f79b872ecaffbece6b0b40e9e0a0
   INTULocationManager: 83bec34472a706e178face50a4e5e21ca986b7d2
   IQKeyboardManager: 167388b27d0194abc50b2ffc3cc16b881a8227df
   JGProgressHUD: 733523c80f69b6dfc41b88a0f33883a89a8b4c3b
