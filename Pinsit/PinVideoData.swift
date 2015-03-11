@@ -91,7 +91,7 @@ class PinVideoData {
         return followerExists(name, currentUserList: likesList)
     }
     
-    private func videoStillActive(objectId: String, completion: (active: Bool) -> Void) {
+     private func videoStillActive(objectId: String, completion: (active: Bool) -> Void) {
         let query = PFQuery(className: "SentData")
         query.whereKey("objectId", equalTo: objectId)
         
