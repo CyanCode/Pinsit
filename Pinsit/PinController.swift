@@ -24,8 +24,8 @@ class PinController {
         var annotations = [PAnnotation]()
         
         if query == nil { //Handles default initialization
-            INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(INTULocationAccuracy.House, timeout: 5) { (location, accuracy, status) -> Void in
-                if status == .Success {
+            INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(INTULocationAccuracy.Block, timeout: 5) { (location, accuracy, status) -> Void in
+                if status == .Success || status == .TimedOut {
                     self.query = PFQuery(className: "SentData")
                     self.query!.whereKey("location", nearGeoPoint: PFGeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude))
                     self.query!.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
@@ -57,7 +57,10 @@ class PinController {
         let point = obj["location"] as PFGeoPoint
         let downloading = obj["downloading"] as NSNumber
         let thumbnail = obj["thumbnail"] as PFFile
+        
+        annotation.title = obj["username"] as String
         annotation.subtitle = obj["description"] as String
+        annotation.coordinate = CLLocationCoordinate2DMake(point.latitude, point.longitude)
         annotation.coord = Coordinate(lat: point.latitude, lon: point.longitude)
         annotation.allowsDownloading = downloading.boolValue
         annotation.thumbnail = UIImage(data: NSData(contentsOfURL: NSURL(string: thumbnail.url)!)!)
@@ -73,6 +76,7 @@ class PinController {
     ///:param: ann PAnnotation to cache
     func cacheAnnotation(ann: PAnnotation) {
         var object = PFObject(className: "CachedPins")
+        object["title"] = ann.title
         object["location"] = PFGeoPoint(latitude: ann.coord.latitude, longitude: ann.coord.longitude)
         object["downloading"] = NSNumber(bool: ann.allowsDownloading)
         object["thumbnail"] = PFFile(data: UIImagePNGRepresentation(ann.thumbnail))

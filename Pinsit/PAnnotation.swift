@@ -44,10 +44,12 @@ class PAnnotation: NSObject, MKAnnotation {
             if error != nil {
                 completion(error: error)
             } else if valid == true {
-                INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(.Block, timeout: 5) { (location, accuracy, status) -> Void in
-                    if status == .Success || status == .TimedOut {
+                let geoCode = FCCurrentLocationGeocoder.sharedGeocoder()
+                
+                geoCode.geocode({ (success) -> Void in
+                    if success == true {
                         ann.subtitle = vc.descriptionView.text
-                        ann.coord = Coordinate(lat: location.coordinate.latitude, lon: location.coordinate.longitude)
+                        ann.coord = Coordinate(lat: geoCode.location.coordinate.latitude, lon: geoCode.location.coordinate.longitude)
                         ann.allowsDownloading = vc.downloadSwitch.on
                         ann.thumbnail = Image().generateThumbnail()
                         ann.videoData = NSData(contentsOfURL: RecordingProgress.videoLocation())
@@ -57,10 +59,10 @@ class PAnnotation: NSObject, MKAnnotation {
                             completion(error: error)
                         })
                     } else {
-                        let error = PError()
-                        completion(error: error.constructErrorWithCode(1004))
+                        println("Location Error: \(geoCode.error.localizedDescription)")
+                        completion(error: geoCode.error)
                     }
-                }
+                })
             }
         }
         
@@ -84,14 +86,11 @@ class PAnnotation: NSObject, MKAnnotation {
     }
     
     func validPostAmount(completion: (valid: Bool, error: NSError?) -> Void) {
-        PFUser.currentUser().fetchInBackgroundWithBlock { (object, error) -> Void in
-            if error != nil {
-                completion(valid: false, error: error)
+        AccountDetails.findPostAmount { (amount) -> Void in
+            if amount == nil {
+                completion(valid: false, error: NSError())
             } else {
-                let amt = object["postAmount"] as NSNumber
-                
-                if amt.integerValue >= 3 {
-                    self.tooManyPosts()
+                if amount >= 3 {
                     completion(valid: false, error: nil)
                 } else {
                     completion(valid: true, error: nil)
