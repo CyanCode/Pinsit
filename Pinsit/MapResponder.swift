@@ -51,7 +51,7 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
                 returnedImg = pointAnn!.thumbnail
             }
             
-            let following = viewControl.isFollowingCurrentUser(annotation.title!)
+            let following = viewControl.followerTracker.followerExists(pointAnn!.title)
             annView.pinColor = following ? .Green : .Red //If user is following, make pin green
             
             let style = Styling(manipulate: UIButton())
@@ -91,13 +91,10 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
         }
     }
     
-    ///MARK: Methods
-    func addAnnotations(annotations: [PAnnotation]) {
-        self.viewControl.currentMap.mapView.addAnnotations(annotations)
-    }
-    
+    ///MARK: Methods    
     func removeAnnotations() {
-        self.viewControl.currentMap.mapView.removeAnnotations(self.viewControl.currentMap.mapView.annotations)
+        let map = self.viewControl.currentMap.mapView
+        map.removeAnnotations(map.annotations)
     }
     
     func zoomCurrentLocation() {
