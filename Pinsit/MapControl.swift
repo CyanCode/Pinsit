@@ -11,18 +11,14 @@ import MapKit
 
 class MapControl: NSObject {
     var currentMap: MapViewController!
-    var followingList: [String]?
+    var followerTracker: Followers!
     
     init(map: MapViewController) {
-        self.currentMap = map
         super.init()
+        self.currentMap = map
         
         let press = UILongPressGestureRecognizer(target: self, action: "mapLongPress:")
         map.mapView.addGestureRecognizer(press)
-    }
-    
-    func zoomCurrentLocation() {
-        
     }
     
     ///Starts populating mapView with default pins
@@ -37,86 +33,65 @@ class MapControl: NSObject {
     ///
     ///:param: query PFQuery that is to be searched for and added
     func searchWithSortQuery(query: PFQuery?) {
-        dispatch_async(dispatch_get_main_queue()) { //Return to the main queue
-            self.currentMap.responder.removeAnnotations()
-            var control: PinController
-            
+        var control: PinController?
+        
+        Async.background {
             if query == nil {
                 control = PinController()
             } else {
                 control = PinController(query: query!)
             }
-            
-            control.annotationsFromQuery({ (annotations) -> Void in
-                self.currentMap.responder.addAnnotations(annotations)
+        }.main { //Return to the main thread
+            control!.annotationsFromQuery({ (annotations) -> Void in
+                self.currentMap.mapView.removeAnnotations(self.currentMap.mapView.annotations)
+                self.currentMap.mapView.addAnnotations(annotations)
             })
-        }
-    }
-    
-    ///Checks to see if current user is following the passed user
-    ///
-    ///:param: user User to check
-    ///:param: completion Called when comparison check is finished running
-    ///:param: following true or false depending on following status
-    func isFollowingCurrentUser(user: String) -> Bool {
-        if followingList == nil {
-            let query = PFQuery(className: "Followers")
-            query.whereKey("username", equalTo: PFUser.currentUser().username)
-            
-            let objects = query.findObjects()
-            if countElements(objects) > 0 {
-                self.followingList = objects[0]["following"] as? [String]
-                return self.followerCompare(user)
-            } else {
-                self.followingList = [String]()
-                return false
-            }
-            
-        } else {
-            return self.followerCompare(user)
         }
     }
     
     ///MARK: Gesture Delegate
     func mapLongPress(gesture: UILongPressGestureRecognizer) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            let sheet = UIAlertController(title: "Sorting", message: "Use the power of sorting to find great pins!  Feel free to choose one of the options below.", preferredStyle: .ActionSheet)
-            sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-            sheet.addAction(UIAlertAction(title: "Following", style: .Default, handler: { (action) -> Void in
-                self.searchWithSortQuery(self.getFriendQuery())
-            }))
-            sheet.addAction(UIAlertAction(title: "Trending", style: .Default, handler: { (action) -> Void in
-                self.searchWithSortQuery(self.getTrendingPins())
-            }))
-            sheet.addAction(UIAlertAction(title: "Newest", style: .Default, handler: { (action) -> Void in
-                self.searchWithSortQuery(self.getNewestPins())
-            }))
-            self.currentMap.presentViewController(sheet, animated: true, completion: nil)
-        })
+        let sheet = UIAlertController(title: "Sorting", message: "Use the power of sorting to find great pins!  Feel free to choose one of the options below.", preferredStyle: .ActionSheet)
+        
+        sheet.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        sheet.addAction(UIAlertAction(title: "Following", style: .Default, handler: { (action) -> Void in
+            self.getFriendQuery({ (query) -> Void in self.searchWithSortQuery(query) })
+        }))
+        sheet.addAction(UIAlertAction(title: "Trending", style: .Default, handler: { (action) -> Void in
+            self.searchWithSortQuery(self.getTrendingPins())
+        }))
+        sheet.addAction(UIAlertAction(title: "Newest", style: .Default, handler: { (action) -> Void in
+            self.searchWithSortQuery(self.getNewestPins())
+        }))
+        
+        self.currentMap.presentViewController(sheet, animated: true, completion: nil)
     }
     
     ///MARK: Private query methods
     ///Pulls follower's pins from server
-    private func getFriendQuery() -> PFQuery? {
-        var following = PFQuery(className: "Followers")
-        following.whereKey("username", equalTo: PFUser.currentUser())
-        let list = following.findObjects()
+    private func getFriendQuery(completion: (query: PFQuery?) -> Void) {
+        var chosenQuery: PFQuery?
         
-        if countElements(list) <= 0 {
-            return nil
-        } else {
-            let usersArray = list as [AnyObject]
-            var userQueries = [PFQuery]()
+        Async.background {
+            var following = PFQuery(className: "Followers")
+            following.whereKey("username", equalTo: PFUser.currentUser().username)
+            let user = following.findObjects()
             
-            for obj in list { //Every Object
-                for user in obj["following"] as [String] { //Followers INSIDE obj
+            if countElements(user) <= 0 {
+                chosenQuery = nil
+            } else {
+                var userQueries = [PFQuery]()
+                
+                for follower in user[0]["following"] as [String] {
                     var userQuery = PFQuery(className: "SentData")
-                    userQuery.whereKey("username", equalTo: user)
+                    userQuery.whereKey("username", equalTo: follower)
                     userQueries.append(userQuery)
                 }
+                
+                chosenQuery = PFQuery.orQueryWithSubqueries(userQueries)
             }
-            
-            return PFQuery.orQueryWithSubqueries(userQueries) //Master query returned
+        }.main {
+                completion(query: chosenQuery) //Master query returned
         }
     }
     
@@ -134,17 +109,6 @@ class MapControl: NSObject {
         query.orderByDescending("createdAt")
         
         return query
-    }
-    
-    ///Same as isCurrentUserFollowing except with the assumption that followersList != nil
-    private func followerCompare(user: String) -> Bool {
-        for following in followingList! {
-            if following == user {
-                return true
-            }
-        }
-        
-        return false
     }
 }
 
