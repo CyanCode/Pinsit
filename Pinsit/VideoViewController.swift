@@ -10,15 +10,13 @@ import UIKit
 import MapKit
 
 class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate {
-    @IBOutlet var videoView: UIView!
+    @IBOutlet var videoView: RecordingView!
     @IBOutlet var switchCamBtn: UIButton!
     @IBOutlet var recordBtn: UIButton!
     @IBOutlet var torchBtn: UIButton!
     @IBOutlet var loadingActivity: UIActivityIndicatorView!
     @IBOutlet var videoProgress: UIProgressView!
     
-    var videoManager: Media!
-    var play: Playback!
     var time: TimeKeeper!
     var recordingTime: NSTimer!
     var recording: Bool!
@@ -28,49 +26,24 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
         super.viewDidLoad()
         
         addGesture()
-        recordingLongPress()
         recordingTime = NSTimer(timeInterval: 0.1, target: self, selector: "timeFired:", userInfo: nil, repeats: true)
         time = TimeKeeper(progress: videoProgress, responder: self)
         recordingFinished = false
     }
     
-    var mapManage: ZoomMap!
-    override func viewWillAppear(animated: Bool) {
-//        if (mapManage == nil) {
-//            mapManage = ZoomMap(map: map, covered: false)
-//        }
-//        
-//        mapManage.zoomToCurrentLocation()
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            self.videoManager = Media(resView: self.videoView)
-            self.videoManager.toggleLoading(self.loadingActivity, enable: true)
-            self.videoManager.view = self.videoView
-            self.videoManager.createPreview()
-            self.videoManager.toggleLoading(self.loadingActivity, enable: false)
-        })
+    var loaded: Bool = false
+    override func viewDidLayoutSubviews() {
+        if loaded == false {
+            loaded = true
+            
+            videoView.createSessions({ () -> Void in
+                self.videoView.previewCamera()
+            })
+        }
     }
     
-    override func viewWillDisappear(animated: Bool) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            self.videoManager.video.endSession()
-            self.videoManager.removeLayers()
-        })
-    }
-    
-    var effect: UIVisualEffectView!
     override func viewDidAppear(animated: Bool) {
-//        if effect == nil {
-//            effect = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
-//            effect.frame = map.bounds
-//            
-//            map.insertSubview(effect, aboveSubview: map)
-//        }
-        
         AppDelegate.loginCheck(self)
-        self.view.bringSubviewToFront(recordBtn)
-        self.view.bringSubviewToFront(switchCamBtn)
-        self.view.bringSubviewToFront(torchBtn)
     }
     
     override func didReceiveMemoryWarning() {
@@ -80,29 +53,26 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
     
     //MARK: Button Actions
     @IBAction func switchCam(sender: AnyObject) {
-        if recordingFinished == false {
-            videoManager.camera.switchCamPosition()
+        if videoView.recStatus != .RECORDING {
+            videoView.switchCameraPositions()
         }
     }
     
     var inPlaybackMode: Bool!
+    ///Readies view for recording
     func restartVideo() {
-        play.deconstructPlayback()
-        
-        recordBtn.setImage(UIImage(named: "record-inactive.png"), forState: UIControlState.Normal)
-        
+        changeVideoState(VideoState.READY)
         self.switchCamBtn.userInteractionEnabled = true
         self.videoProgress.setProgress(0.0, animated: true)
-        self.videoManager = Media(resView: self.videoView)
-        self.videoManager.toggleLoading(self.loadingActivity, enable: true)
-        self.videoManager.view = self.videoView
-        self.videoManager.createPreview()
-        self.videoManager.toggleLoading(self.loadingActivity, enable: false)
+        self.videoView.stopPlayback()
+        self.videoView.previewCamera()
+        self.videoView.recStatus = .RECORDING
+    
         inPlaybackMode = false
     }
     
     @IBAction func commitVideo(sender: AnyObject) {
-        if inPlaybackMode != nil && inPlaybackMode == true {
+        if videoView.recStatus == .READY {
             let setDetails = UIView.detailViewFromNib()
             setDetails.presentViewInController(self, popupPoint: CGPointMake(recordBtn.center.x, recordBtn.center.y + 23))
             
@@ -116,51 +86,38 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
         }
     }
     
-    //MARK: Long Press
-    private func recordingLongPress() {
-        recording = false
-        let press = UILongPressGestureRecognizer(target: self, action: "handleRecordingPress:")
-        recordBtn.addGestureRecognizer(press)
-    }
-    
     private func doneRecording() {
-        println("Time is up")
         switchCamBtn.userInteractionEnabled = false
-        recordBtn.setImage(UIImage(named: "check.png"), forState: UIControlState.Normal)
-        videoManager.progress.endRecording()
+        changeVideoState(VideoState.DONE)
+        
+        videoView.endRecordingSession()
         time.endTime()
-        play = Playback(view: videoView)
-        play.startPlayback()
-        recordingFinished = true
-        inPlaybackMode = true
     }
     
-    func handleRecordingPress(recognizer: UILongPressGestureRecognizer) {
-        if recognizer.state == UIGestureRecognizerState.Began && recordingFinished != true { //Start recording
-            recording = true
-            recordBtn.setImage(UIImage(named: "progress.png"), forState: UIControlState.Normal)
+    var isRecording: Bool = false
+    @IBAction func handleRecordingTap(recognizer: UITapGestureRecognizer) {
+        if videoView.recStatus != .READY && videoView.recStatus != .RECORDING { //Start recording
+            isRecording = true
+            
             time.startTime()
-            videoManager.progress.startRecording()
-            recordingFinished = false
-            inPlaybackMode = false
-        } else if recognizer.state == UIGestureRecognizerState.Ended && recordingFinished != true { //Finished Recording
-            recording = false
-            recordBtn.setImage(UIImage(named: "check.png"), forState: UIControlState.Normal)
-            time.endTime()
-            doneRecording()
+            videoView.stopPlayback()
+            videoView.startRecordingVideo(nil)
+            
+            changeVideoState(VideoState.RECORDING)
+        } else if videoView.recStatus == .RECORDING { //End recording
+            isRecording = false
+            self.doneRecording()
         }
     }
     
     //MARK: Shaking
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
-        if (recordingFinished == true) {
+        if (videoView.recStatus == .DONE_RECORDING) {
             var alert = UIAlertController(title: "Are you sure?", message: "Do you really want to delete your masterpiece?", preferredStyle: UIAlertControllerStyle.Alert)
             
             alert.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: { action in
                 println("Deletion Cancelled")
-            }))
-            
-            alert.addAction(UIAlertAction(title: "Delete It", style: .Default, handler: { action in
+            })); alert.addAction(UIAlertAction(title: "Delete It", style: .Default, handler: { action in
                 self.restartVideo()
             }))
             
@@ -178,22 +135,10 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
         videoView.addGestureRecognizer(tap)
     }
     
-    func togglePlayback(tap: UITapGestureRecognizer) {
-        if (recordingFinished == true) {
-            if (play.playing == true && play.donePlaying == false) { //Playing, pause
-                play.pausePlayback()
-            } else if (play.playing == false && play.donePlaying == false){ //Paused, unpause
-                play.startPlayback()
-            } else if (play.donePlaying == true) { //Stopped, restart
-                play.startPlayback()
-            }
-        }
-    }
-    
     //MARK: Times up
     @objc func timeUp(notification: NSNotification) {
         recording = false
-        recordBtn.setImage(UIImage(named: "check.png"), forState: UIControlState.Normal)
+        changeVideoState(VideoState.DONE)
         time.endTime()
         doneRecording()
     }
@@ -201,5 +146,19 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+    }
+    
+    private func changeVideoState(state: VideoState) {
+        switch state {
+        case .READY: recordBtn.setImage(UIImage(named: "record-inactive.png"), forState: .Normal)
+        case .RECORDING: recordBtn.setImage(UIImage(named: "progress.png"), forState: .Normal)
+        case .DONE: recordBtn.setImage(UIImage(named: "check.png"), forState: .Normal)
+        }
+    }
+    
+    enum VideoState {
+        case READY
+        case RECORDING
+        case DONE
     }
 }
