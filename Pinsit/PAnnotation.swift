@@ -63,6 +63,8 @@ class PAnnotation: NSObject, MKAnnotation {
                         completion(error: geoCode.error)
                     }
                 })
+            } else {
+                completion(error: nil)
             }
         }
         
@@ -70,16 +72,16 @@ class PAnnotation: NSObject, MKAnnotation {
     
     func confirmCredentials(completion: (valid: Bool, error: NSError?) -> Void) {
         self.validPostAmount { (valid, error) -> Void in
-            if error != nil {
+            if error != nil || valid == false {
                 completion(valid: false, error: error)
             } else {
                 let email = self.confirmEmail()
                 let phone = self.confirmNumber()
                 
-                if email == false || phone == false {
-                    completion(valid: false, error: nil)
-                } else {
+                if email == true && phone == true {
                     completion(valid: true, error: nil)
+                } else {
+                    completion(valid: false, error: nil)
                 }
             }
         }
@@ -91,6 +93,7 @@ class PAnnotation: NSObject, MKAnnotation {
                 completion(valid: false, error: NSError())
             } else {
                 if amount?.integerValue >= 3 {
+                    self.tooManyPosts()
                     completion(valid: false, error: nil)
                 } else {
                     completion(valid: true, error: nil)
