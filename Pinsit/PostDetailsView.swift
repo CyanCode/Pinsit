@@ -93,7 +93,7 @@ class PostDetailsView: UIView, UITextViewDelegate {
         postingProgress.textLabel.text = "Posting"
         postingProgress.showInView(responder.view)
         PAnnotation().postAnnotation(self, completion: { (error) -> Void in
-            postingProgress.dismiss()
+            postingProgress.dismissAnimated(true)
             
             if error != nil {
                 self.postingError()
