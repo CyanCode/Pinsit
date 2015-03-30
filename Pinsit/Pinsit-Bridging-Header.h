@@ -3,6 +3,7 @@
 //
 
 #import <Parse/Parse.h>
+#import <ParseCrashReporting/ParseCrashReporting.h>
 
 #import "ColorUtils.h"
 #import "DBAccess/DBAccess.h"
