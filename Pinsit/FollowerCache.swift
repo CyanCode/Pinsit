@@ -30,6 +30,9 @@ class FollowerCache {
             
             object["username"] = PFUser.currentUser().username
             object["following"] = followers
+            
+            //Reset and Pin
+            self.resetCache()
             object.pinInBackgroundWithBlock({ (success, error) -> Void in })
             println("Follower cache updated successfully")
             
@@ -84,6 +87,19 @@ class FollowerCache {
         }
         
         return false
+    }
+    
+    ///Reset all cached follower objects (if they exist)
+    func resetCache() {
+        let query = PFQuery(className: "Followers")
+        query.whereKey("username", equalTo: PFUser.currentUser().username)
+        query.fromLocalDatastore()
+        
+        let objects = query.findObjects()
+        
+        for obj in objects as [PFObject] {
+            obj.unpin()
+        }
     }
     
     private func getUserObject() -> PFObject? {
