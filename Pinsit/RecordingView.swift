@@ -34,7 +34,35 @@ class RecordingView: VideoProjectionView {
         
     ///Flip between front and back camera
     func switchCameraPositions() {
+        session.beginConfiguration()
         
+        var input: AVCaptureDeviceInput
+        let oldPosition = self.videoDevice.position
+        var newPosition: AVCaptureDevicePosition
+        
+        if (oldPosition == AVCaptureDevicePosition.Back) {
+            newPosition = AVCaptureDevicePosition.Front
+        } else {
+            newPosition = AVCaptureDevicePosition.Back
+        }
+        
+        session.removeInput(videoInput)
+        
+        if newPosition == AVCaptureDevicePosition.Back {
+            videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        } else {
+            videoDevice = frontCamDevice()
+        }
+        
+        var error: NSError?
+        if videoDevice != nil {
+            videoInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error) as AVCaptureDeviceInput
+            if (error == nil) {
+                session.addInput(videoInput)
+            }
+        }
+        
+        session.commitConfiguration()
     }
     
     ///MARK: Management

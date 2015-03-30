@@ -14,6 +14,8 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
     var recStatus: RecordingStatus = .NOT_STARTED
     var session: AVCaptureSession!
     var deviceOutput: AVCaptureMovieFileOutput!
+    var videoInput: AVCaptureDeviceInput!
+    var videoDevice: AVCaptureDevice!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,16 +93,16 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
         Async.background {
             self.session = AVCaptureSession()
             self.session.sessionPreset = AVCaptureSessionPresetHigh
-            let videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+            self.videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
             let audioDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
             
             var error: NSError?
-            let videoInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error) as AVCaptureDeviceInput
+            self.videoInput = AVCaptureDeviceInput.deviceInputWithDevice(self.videoDevice, error: &error) as AVCaptureDeviceInput
             let audioInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error) as AVCaptureDeviceInput
             self.deviceOutput = AVCaptureMovieFileOutput()
             
-            if self.session.canAddInput(videoInput) { //Video input
-                self.session.addInput(videoInput)
+            if self.session.canAddInput(self.videoInput) { //Video input
+                self.session.addInput(self.videoInput)
             }; if self.session.canAddInput(audioInput) { //Audio input
                 self.session.addInput(audioInput)
             }; if self.session.canAddOutput(self.deviceOutput) { //Video output
@@ -111,6 +113,19 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
             }.main {
                 loaded()
         }
+    }
+    
+    ///Get the front camera's AVCaptureDevice object
+    func frontCamDevice() -> AVCaptureDevice {
+        let devices = AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo)
+        
+        for device in devices {
+            if device.position == AVCaptureDevicePosition.Front {
+                return device as AVCaptureDevice
+            }
+        }
+        
+        return AVCaptureDevice()
     }
     
     ///Video did finish recording delegate

@@ -66,7 +66,7 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
         self.videoProgress.setProgress(0.0, animated: true)
         self.videoView.stopPlayback()
         self.videoView.previewCamera()
-        self.videoView.recStatus = .RECORDING
+        self.videoView.recStatus = .NOT_STARTED
     
         inPlaybackMode = false
     }
@@ -112,7 +112,7 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
     
     //MARK: Shaking
     override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
-        if (videoView.recStatus == .DONE_RECORDING) {
+        if (videoView.recStatus == .DONE_RECORDING || videoView.recStatus == .READY) {
             var alert = UIAlertController(title: "Are you sure?", message: "Do you really want to delete your masterpiece?", preferredStyle: UIAlertControllerStyle.Alert)
             
             alert.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: { action in
