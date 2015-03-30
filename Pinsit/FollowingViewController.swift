@@ -11,15 +11,11 @@ import UIKit
 class FollowingViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var userSearch: UISearchBar!
     @IBOutlet var tableView: UITableView!
-    var tableData: [String]!
-    var followingValues: [Bool]!
-    var userFollowing: [String]!
+    var tableData: [String] = [String]()
+    var followingValues: [Bool] = [Bool]()
+    var userFollowing: [String] = [String]()
     
     override func viewDidAppear(animated: Bool) {
-        tableData = [String]() //Default value
-        userFollowing = [String]() //Default value
-        followingValues = [Bool]()
-        
         userSearch.delegate = self
         tableView.delegate = self
         tableView.dataSource = self
