@@ -12,6 +12,7 @@ import UIKit
 class PostDetailsView: UIView, UITextViewDelegate {
     @IBOutlet var descriptionView: UITextView!
     @IBOutlet var downloadSwitch: UISwitch!
+    @IBOutlet var privateSwitch: UISwitch!
     @IBOutlet var cancelButton: UIButton!
     @IBOutlet var postButton: UIButton!
     
@@ -30,6 +31,7 @@ class PostDetailsView: UIView, UITextViewDelegate {
     func prepareView() {
         downloadSwitch.enabled = File().isUpgraded()
         downloadSwitch.onTintColor = UIColor(string: "#FF2851")
+        privateSwitch.onTintColor = UIColor(string: "#FF2851")
         fillerText()
         
         //Buttons and TextView
@@ -42,10 +44,9 @@ class PostDetailsView: UIView, UITextViewDelegate {
         
         //Full View
         self.layer.cornerRadius = 3
-        self.layer.borderWidth = 4
+        self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.whiteColor().CGColor
-        self.layer.masksToBounds = true
-        
+
         self.descriptionView.delegate = self
     }
     
