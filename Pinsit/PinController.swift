@@ -19,20 +19,14 @@ class PinController {
     
     ///Creates PAnnotation array from query variable
     ///
-    ///:returns: Array of PAnnotations pulled from query
+    ///:param: completion function called when all annotations have been found
     func annotationsFromQuery(completion: (annotations: [PAnnotation]) -> Void) {
         var annotations = [PAnnotation]()
         
         if query == nil { //Handles default initialization
             INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(INTULocationAccuracy.Block, timeout: 5) { (location, accuracy, status) -> Void in
                 if status == .Success || status == .TimedOut {
-                    self.query = PFQuery(className: "SentData")
-                    self.query!.whereKey("location", nearGeoPoint: PFGeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude))
-                    self.query!.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
-                        for obj in objects as [PFObject] {
-                            annotations.append(self.objectToAnnotation(obj))
-                        }
-                        
+                    self.defaultQueryAnnotations(PFGeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude), done: { (annotations) -> Void in
                         completion(annotations: annotations)
                     })
                 }
@@ -100,5 +94,30 @@ class PinController {
             let obj = objects[0] as PFObject
             return self.objectToAnnotation(obj)
         } else { return nil }
+    }
+    
+    ///Get the default annotations from the map refresh, removing private objects
+    ///
+    ///:param: location the PFGeoPoint to query from
+    ///:param: done called when annotations have been found, returns array of PAnnotations
+    func defaultQueryAnnotations(location: PFGeoPoint, done: (annotations: [PAnnotation]) -> Void) {
+        let manager = MapControl()
+        let followerManager = FollowerCache()
+        var annotations = [PAnnotation]()
+        
+        let query = manager.getDefaultQuery(location)
+        query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
+            if error != nil {
+                done(annotations: [PAnnotation]()); return
+            }
+            
+            for obj in objects as [PFObject] { //Only add if video isn't private OR we are following them
+                if obj["private"] as NSNumber == false || followerManager.isFollowing(obj["username"] as String) {
+                    annotations.append(self.objectToAnnotation(obj))
+               }
+            }
+            
+            done(annotations: annotations)
+        }
     }
 }

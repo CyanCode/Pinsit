@@ -21,6 +21,8 @@ class MapControl: NSObject {
         map.mapView.addGestureRecognizer(press)
     }
     
+    override init() { }
+    
     ///Starts populating mapView with default pins
     func startMapPopulation() {
         self.searchWithSortQuery(nil) //Pass nil to search with default query
@@ -41,11 +43,11 @@ class MapControl: NSObject {
             } else {
                 control = PinController(query: query!)
             }
-        }.main { //Return to the main thread
-            control!.annotationsFromQuery({ (annotations) -> Void in
-                self.currentMap.mapView.removeAnnotations(self.currentMap.mapView.annotations)
-                self.currentMap.mapView.addAnnotations(annotations)
-            })
+            }.main { //Return to the main thread
+                control!.annotationsFromQuery({ (annotations) -> Void in
+                    self.currentMap.mapView.removeAnnotations(self.currentMap.mapView.annotations)
+                    self.currentMap.mapView.addAnnotations(annotations)
+                })
         }
     }
     
@@ -67,10 +69,9 @@ class MapControl: NSObject {
         self.currentMap.presentViewController(sheet, animated: true, completion: nil)
     }
     
-    ///MARK: Private query methods
-    ///Pulls follower's pins from server
-    private func getFriendQuery(completion: (query: PFQuery?) -> Void) {
-        var chosenQuery: PFQuery?
+    ///Get individual friend queries
+    private func getFriendQueries(completion: (queries: [PFQuery]?) -> Void) {
+        var allQueries: [PFQuery]?
         
         Async.background {
             var following = PFQuery(className: "Followers")
@@ -78,7 +79,7 @@ class MapControl: NSObject {
             let user = following.findObjects()
             
             if countElements(user) <= 0 {
-                chosenQuery = nil
+                allQueries = nil
             } else {
                 var userQueries = [PFQuery]()
                 
@@ -88,10 +89,30 @@ class MapControl: NSObject {
                     userQueries.append(userQuery)
                 }
                 
-                chosenQuery = PFQuery.orQueryWithSubqueries(userQueries)
+                allQueries = userQueries
             }
-        }.main {
-                completion(query: chosenQuery) //Master query returned
+            }.main {
+                completion(queries: allQueries)
+        }
+    }
+    
+    ///Gets the default query from the server, does not remove private pins
+    func getDefaultQuery(location: PFGeoPoint) -> PFQuery {
+        let query = PFQuery(className: "SentData")
+        query.whereKey("location", nearGeoPoint: location)
+        
+        return query
+    }
+    
+    ///MARK: Private query methods
+    ///Pulls follower's pins from server
+    private func getFriendQuery(completion: (query: PFQuery?) -> Void) {
+        self.getFriendQueries { (queries) -> Void in
+            if queries == nil {
+                completion(query: nil)
+            } else {
+                completion(query: PFQuery.orQueryWithSubqueries(queries))
+            }
         }
     }
     

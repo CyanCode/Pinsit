@@ -16,6 +16,7 @@ class PAnnotation: NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var thumbnail: UIImage!
     var allowsDownloading: Bool!
+    var isPrivate: Bool!
     var videoURL: NSURL!
     var videoData: NSData!
     var isFriend: NSNumber!
@@ -51,13 +52,12 @@ class PAnnotation: NSObject, MKAnnotation {
                         ann.subtitle = vc.descriptionView.text
                         ann.coord = Coordinate(lat: geoCode.location.coordinate.latitude, lon: geoCode.location.coordinate.longitude)
                         ann.allowsDownloading = vc.downloadSwitch.on
+                        ann.isPrivate = vc.privateSwitch.on
                         ann.thumbnail = Image().generateThumbnail()
                         ann.videoData = NSData(contentsOfURL: RecordingProgress.videoLocation())
                         
                         let send = ServerSend(ann: ann)
-                        send.sendDataWithBlock({ (error) -> Void in
-                            completion(error: error)
-                        })
+                        send.sendDataWithBlock({ (error) -> Void in completion(error: error) })
                     } else {
                         println("Location Error: \(geoCode.error.localizedDescription)")
                         completion(error: geoCode.error)
