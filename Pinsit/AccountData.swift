@@ -27,8 +27,8 @@ public class AccountData {
         var query = PFQuery(className: "AccountActivity")
         query.whereKey("userID", equalTo: userID)
         query.orderByAscending("updatedAt")
-        query.cachePolicy = kPFCachePolicyNetworkElseCache
-
+        query.cachePolicy = PFCachePolicy.CacheElseNetwork
+        
         var objects = query.findObjects(&error) as [PFObject]
         distributeObjectData(objects)
     }
