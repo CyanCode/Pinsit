@@ -57,6 +57,16 @@ class Styling {
         return btn
     }
     
+    func gradientBackground() {
+        let view = obj as UIView
+        let gradient = CAGradientLayer()
+
+        gradient.frame = view.bounds
+        gradient.colors = [UIColor(string: "#50C9C3").CGColor, UIColor(string: "#96DEDA").CGColor, 1]
+
+        view.layer.insertSublayer(gradient, atIndex: 0)
+    }
+    
     ///Creates a pattern on sent view's background
     class func patternView(view: UIView) {
         var image = UIImage(named: "pattern.png")
