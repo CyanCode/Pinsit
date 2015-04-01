@@ -23,13 +23,4 @@ class FormTextField: UITextField {
         self.layer.borderColor = UIColor.whiteColor().CGColor
         self.layer.borderWidth = 1
     }
-    
-    /*
-    // Only override drawRect: if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func drawRect(rect: CGRect) {
-    // Drawing code
-    }
-    */
-    
 }
