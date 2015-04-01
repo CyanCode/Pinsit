@@ -8,6 +8,14 @@
 	<string>We need you to enable Location Services before Pinsit will work.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>We need you to enable Location Services before Pinsit will work.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Aileron-SemiBold.otf</string>
+		<string>Aileron-Regular.otf</string>
+		<string>Aileron-Heavy.otf</string>
+		<string>Aileron-Bold.otf</string>
+		<string>leaguegothic.otf</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
