@@ -142,7 +142,7 @@
                                             </constraints>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits"/>
+                                            <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="Lx9-cm-coa"/>
@@ -177,6 +177,9 @@
                                                     <include reference="i1V-la-3wU"/>
                                                 </mask>
                                             </variation>
+                                            <connections>
+                                                <action selector="loginButton:" destination="RJe-zK-kE3" eventType="touchUpInside" id="hch-9v-hu9"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="characterWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YWk-tV-BgI">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -386,6 +389,10 @@
                         </variation>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
+                    <connections>
+                        <outlet property="passwordField" destination="yhe-lU-O6K" id="iGp-jE-ajr"/>
+                        <outlet property="usernameField" destination="VWr-8c-ArA" id="8JK-8i-kuu"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HLY-vx-4Ao" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -526,7 +533,7 @@
                                             </constraints>
                                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                            <textInputTraits key="textInputTraits"/>
+                                            <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="PBp-sO-UzO"/>
@@ -598,6 +605,9 @@
                                                     <include reference="BWM-0s-T1V"/>
                                                 </mask>
                                             </variation>
+                                            <connections>
+                                                <action selector="registerPressed:" destination="M9L-AG-ooH" eventType="touchUpInside" id="L3f-U8-0ZW"/>
+                                            </connections>
                                         </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YEr-x2-8xw">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -621,6 +631,32 @@
                                             </variation>
                                             <connections>
                                                 <segue destination="RJe-zK-kE3" kind="presentation" modalTransitionStyle="crossDissolve" animates="NO" id="IMv-Cf-bOa"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="infoLight" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H3m-Of-AM5">
+                                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="22" id="5rd-DH-95v"/>
+                                                <constraint firstAttribute="height" constant="22" id="XYm-dN-OYc"/>
+                                            </constraints>
+                                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                            <state key="normal">
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="5rd-DH-95v"/>
+                                                    <exclude reference="XYm-dN-OYc"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <mask key="constraints">
+                                                    <include reference="5rd-DH-95v"/>
+                                                    <include reference="XYm-dN-OYc"/>
+                                                </mask>
+                                            </variation>
+                                            <connections>
+                                                <action selector="infoPressed:" destination="M9L-AG-ooH" eventType="touchUpInside" id="1nn-jm-Nm2"/>
                                             </connections>
                                         </button>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="PINSIT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xIX-Wh-EjH">
@@ -648,6 +684,7 @@
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="YEr-x2-8xw" secondAttribute="trailing" constant="72" id="342-R0-jwT"/>
+                                        <constraint firstItem="H3m-Of-AM5" firstAttribute="top" secondItem="7nI-cs-Kae" secondAttribute="top" constant="8" id="D47-19-PST"/>
                                         <constraint firstAttribute="trailing" secondItem="qvR-zq-s1i" secondAttribute="trailing" id="GAY-BN-POe"/>
                                         <constraint firstItem="191-11-pEG" firstAttribute="centerX" secondItem="xIX-Wh-EjH" secondAttribute="centerX" id="GN6-6F-NQj"/>
                                         <constraint firstItem="YEr-x2-8xw" firstAttribute="top" secondItem="i3e-q5-fsW" secondAttribute="bottom" constant="8" id="MRw-cQ-FfW"/>
@@ -656,6 +693,7 @@
                                         <constraint firstItem="191-11-pEG" firstAttribute="top" secondItem="7nI-cs-Kae" secondAttribute="top" constant="40" id="Pfj-7p-3Ro"/>
                                         <constraint firstItem="a8G-iJ-cN8" firstAttribute="leading" secondItem="7nI-cs-Kae" secondAttribute="leading" id="PpE-2x-KE3"/>
                                         <constraint firstAttribute="trailing" secondItem="aKB-Hi-Mj6" secondAttribute="trailing" id="ScZ-Zx-xIK"/>
+                                        <constraint firstItem="H3m-Of-AM5" firstAttribute="leading" secondItem="7nI-cs-Kae" secondAttribute="leading" constant="8" id="SpF-UI-cZc"/>
                                         <constraint firstItem="i3e-q5-fsW" firstAttribute="leading" secondItem="7nI-cs-Kae" secondAttribute="leading" constant="73" id="TUy-bg-nnU"/>
                                         <constraint firstAttribute="trailing" secondItem="a8G-iJ-cN8" secondAttribute="trailing" id="VsF-lx-rOX"/>
                                         <constraint firstAttribute="trailing" secondItem="597-Gu-Mbq" secondAttribute="trailing" id="YpT-9v-SW1"/>
@@ -679,9 +717,12 @@
                                             <exclude reference="a8G-iJ-cN8"/>
                                             <exclude reference="i3e-q5-fsW"/>
                                             <exclude reference="YEr-x2-8xw"/>
+                                            <exclude reference="H3m-Of-AM5"/>
                                             <exclude reference="xIX-Wh-EjH"/>
                                         </mask>
                                         <mask key="constraints">
+                                            <exclude reference="D47-19-PST"/>
+                                            <exclude reference="SpF-UI-cZc"/>
                                             <exclude reference="wGf-Wf-gX4"/>
                                             <exclude reference="GN6-6F-NQj"/>
                                             <exclude reference="PIA-29-tgK"/>
@@ -715,9 +756,12 @@
                                             <include reference="a8G-iJ-cN8"/>
                                             <include reference="i3e-q5-fsW"/>
                                             <include reference="YEr-x2-8xw"/>
+                                            <include reference="H3m-Of-AM5"/>
                                             <include reference="xIX-Wh-EjH"/>
                                         </mask>
                                         <mask key="constraints">
+                                            <include reference="D47-19-PST"/>
+                                            <include reference="SpF-UI-cZc"/>
                                             <include reference="wGf-Wf-gX4"/>
                                             <include reference="GN6-6F-NQj"/>
                                             <include reference="PIA-29-tgK"/>
@@ -791,6 +835,10 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="email" destination="aKB-Hi-Mj6" id="77g-Pb-8XY"/>
+                        <outlet property="number" destination="a8G-iJ-cN8" id="kSx-8N-ED7"/>
+                        <outlet property="password" destination="597-Gu-Mbq" id="f8J-w7-200"/>
+                        <outlet property="username" destination="qvR-zq-s1i" id="2pU-Dn-sSN"/>
                         <segue destination="y5E-1D-MQY" kind="presentation" identifier="tosModal" animates="NO" id="aY3-K8-Mtn"/>
                     </connections>
                 </viewController>
