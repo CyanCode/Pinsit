@@ -9,36 +9,18 @@
 import UIKit
 
 class SettingsViewController: XLFormViewController {
-    @IBOutlet var upgrade: UITableViewCell!
-    @IBOutlet var facebook: UITableViewCell!
-    @IBOutlet var twitter: UITableViewCell!
-    @IBOutlet var logout: UITableViewCell!
-    @IBOutlet var removeAccount: UITableViewCell!
-    
     var options: [String]!
     
     override func viewDidLoad() {
-        self.createTableForm()
         super.viewDidLoad()
+        AppDelegate.loginCheck(self)
+        
+        self.createTableForm()
     }
-    
-//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        let tapped = self.tableView.cellForRowAtIndexPath(indexPath)!
-//        
-//        switch tapped {
-//        case upgrade: upgradeAccount(); break
-//        case facebook: social(SocialType.Facebook); break
-//        case twitter: social(SocialType.Twitter); break
-//        case logout: logoutUser(); break
-//        case removeAccount: deleteAccount(); break
-//        default: break
-//        }
-//    }
     
     ///MARK: Button Selectors
     private func upgradeAccount() {
-        let manager = StoreManager(responseV: self)
-        manager.startPurchase()
+        Upgrade().startPurchase(self)
     }
     
     private func social(type: SocialType) {
@@ -47,8 +29,7 @@ class SettingsViewController: XLFormViewController {
     }
     
     private func logoutUser() {
-        var user = PFUser.currentUser()
-        user = nil
+        PFUser.logOut()
         StoryboardManager.segueRegistration(self)
     }
     
@@ -93,7 +74,6 @@ class SettingsViewController: XLFormViewController {
     ///MARK: Settings form
     private func createTableForm() {
         //Form builder requirements
-        var form: XLFormDescriptor!
         var section: XLFormSectionDescriptor!
         var row: XLFormRowDescriptor!
         
@@ -102,8 +82,11 @@ class SettingsViewController: XLFormViewController {
         //"Pinsit" section
         section = XLFormSectionDescriptor.formSectionWithTitle("Pinsit") as XLFormSectionDescriptor
         form.addFormSection(section)
-        row = XLFormRowDescriptor(tag: Tags.Upgrade.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Upgrade Account")
-        section.addFormRow(row)
+        
+        if Upgrade().isUpgraded() == false {
+            row = XLFormRowDescriptor(tag: Tags.Upgrade.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Upgrade Account")
+            section.addFormRow(row)
+        }
         
         row = XLFormRowDescriptor(tag: Tags.Facebook.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Share on Facebook")
         section.addFormRow(row)
@@ -131,8 +114,6 @@ class SettingsViewController: XLFormViewController {
         
         row = XLFormRowDescriptor(tag: Tags.Delete.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Delete Account")
         section.addFormRow(row)
-        
-        row.action
         
         self.form = form
     }
