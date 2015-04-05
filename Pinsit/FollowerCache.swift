@@ -108,7 +108,7 @@ class FollowerCache {
         query.fromLocalDatastore()
         let objects = query.findObjects()
         
-        if countElements(objects) <= 0 {
+        if objects == nil || countElements(objects) <= 0 {
             return nil
         } else {
             return objects[0] as? PFObject
