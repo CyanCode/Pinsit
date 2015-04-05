@@ -774,7 +774,7 @@
         <!--Custom Tab Bar-->
         <scene sceneID="bRl-62-OP2">
             <objects>
-                <tabBarController hidesBottomBarWhenPushed="YES" id="8NI-SP-eed" customClass="CustomTabBar" customModule="Pinsit" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="main" hidesBottomBarWhenPushed="YES" id="8NI-SP-eed" customClass="CustomTabBar" customModule="Pinsit" customModuleProvider="target" sceneMemberID="viewController">
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="Nt1-Ss-ZG5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
