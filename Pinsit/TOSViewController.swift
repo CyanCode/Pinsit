@@ -13,11 +13,15 @@ class TOSViewController: UIViewController {
         let user = PFUser.currentUser()
         user["tosverified"] = NSNumber(bool: true)
         user.saveInBackgroundWithBlock { (success, error) -> Void in
+            
             if error != nil {
-                let control = UIAlertController(title: "Something went wrong", message: "You must be connected to the internet in order to approve the terms of service!", preferredStyle: .Alert)
-                let cancel = UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil)
-                control.addAction(cancel)
-                self.presentViewController(control, animated: true, completion: nil)
+                let alert = RegistrationAlerts(vc: self)
+                
+                if error.code == PFErrorCode.ErrorConnectionFailed.rawValue {
+                    alert.tosConnection()
+                } else {
+                    alert.unknownError()
+                }
             } else {
                 StoryboardManager.segueMain(self)
             }
