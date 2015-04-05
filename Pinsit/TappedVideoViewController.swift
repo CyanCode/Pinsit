@@ -18,6 +18,9 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     private var dataHandler: PinVideoData!
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        AppDelegate.loginCheck(self)
         self.startPlaying()
         self.dataHandler = PinVideoData(viewController: self)
         self.tableView = PinVideoTableView(pinObject: self.videoObject)

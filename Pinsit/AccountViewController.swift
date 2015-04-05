@@ -24,6 +24,8 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate {
         self.detailManager = AccountDetails(viewController: self)
         
         super.viewDidLoad()
+        AppDelegate.loginCheck(self)
+
         map.userInteractionEnabled = false
         loadInformation()
         toggleHiddenLabels(true)

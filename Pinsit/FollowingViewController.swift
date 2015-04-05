@@ -16,6 +16,9 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
     var userFollowing: [String] = [String]()
     
     override func viewDidAppear(animated: Bool) {
+        super.viewDidLoad()
+        AppDelegate.loginCheck(self)
+        
         userSearch.delegate = self
         tableView.delegate = self
         tableView.dataSource = self

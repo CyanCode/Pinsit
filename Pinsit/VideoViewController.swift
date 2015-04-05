@@ -24,7 +24,8 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        AppDelegate.loginCheck(self)
+
         addGesture()
         recordingTime = NSTimer(timeInterval: 0.1, target: self, selector: "timeFired:", userInfo: nil, repeats: true)
         time = TimeKeeper(progress: videoProgress, responder: self)
@@ -40,10 +41,6 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
                 self.videoView.previewCamera()
             })
         }
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        AppDelegate.loginCheck(self)
     }
     
     override func didReceiveMemoryWarning() {
