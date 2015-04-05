@@ -29,7 +29,7 @@ class PostDetailsView: UIView, UITextViewDelegate {
     
     ///Used for object initialization, called manually when initialized
     func prepareView() {
-        downloadSwitch.enabled = File().isUpgraded()
+        downloadSwitch.enabled = Upgrade().isUpgraded()
         downloadSwitch.onTintColor = UIColor(string: "#FF2851")
         privateSwitch.onTintColor = UIColor(string: "#FF2851")
         fillerText()

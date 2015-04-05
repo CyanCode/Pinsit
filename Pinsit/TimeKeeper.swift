@@ -26,7 +26,7 @@ class TimeKeeper {
         
         NSNotificationCenter.defaultCenter().addObserver(responder, selector: "timeUp:", name: "TimeFinishedNotification", object: nil)
         
-        setMax()
+        self.max = Upgrade().isUpgraded() ? 10 : 7
     }
     
     func startTime() {
@@ -55,15 +55,6 @@ class TimeKeeper {
             self.startTime()
         } else {
             interTime.invalidate()
-        }
-    }
-    
-    func setMax() {
-        let fm = File()
-        if (fm.isUpgraded()) {
-            max = 10
-        } else {
-            max = 7
         }
     }
 }
