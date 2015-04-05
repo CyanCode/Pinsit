@@ -29,25 +29,18 @@ class LoginViewController: UIViewController {
         button.enabled = false
         PFUser.logInWithUsernameInBackground(usernameField.text, password: passwordField.text) { (user, error) -> Void in
             button.enabled = true
+            
             if error != nil {
-                let alert = UIAlertController(title: "Oops", message: "Double check your username and password, make sure you are connected to the internet", preferredStyle: .Alert)
-                let cancel = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
-                alert.addAction(cancel)
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = RegistrationAlerts(vc: self)
+                
+                if error.code == PFErrorCode.ErrorConnectionFailed.rawValue {
+                    alert.connectionIssue()
+                } else if error.code == PFErrorCode.ErrorUsernameTaken.rawValue {
+                    alert.accountExistsAlready()
+                }
             } else {
                 StoryboardManager.segueMain(self)
             }
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -56,18 +56,23 @@ class RegisterViewController: UIViewController {
                 
                 newUser.signUp(&error)
                 
-                if error == nil {
+                if error != nil {
+                    let alert = RegistrationAlerts(vc: self)
+                    
+                    if error!.code == PFErrorCode.ErrorConnectionFailed.rawValue {
+                        alert.connectionIssue()
+                    } else if error!.code == PFErrorCode.ErrorUsernameTaken.rawValue {
+                        alert.accountExistsAlready()
+                    } else {
+                        alert.unknownError()
+                    }
+                } else {
                     let f = File()
                     if f.tosConfirmed() == false {
                         self.performSegueWithIdentifier("tos", sender: self)
                     } else {
                         StoryboardManager.segueMain(self)
                     }
-                } else {
-                    let controller = UIAlertController(title: "Uh Oh", message: "We couldn't create your account, are you sure you're connected to the internet?", preferredStyle: .Alert)
-                    let cancel = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
-                    controller.addAction(cancel)
-                    self.presentViewController(controller, animated: true, completion: nil)
                 }
             }
             
