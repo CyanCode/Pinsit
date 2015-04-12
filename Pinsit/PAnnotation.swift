@@ -21,6 +21,7 @@ class PAnnotation: NSObject, MKAnnotation {
     var videoData: NSData!
     var isFriend: NSNumber!
     var dataID: NSString!
+    var object: PFObject!
     
     private var viewController: PostDetailsView!
     
@@ -54,7 +55,7 @@ class PAnnotation: NSObject, MKAnnotation {
                         ann.allowsDownloading = vc.downloadSwitch.on
                         ann.isPrivate = vc.privateSwitch.on
                         ann.thumbnail = Image().generateThumbnail()
-                        ann.videoData = NSData(contentsOfURL: RecordingProgress.videoLocation())
+                        ann.videoData = NSData(contentsOfURL: File.getVideoPathURL())
                         
                         let send = ServerSend(ann: ann)
                         send.sendDataWithBlock({ (error) -> Void in completion(error: error) })
