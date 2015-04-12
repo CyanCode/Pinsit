@@ -82,7 +82,7 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
     func createSessions(loaded: () -> Void) {
         Async.background {
             self.session = AVCaptureSession()
-            self.session.sessionPreset = AVCaptureSessionPresetHigh
+            self.session.sessionPreset = AVCaptureSessionPresetMedium
             self.videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
             let audioDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
             
