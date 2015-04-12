@@ -79,7 +79,7 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
     
     @IBAction func toggleTorch(sender: AnyObject) {
         if inPlaybackMode == nil || inPlaybackMode == false {
-            CameraManager.toggleTorch()
+            //CameraManager.toggleTorch()
         }
     }
     
