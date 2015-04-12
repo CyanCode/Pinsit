@@ -60,6 +60,7 @@ class PinController {
         annotation.thumbnail = UIImage(data: NSData(contentsOfURL: NSURL(string: thumbnail.url!)!)!)
         annotation.videoURL = NSURL(string: thumbnail.url!)
         annotation.dataID = obj.objectId
+        annotation.object = obj
         
         return annotation
     }
