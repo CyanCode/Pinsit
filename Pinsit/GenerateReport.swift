@@ -37,9 +37,9 @@ class GenerateReport {
     ///
     ///:returns: Newly created report object
     func createReportObject() -> Report {
-        let reportSender = PFUser.currentUser().username
+        let reportSender = PFUser.currentUser()!.username
         
-        return Report(reportSender: reportSender, reportedUser: reportedUser, videoId: videoId)
+        return Report(reportSender: reportSender!, reportedUser: reportedUser, videoId: videoId)
     }
     
     ///Report user in background with completion block
@@ -79,13 +79,13 @@ class GenerateReport {
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil { completion(exists: false) } //If an error was thrown
             
-            if countElements(objects) < 1 { //Less than one PFObject exists
+            if count(objects!) < 1 { //Less than one PFObject exists
                 completion(exists: false)
             } else if increment == false { //Does exist, but don't increment
                 completion(exists: true)
             } else {
-                objects[0].incrementKey("reportAmt")
-                objects[0].saveInBackgroundWithBlock({ (success, error) -> Void in
+                objects![0].incrementKey("reportAmt")
+                objects![0].saveInBackgroundWithBlock({ (success, error) -> Void in
                     completion(exists: true)
                 })
             }

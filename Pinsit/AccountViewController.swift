@@ -74,7 +74,7 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func loadInformation() {
-        self.usernameLabel.text = PFUser.currentUser().username
+        self.usernameLabel.text = PFUser.currentUser()!.username
         let progress = JGProgressHUD(style: .Dark)
         progress.textLabel.text = "Loading"
         progress.showInView(self.view, animated: true)

@@ -19,16 +19,16 @@ class FollowerCache {
     ///Updates current cache with currentUser's follower list
     func updateCache() {
         let query = PFQuery(className: "Followers")
-        query.whereKey("username", equalTo: PFUser.currentUser().username)
+        query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil {
                 return
             }
             
-            let followers = countElements(objects) > 0 ? objects[0]["following"] as [String] : [String]()
+            let followers = count(objects!) > 0 ? objects![0]["following"] as! [String] : [String]()
             let object = PFObject(className: "Followers")
             
-            object["username"] = PFUser.currentUser().username
+            object["username"] = PFUser.currentUser()!.username
             object["following"] = followers
             
             //Reset and Pin
@@ -92,26 +92,26 @@ class FollowerCache {
     ///Reset all cached follower objects (if they exist)
     func resetCache() {
         let query = PFQuery(className: "Followers")
-        query.whereKey("username", equalTo: PFUser.currentUser().username)
+        query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.fromLocalDatastore()
         
         let objects = query.findObjects()
         
-        for obj in objects as [PFObject] {
+        for obj in objects as! [PFObject] {
             obj.unpin()
         }
     }
     
     private func getUserObject() -> PFObject? {
         let query = PFQuery(className: "Followers")
-        query.whereKey("username", equalTo: PFUser.currentUser().username)
+        query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.fromLocalDatastore()
         let objects = query.findObjects()
         
-        if objects == nil || countElements(objects) <= 0 {
+        if objects == nil || count(objects!) <= 0 {
             return nil
         } else {
-            return objects[0] as? PFObject
+            return objects![0] as? PFObject
         }
     }
 }

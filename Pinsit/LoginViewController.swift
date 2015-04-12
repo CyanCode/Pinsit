@@ -24,7 +24,7 @@ class LoginViewController: UIViewController {
     }
     
     @IBAction func loginButton(sender: AnyObject) {
-        let button = sender as UIButton
+        let button = sender as! UIButton
         
         button.enabled = false
         PFUser.logInWithUsernameInBackground(usernameField.text, password: passwordField.text) { (user, error) -> Void in
@@ -33,9 +33,9 @@ class LoginViewController: UIViewController {
             if error != nil {
                 let alert = RegistrationAlerts(vc: self)
                 
-                if error.code == PFErrorCode.ErrorConnectionFailed.rawValue {
+                if error!.code == PFErrorCode.ErrorConnectionFailed.rawValue {
                     alert.connectionIssue()
-                } else if error.code == PFErrorCode.ErrorUsernameTaken.rawValue {
+                } else if error!.code == PFErrorCode.ErrorUsernameTaken.rawValue {
                     alert.accountExistsAlready()
                 }
             } else {

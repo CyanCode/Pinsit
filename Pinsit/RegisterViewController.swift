@@ -43,7 +43,7 @@ class RegisterViewController: UIViewController {
             return
         }
         
-        let button = sender as UIButton
+        let button = sender as! UIButton
         button.enabled = false
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             if cred.usernameAvailable(self) {

@@ -19,7 +19,7 @@ class Credentials {
     
     ///Does the password contain more than or 6 characters
     func confirmPassword() -> Bool {
-        if countElements(password) >= 6 {
+        if count(password) >= 6 {
             return true
         } else {
             return false
@@ -28,7 +28,7 @@ class Credentials {
     
     ///Does the username contain more than or 6 characters
     func confirmUsername() -> Bool {
-        if countElements(username) >= 6 {
+        if count(username) >= 6 {
             return true
         } else {
             return false

@@ -24,7 +24,7 @@ class AudioFactory {
         recDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
         
         var error: NSError?
-        input = AVCaptureDeviceInput.deviceInputWithDevice(recDevice, error: &error) as AVCaptureDeviceInput
+        input = AVCaptureDeviceInput.deviceInputWithDevice(recDevice, error: &error) as! AVCaptureDeviceInput
         
         if (error == nil) {
             session.addInput(input)

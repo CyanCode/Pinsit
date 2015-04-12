@@ -30,8 +30,8 @@ class Report {
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil {
                 completion(object: nil)
-            } else if countElements(objects) > 0 {
-                completion(object: objects[0] as? PFObject)
+            } else if count(objects!) > 0 {
+                completion(object: objects![0] as? PFObject)
             } else {
                 completion(object: nil)
             }

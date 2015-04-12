@@ -15,7 +15,7 @@ class ForgotViewController: UIViewController {
         var error: NSError?
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            let button = sender as UIButton
+            let button = sender as! UIButton
             button.enabled = false
             let user = PFUser.requestPasswordResetForEmail(self.email.text, error: &error)
             let alert = RegistrationAlerts(vc: self)

@@ -57,7 +57,7 @@ class ZoomMap: NSObject, MKMapViewDelegate, CLLocationManagerDelegate {
     
     //MARK: Location Stuff
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        let location = locations.last as CLLocation
+        let location = locations.last as! CLLocation
         let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
         let region = MKCoordinateRegionMake(location.coordinate, span)
         

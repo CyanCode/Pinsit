@@ -17,13 +17,13 @@ class Followers {
     
     func findFollowersInBackground(completion: (success: Bool) -> Void) {
         let query = PFQuery(className: "Followers")
-        query.whereKey("username", equalTo: PFUser.currentUser().username)
+        query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil {
                 completion(success: false)
-            } else if countElements(objects) > 0 {
-                self.followers = objects[0]["following"] as? [String]
+            } else if count(objects!) > 0 {
+                self.followers = objects![0]["following"] as? [String]
                 completion(success: true)
             } else {
                 self.followers = [String]()

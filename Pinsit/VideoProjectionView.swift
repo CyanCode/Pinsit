@@ -74,16 +74,6 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
         self.insertLayerWithCheck(preview)
     }
     
-    ///Inserts layer into view, checking if others exist and deleting them
-    ///:param: toInsert layer to insert
-    func insertLayerWithCheck(toInsert: CALayer) {
-        if countElements(self.layer.sublayers) > 0 {
-            self.layer.sublayers[0].removeFromSuperlayer()
-        }
-        
-        self.layer.insertSublayer(toInsert, atIndex: 0)
-    }
-    
     ///Creates default capture session for recording / playing back video.
     ///This does create a global capture session, therefore you must remove
     ///the session before calling this method again
@@ -97,8 +87,8 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
             let audioDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
             
             var error: NSError?
-            self.videoInput = AVCaptureDeviceInput.deviceInputWithDevice(self.videoDevice, error: &error) as AVCaptureDeviceInput
-            let audioInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error) as AVCaptureDeviceInput
+            self.videoInput = AVCaptureDeviceInput.deviceInputWithDevice(self.videoDevice, error: &error) as! AVCaptureDeviceInput
+            let audioInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error) as! AVCaptureDeviceInput
             self.deviceOutput = AVCaptureMovieFileOutput()
             
             if self.session.canAddInput(self.videoInput) { //Video input
@@ -121,7 +111,7 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
         
         for device in devices {
             if device.position == AVCaptureDevicePosition.Front {
-                return device as AVCaptureDevice
+                return device as! AVCaptureDevice
             }
         }
         
@@ -148,5 +138,26 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
         case RECORDING
         case NOT_STARTED
         case READY
+    }
+}
+
+extension UIView {
+    ///Inserts layer into view, checking if others exist and deleting them
+    ///
+    ///:param: toInsert layer to insert
+    func insertLayerWithCheck(toInsert: CALayer) {
+        let sublayers = self.layer.sublayers
+        
+        if sublayers != nil && count(sublayers!) > 0 {
+            sublayers![0].removeFromSuperlayer()
+        }
+        
+        self.layer.insertSublayer(toInsert, atIndex: 0)
+    }
+    
+    func insertLayerAtTop(toInsert: CALayer) {
+        let index = self.layer.sublayers != nil ? count(self.layer.sublayers) + 1 : 0
+        
+        self.layer.insertSublayer(toInsert, atIndex: UInt32(index))
     }
 }

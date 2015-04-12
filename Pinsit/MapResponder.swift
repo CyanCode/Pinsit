@@ -35,8 +35,8 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
     }
     
     func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
-        var pointAnn = view.annotation as PAnnotation?
-        let writer = ListWriter(annotation: pointAnn!)
+        let ann = view.annotation as! PAnnotation
+        viewControl.currentMap.performSegueWithIdentifier("video", sender: ann)
     }
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
@@ -44,14 +44,14 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
         let annView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         
         if (annotation.isKindOfClass(PAnnotation)) {
-            let pointAnn = annotation as PAnnotation?
+            let pointAnn = annotation as! PAnnotation?
             var returnedImg = UIImage()
             
             if (pointAnn != nil) {
                 returnedImg = pointAnn!.thumbnail
             }
             
-            let following = viewControl.followerTracker.followerExists(pointAnn!.title)
+            let following = viewControl.followerTracker.followerExists(pointAnn!.title! as String)
             annView.pinColor = following ? .Green : .Red //If user is following, make pin green
             
             let style = Styling(manipulate: UIButton())
@@ -85,13 +85,13 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
         
         UIView.animateWithDuration(0.5, animations: { () -> Void in
             toolbar.frame = CGRectMake(0, self.yPos, toolbar.frame.width, toolbar.frame.height)
-        }) { (finished) -> Void in
-            self.viewControl.currentMap.searchBar.resignFirstResponder()
-            if self.yPos == -64 { toolbar.hidden = true }
+            }) { (finished) -> Void in
+                self.viewControl.currentMap.searchBar.resignFirstResponder()
+                if self.yPos == -64 { toolbar.hidden = true }
         }
     }
     
-    ///MARK: Methods    
+    ///MARK: Methods
     func removeAnnotations() {
         let map = self.viewControl.currentMap.mapView
         map.removeAnnotations(map.annotations)
@@ -99,8 +99,12 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
     
     func zoomCurrentLocation() {
         INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(.House, timeout: 5) { (location, accuracy, status) -> Void in
-            let region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(0.05, 0.05))
-            self.viewControl.currentMap.mapView.setRegion(region, animated: true)
+            if status != .Error {
+                let region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(0.05, 0.05))
+                self.viewControl.currentMap.mapView.setRegion(region, animated: true)
+            } else {
+                println("Location error")
+            }
         }
     }
 }

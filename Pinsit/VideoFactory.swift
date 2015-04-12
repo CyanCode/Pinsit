@@ -43,11 +43,11 @@ class VideoFactory {
         session.stopRunning()
         
         for input in session.inputs {
-            session.removeInput(input as AVCaptureInput)
+            session.removeInput(input as! AVCaptureInput)
         }
         
         for output in session.outputs {
-            session.removeOutput(output as AVCaptureOutput)
+            session.removeOutput(output as! AVCaptureOutput)
         }
     }
     
@@ -56,7 +56,7 @@ class VideoFactory {
         
         if (recDevice != nil) {
             var error: NSError?
-            input = AVCaptureDeviceInput.deviceInputWithDevice(recDevice, error: &error) as AVCaptureDeviceInput
+            input = AVCaptureDeviceInput.deviceInputWithDevice(recDevice, error: &error) as! AVCaptureDeviceInput
             
             if (error == nil) {
                 if (session.canAddInput(input)) {

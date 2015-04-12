@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14A386b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="VideoViewCell" customModule="Pinsit" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="400" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ekj-wD-d6h">
+                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" none="YES" button="YES" image="YES"/>
+                        <bool key="isElement" value="NO"/>
+                    </accessibility>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="50" id="hPT-pd-RG7"/>
+                    </constraints>
+                </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aXd-mI-6TB">
+                    <rect key="frame" x="358" y="8" width="34" height="34"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="34" id="hS8-jc-sa5"/>
+                        <constraint firstAttribute="height" constant="34" id="tcD-zs-kcu"/>
+                    </constraints>
+                    <state key="normal" image="report.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="tcD-zs-kcu"/>
+                            <exclude reference="hS8-jc-sa5"/>
+                        </mask>
+                    </variation>
+                    <variation key="widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="tcD-zs-kcu"/>
+                            <include reference="hS8-jc-sa5"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="reportVideo" destination="iN0-l3-epB" eventType="touchUpInside" id="8bv-LP-rXE"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DUX-pQ-Lwe">
+                    <rect key="frame" x="58" y="11" width="208" height="28"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1QK-PV-XPG">
+                    <rect key="frame" x="316" y="8" width="34" height="34"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="34" id="Uz5-kd-7dx"/>
+                        <constraint firstAttribute="width" constant="34" id="dUc-7X-1h2"/>
+                    </constraints>
+                    <state key="normal" image="download.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="dUc-7X-1h2"/>
+                            <exclude reference="Uz5-kd-7dx"/>
+                        </mask>
+                    </variation>
+                    <variation key="widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="dUc-7X-1h2"/>
+                            <include reference="Uz5-kd-7dx"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="downloadVideo" destination="iN0-l3-epB" eventType="touchUpInside" id="ypy-Nd-KYf"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TTb-IT-ZeA">
+                    <rect key="frame" x="274" y="8" width="34" height="34"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="34" id="WFf-W8-rr7"/>
+                        <constraint firstAttribute="width" constant="34" id="o3A-dz-Qmw"/>
+                    </constraints>
+                    <state key="normal" image="like.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="WFf-W8-rr7"/>
+                            <exclude reference="o3A-dz-Qmw"/>
+                        </mask>
+                    </variation>
+                    <variation key="widthClass=compact">
+                        <mask key="constraints">
+                            <include reference="WFf-W8-rr7"/>
+                            <include reference="o3A-dz-Qmw"/>
+                        </mask>
+                    </variation>
+                    <connections>
+                        <action selector="likeVideo" destination="iN0-l3-epB" eventType="touchUpInside" id="zdD-YC-hxg"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="Ekj-wD-d6h" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="BE7-gL-hJP"/>
+                <constraint firstItem="DUX-pQ-Lwe" firstAttribute="leading" secondItem="Ekj-wD-d6h" secondAttribute="trailing" constant="8" symbolic="YES" id="CAG-el-1fY"/>
+                <constraint firstItem="aXd-mI-6TB" firstAttribute="leading" secondItem="1QK-PV-XPG" secondAttribute="trailing" constant="8" symbolic="YES" id="ERx-af-1jr"/>
+                <constraint firstItem="TTb-IT-ZeA" firstAttribute="leading" secondItem="DUX-pQ-Lwe" secondAttribute="trailing" constant="8" symbolic="YES" id="FkD-AV-Mxg"/>
+                <constraint firstItem="DUX-pQ-Lwe" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="11" id="Hv9-ql-LKW"/>
+                <constraint firstItem="1QK-PV-XPG" firstAttribute="top" secondItem="TTb-IT-ZeA" secondAttribute="top" id="OoI-mC-cci"/>
+                <constraint firstItem="aXd-mI-6TB" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="topMargin" id="Whe-iC-hcf"/>
+                <constraint firstItem="aXd-mI-6TB" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailingMargin" id="XL3-MC-m07"/>
+                <constraint firstItem="aXd-mI-6TB" firstAttribute="top" secondItem="1QK-PV-XPG" secondAttribute="top" id="aKd-2t-ApA"/>
+                <constraint firstItem="Ekj-wD-d6h" firstAttribute="centerY" secondItem="DUX-pQ-Lwe" secondAttribute="centerY" id="fI8-u6-GLM"/>
+                <constraint firstItem="1QK-PV-XPG" firstAttribute="leading" secondItem="TTb-IT-ZeA" secondAttribute="trailing" constant="8" symbolic="YES" id="qrp-3f-p0F"/>
+                <constraint firstItem="Ekj-wD-d6h" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="r5G-yl-RNj"/>
+                <constraint firstItem="DUX-pQ-Lwe" firstAttribute="centerY" secondItem="TTb-IT-ZeA" secondAttribute="centerY" id="zZN-5I-PEI"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="profileImage" destination="Ekj-wD-d6h" id="hh5-jI-RUH"/>
+                <outlet property="usernameLabel" destination="DUX-pQ-Lwe" id="FjA-eV-x0y"/>
+            </connections>
+            <point key="canvasLocation" x="399" y="32"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="download.png" width="136" height="136"/>
+        <image name="like.png" width="136" height="136"/>
+        <image name="report.png" width="136" height="136"/>
+    </resources>
+</document>

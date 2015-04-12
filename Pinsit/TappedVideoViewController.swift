@@ -23,7 +23,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         AppDelegate.loginCheck(self)
         self.startPlaying()
         self.dataHandler = PinVideoData(viewController: self)
-        self.tableView = PinVideoTableView(pinObject: self.videoObject)
+        self.tableView.readyTableView(videoObject)
     }
     
     @IBAction func downloadButton(sender: AnyObject) {
@@ -31,15 +31,15 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func likeVideoButton(sender: AnyObject) {
-        self.dataHandler.addLike(videoObject.objectId, button: sender as UIButton)
+        self.dataHandler.addLike(videoObject.objectId!, button: sender as! UIButton)
     }
     
     @IBAction func followButton(sender: AnyObject) {
-        self.dataHandler.addFollower(videoObject["username"] as String, button: sender as UIButton)
+        self.dataHandler.addFollower(videoObject["username"] as! String, button: sender as! UIButton)
     }
     
     @IBAction func reportButton(sender: AnyObject) {
-        self.dataHandler.reportUser(videoObject["username"] as String, videoId: videoObject.objectId)
+        self.dataHandler.reportUser(videoObject["username"] as! String, videoId: videoObject.objectId!)
     }
     
     private func startPlaying() {
@@ -48,10 +48,32 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         progress.showInView(self.view)
         
         let manager = PinVideoManager(videoView: self.videoView)
-        let file = videoObject["video"] as PFFile
-        manager.startPlayingWithVideoData(NSURL(string: file.url)!, completion: { () -> Void in
-            manager.monitorTaps()
-            progress.dismiss()
+        
+        getVideoData(videoObject, completion: { (data) -> Void in
+            if data != nil {
+                manager.startPlayingWithVideoData(data!, completion: { () -> Void in
+                    manager.monitorTaps()
+                    progress.dismiss()
+                })
+            } else {
+                println("Could not retrieve video data!")
+            }
         })
+    }
+    
+    private func getVideoData(object: PFObject, completion: (data: NSData?) -> Void) {
+        if VideoCache().pinExistsInCache(object["objectId"] as! String) == true {
+            let pin = VideoCache().getPinWithId(videoObject!["objectId"] as! String)
+            let file = pin["videoData"] as? PFFile
+            
+            completion(data: file?.getData())
+        } else {
+            let video = object["video"] as! String
+            let id = object["objectId"] as! String
+            
+            VideoCache().cacheDataFromServer(id, url: NSURL(string: video)!, completion: { (data) -> Void in
+                completion(data: data)
+            })
+        }
     }
 }

@@ -15,13 +15,19 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
     
     private var offset: Int!
     
-    init(pinObject: PFObject) {
-        super.init()
-
+    func readyTableView(pinObject: PFObject) {
         self.pinObject = pinObject
         self.offset = 0
         
         self.pullToRefresh()
+    }
+    
+    override init(frame: CGRect, style: UITableViewStyle) {
+        super.init(frame: frame, style: style)
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -29,12 +35,12 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return countElements(tableUsernames)
+        return count(tableUsernames)
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let identifier = "cell"
-        var cell = self.dequeueReusableCellWithIdentifier(identifier) as TappedPinLikesCell?
+        var cell = self.dequeueReusableCellWithIdentifier(identifier) as! TappedPinLikesCell?
         
         if cell == nil {
             cell = TappedPinLikesCell(style: .Default, reuseIdentifier: identifier)
@@ -69,20 +75,20 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
     ///:param: completion Called when the values have been added
     private func fillTableArrays(resetFirst: Bool, completion: () -> Void) {
         let likesQuery = PFQuery(className: "Likes")
-        likesQuery.whereKey("videoId", equalTo: pinObject.objectId)
+        likesQuery.whereKey("videoId", equalTo: pinObject.objectId!)
         likesQuery.skip = offset
         likesQuery.limit = offset + 15 //Find next 15 likes
         
         likesQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if countElements(objects) > 0 {
+            if count(objects!) > 0 {
                 if resetFirst == true {
                     self.tableUsernames = [String]()
                     self.tableProfiles = [NSURL]()
                 }
                 
-                for like in objects {
-                    self.tableUsernames.append(like["username"] as String)
-                    self.tableProfiles.append(like["profileURL"] != nil ? NSURL(string: like["profileURL"] as String) : NSURL(fileURLWithPath: "profile.png")!)
+                for like in objects! {
+                    self.tableUsernames.append(like["username"] as! String)
+                    self.tableProfiles.append(like["profileURL"] != nil ? NSURL(string: like["profileURL"] as! String) : NSURL(fileURLWithPath: "profile.png")!)
                 }
             } else {
                 completion()

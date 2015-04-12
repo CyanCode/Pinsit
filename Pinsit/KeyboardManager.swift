@@ -41,7 +41,7 @@ class KeyboardManager: NSObject, UITextViewDelegate {
     
     @objc func keyboardWillShow(notification: NSNotification) {
         if let info = notification.userInfo {
-            keyboardFrame = (info[UIKeyboardFrameBeginUserInfoKey] as NSValue).CGRectValue()
+            keyboardFrame = (info[UIKeyboardFrameBeginUserInfoKey] as! NSValue).CGRectValue()
         }
         
         toggleViewMoving(true, frame: keyboardFrame)
@@ -49,7 +49,7 @@ class KeyboardManager: NSObject, UITextViewDelegate {
     
     @objc func keyboardWillHide(notification: NSNotification) {
         if let info = notification.userInfo {
-            keyboardFrame = (info[UIKeyboardFrameEndUserInfoKey] as NSValue).CGRectValue()
+            keyboardFrame = (info[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
         }
         
         toggleViewMoving(false, frame: keyboardFrame)

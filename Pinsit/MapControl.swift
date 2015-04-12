@@ -75,15 +75,15 @@ class MapControl: NSObject {
         
         Async.background {
             var following = PFQuery(className: "Followers")
-            following.whereKey("username", equalTo: PFUser.currentUser().username)
+            following.whereKey("username", equalTo: PFUser.currentUser()!.username!)
             let user = following.findObjects()
             
-            if countElements(user) <= 0 {
+            if count(user!) <= 0 {
                 allQueries = nil
             } else {
                 var userQueries = [PFQuery]()
                 
-                for follower in user[0]["following"] as [String] {
+                for follower in user![0]["following"] as! [String] {
                     var userQuery = PFQuery(className: "SentData")
                     userQuery.whereKey("username", equalTo: follower)
                     userQueries.append(userQuery)
@@ -111,7 +111,7 @@ class MapControl: NSObject {
             if queries == nil {
                 completion(query: nil)
             } else {
-                completion(query: PFQuery.orQueryWithSubqueries(queries))
+                completion(query: PFQuery.orQueryWithSubqueries(queries!))
             }
         }
     }

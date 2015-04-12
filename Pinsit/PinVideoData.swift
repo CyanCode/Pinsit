@@ -44,14 +44,14 @@ class PinVideoData {
     
     func addLike(videoId: String, button: UIButton) {
         let query = PFQuery(className: "Likes")
-        query.whereKey("username", equalTo: PFUser.currentUser().username)
+        query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error == nil && countElements(objects) == 0 {
+            if error == nil && count(objects!) == 0 {
                 var likeObj = PFObject(className: "Likes")
-                likeObj["username"] = PFUser.currentUser().username
+                likeObj["username"] = PFUser.currentUser()!.username
                 likeObj["videoId"] = videoId
                 
-                let profileFile = PFUser.currentUser()["profileImage"] as PFFile
+                let profileFile = PFUser.currentUser()!["profileImage"] as! PFFile
                 likeObj["profileURL"] = profileFile.url
                 
                 likeObj.saveInBackgroundWithBlock(nil)
@@ -62,12 +62,12 @@ class PinVideoData {
     ///Add follower to list of following users
     func addFollower(name: String, button: UIButton) {
         let followerQuery = PFQuery(className: "Followers")
-        followerQuery.whereKey("username", equalTo: PFUser.currentUser().username)
+        followerQuery.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         
         followerQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error == nil && countElements(objects) > 0 {
-                let user = objects[0] as PFObject
-                if self.followerExists(name, currentUserList: user["following"] as [String]) == false {
+            if error == nil && count(objects!) > 0 {
+                let user = objects![0] as! PFObject
+                if self.followerExists(name, currentUserList: user["following"] as! [String]) == false {
                     user.addObject(name, forKey: "following")
                     user.saveInBackgroundWithBlock(nil)
                     button.userInteractionEnabled = false
@@ -96,7 +96,7 @@ class PinVideoData {
         query.whereKey("objectId", equalTo: objectId)
         
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if countElements(objects) > 0 {
+            if count(objects!) > 0 {
                 completion(active: true)
             } else {
                 completion(active: false)

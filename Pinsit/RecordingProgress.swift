@@ -19,10 +19,10 @@ class RecordingProgress {
     }
     
     func startRecording() {
-        let outputPath: NSString = NSTemporaryDirectory() + "output.mov"
-        let outputURL: NSURL = NSURL(fileURLWithPath: outputPath)!
+        let outputPath: String = NSTemporaryDirectory() + "output.mov"
+        let outputURL: NSURL = NSURL(fileURLWithPath: outputPath as String)!
         
-        if NSFileManager.defaultManager().fileExistsAtPath(outputPath) {
+        if NSFileManager.defaultManager().fileExistsAtPath(outputPath as String) {
             var error: NSError?
             NSFileManager.defaultManager().removeItemAtPath(outputPath, error: &error)
         }
@@ -38,17 +38,17 @@ class RecordingProgress {
         
         //Remove inputs
         for var index = 0; index < session.inputs.count; index++ {
-            session.removeInput(session.inputs[index] as AVCaptureInput)
+            session.removeInput(session.inputs[index] as! AVCaptureInput)
         }
         
         //Remove outputs
         for var index = 0; index < session.outputs.count; index++ {
-            session.removeOutput(session.outputs[index] as AVCaptureOutput)
+            session.removeOutput(session.outputs[index] as! AVCaptureOutput)
         }
     }
     
     class func videoLocation() -> NSURL {
         let outputPath: NSString = NSTemporaryDirectory() + "output.mov"
-        return NSURL(fileURLWithPath: outputPath)!
+        return NSURL(fileURLWithPath: outputPath as String)!
     }
 }

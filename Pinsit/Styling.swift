@@ -17,7 +17,7 @@ class Styling {
     }
     
     func smoothButton() -> UIButton {
-        var btn = obj as UIButton
+        var btn = obj as! UIButton
         
         btn.layer.cornerRadius = 5.0
         btn.layer.borderColor = UIColor.whiteColor().CGColor
@@ -31,7 +31,7 @@ class Styling {
     }
     
     func constructView() -> UIView {
-        var view = obj as UIView
+        var view = obj as! UIView
         
         view.layer.cornerRadius = 5.0
         view.layer.borderColor = UIColor.whiteColor().CGColor
@@ -45,7 +45,7 @@ class Styling {
     }
     
     func encircleButton(img: UIImage) -> UIButton {
-        var btn = UIButton.buttonWithType(UIButtonType.Custom) as UIButton
+        var btn = UIButton.buttonWithType(UIButtonType.Custom) as! UIButton
         btn.frame = CGRectMake(0, 0, 37, 37)
         btn.setImage(img, forState: UIControlState.Normal)
         
@@ -58,7 +58,7 @@ class Styling {
     }
     
     func gradientBackground() {
-        let view = obj as UIView
+        let view = obj as! UIView
         let gradient = CAGradientLayer()
 
         gradient.frame = view.bounds

@@ -11,13 +11,13 @@ import UIKit
 class TOSViewController: UIViewController {
     @IBAction func agreePressed(sender: AnyObject) {
         let user = PFUser.currentUser()
-        user["tosverified"] = NSNumber(bool: true)
-        user.saveInBackgroundWithBlock { (success, error) -> Void in
+        user!["tosverified"] = NSNumber(bool: true)
+        user!.saveInBackgroundWithBlock { (success, error) -> Void in
             
             if error != nil {
                 let alert = RegistrationAlerts(vc: self)
                 
-                if error.code == PFErrorCode.ErrorConnectionFailed.rawValue {
+                if error!.code == PFErrorCode.ErrorConnectionFailed.rawValue {
                     alert.tosConnection()
                 } else {
                     alert.unknownError()

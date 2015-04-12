@@ -43,7 +43,7 @@ class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate {
         
         var error: NSError?
         if vidInput.recDevice != nil {
-            vidInput.input = AVCaptureDeviceInput.deviceInputWithDevice(vidInput.recDevice, error: &error) as AVCaptureDeviceInput
+            vidInput.input = AVCaptureDeviceInput.deviceInputWithDevice(vidInput.recDevice, error: &error) as! AVCaptureDeviceInput
             
             if (error == nil) {
                 vidInput.session.addInput(vidInput.input)
@@ -58,7 +58,7 @@ class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate {
         
         for device in devices {
             if device.position == AVCaptureDevicePosition.Front {
-                return device as AVCaptureDevice
+                return device as! AVCaptureDevice
             }
         }
         

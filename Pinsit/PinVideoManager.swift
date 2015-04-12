@@ -21,22 +21,27 @@ class PinVideoManager {
         self.videoEnded = false
     }
     
-    ///Loads video from server with data
+    ///Loads video from cache then server, plays it
     ///
-    ///:param: videoURL The url of the video to be played
+    ///:param: videoData NSData of the video to be played
     ///:param: completion Called when the video has been rendered and began playing
-    func startPlayingWithVideoData(videoURL: NSURL, completion: () -> Void) {
+    func startPlayingWithVideoData(videoData: NSData, completion: () -> Void) {
         Async.background {
-            self.videoData = NSData(contentsOfURL: videoURL)
-            
+            self.videoData = videoData
             self.player = self.playerFromData(self.videoData)
-            self.layer = AVPlayerLayer(player: self.player)
-            
-            self.layer.frame = self.videoView.frame
-            self.videoView.layer.addSublayer(self.layer)
-            self.player.seekToTime(kCMTimeZero)
-            self.player.play()
         }.main {
+            var layer = self.layer
+            let player = self.player
+            let view = self.videoView
+            
+            layer = AVPlayerLayer(player: self.player)
+            layer.videoGravity = AVLayerVideoGravityResizeAspectFill
+            layer.frame = self.videoView.bounds
+            
+            view.layer.insertSublayer(layer, atIndex: 1)
+            player.seekToTime(kCMTimeZero)
+            player.play()
+            
             completion()
         }
     }
@@ -70,7 +75,7 @@ class PinVideoManager {
     
     private func playerFromData(data: NSData) -> AVPlayer {
         let directory = File.pulledVideoPath()
-        data.writeToFile(File.pulledVideoPath(), atomically: true)
+        data.writeToFile(directory, atomically: true)
         
         return AVPlayer(URL: NSURL(fileURLWithPath: directory))
     }

@@ -56,7 +56,7 @@ class RecordingView: VideoProjectionView {
         
         var error: NSError?
         if videoDevice != nil {
-            videoInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error) as AVCaptureDeviceInput
+            videoInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error) as! AVCaptureDeviceInput
             if (error == nil) {
                 session.addInput(videoInput)
             }
@@ -68,18 +68,18 @@ class RecordingView: VideoProjectionView {
     ///MARK: Management
     ///Reset self CALayer's sublayers
     func resetRootLayer() {
-        for layer in self.layer.sublayers as [CALayer] {
+        for layer in self.layer.sublayers as! [CALayer] {
             layer.removeFromSuperlayer()
         }
     }
     
     ///Remove Audio and Video inputs / outputs from the session, used while previewing video
     func removeCameraInputOutput() {
-        for input in session.inputs as [AVCaptureInput] {
+        for input in session.inputs as! [AVCaptureInput] {
             session.removeInput(input)
         }
         
-        for output in session.outputs as [AVCaptureOutput] {
+        for output in session.outputs as! [AVCaptureOutput] {
             session.removeOutput(output)
         }
     }
@@ -89,18 +89,18 @@ class RecordingView: VideoProjectionView {
     ///:param: type input or output
     func exchangeInputOutput(type: AnyObject) {
         if type is AVCaptureInput {
-            session.addInput(type as AVCaptureInput)
+            session.addInput(type as! AVCaptureInput)
             
-            for input in session.inputs as [AVCaptureInput] {
-                if input != type as AVCaptureInput {
+            for input in session.inputs as! [AVCaptureInput] {
+                if input != type as! AVCaptureInput {
                     session.removeInput(input)
                 }
             }
         }; if type is AVCaptureOutput {
-            session.addOutput(type as AVCaptureOutput)
+            session.addOutput(type as! AVCaptureOutput)
             
-            for output in session.outputs as [AVCaptureOutput] {
-                if output != type as AVCaptureOutput {
+            for output in session.outputs as! [AVCaptureOutput] {
+                if output != type as! AVCaptureOutput {
                     session.removeOutput(output)
                 }
             }
@@ -114,7 +114,7 @@ class RecordingView: VideoProjectionView {
     
     ///MARK: Private and Delegates
     private func printAllLayers() {
-        for layer in self.layer.sublayers as [CALayer] {
+        for layer in self.layer.sublayers as! [CALayer] {
             println("Layer: \(layer.description) \n")
         }
     }

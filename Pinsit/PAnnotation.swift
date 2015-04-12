@@ -10,8 +10,8 @@ import Foundation
 import MapKit
 
 class PAnnotation: NSObject, MKAnnotation {
-    var title: NSString!
-    var subtitle: NSString!
+    var title: String!
+    var subtitle: String!
     var coord: Coordinate!
     var coordinate: CLLocationCoordinate2D
     var thumbnail: UIImage!
@@ -103,7 +103,7 @@ class PAnnotation: NSObject, MKAnnotation {
     }
     
     func confirmEmail() -> Bool {
-        if PFUser.currentUser()["emailVerified"] as Bool == true {
+        if PFUser.currentUser()!["emailVerified"] as! Bool == true {
             return true
         } else {
             self.unverifiedEmailError()
@@ -112,7 +112,7 @@ class PAnnotation: NSObject, MKAnnotation {
     }
     
     func confirmNumber() -> Bool {
-        let number = PFUser.currentUser()["phone"] as String?
+        let number = PFUser.currentUser()!["phone"] as! String?
         if number == nil || number == "" {
             unverifiedNumber()
             return false

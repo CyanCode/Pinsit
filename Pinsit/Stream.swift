@@ -25,24 +25,24 @@ class Stream {
         let vidPath = File.getVideoPathString()
         let fManager = NSFileManager.defaultManager()
         
-        if (fManager.fileExistsAtPath(vidPath)) {
+        if (fManager.fileExistsAtPath(vidPath as String)) {
             var error: NSError?
-            fManager.removeItemAtPath(vidPath, error: &error)
+            fManager.removeItemAtPath(vidPath as String, error: &error)
         }
         
-        let vidData = NSData(contentsOfFile: vidPath)
-        vidData?.writeToFile(vidPath, atomically: true)
+        let vidData = NSData(contentsOfFile: vidPath as String)
+        vidData?.writeToFile(vidPath as String, atomically: true)
     }
     
     func writeVideoFromCache() {
         let vidPath = File.getVideoPathString()
         let fManager = NSFileManager.defaultManager()
         
-        if (fManager.fileExistsAtPath(vidPath)) {
+        if (fManager.fileExistsAtPath(vidPath as String)) {
             var error: NSError?
-            fManager.removeItemAtPath(vidPath, error: &error)
+            fManager.removeItemAtPath(vidPath as String, error: &error)
         }
         
-        annotation.videoData?.writeToFile(vidPath, atomically: true)
+        annotation.videoData?.writeToFile(vidPath as String, atomically: true)
     }
 }

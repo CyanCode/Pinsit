@@ -27,12 +27,12 @@ class SocialManager {
     private func getDialog(type: SocialType) -> SLComposeViewController? {
         if type == .Facebook && confirmFacebookAvailable() == true {
             let compose = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-            compose.setInitialText("Follow me on Pinsit @\(PFUser.currentUser().username)")
+            compose.setInitialText("Follow me on Pinsit @\(PFUser.currentUser()!.username)")
             
             return compose
         } else if type == .Twitter && confirmTwitterAvailable() == true {
             let compose = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
-            compose.setInitialText("Follow me on Pinsit @\(PFUser.currentUser().username)")
+            compose.setInitialText("Follow me on Pinsit @\(PFUser.currentUser()!.username)")
             
             return compose
         }

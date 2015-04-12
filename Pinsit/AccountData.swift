@@ -29,23 +29,23 @@ public class AccountData {
         query.orderByAscending("updatedAt")
         query.cachePolicy = PFCachePolicy.CacheElseNetwork
         
-        var objects = query.findObjects(&error) as [PFObject]
+        var objects = query.findObjects(&error) as! [PFObject]
         distributeObjectData(objects)
     }
     
     private func distributeObjectData(objects: [PFObject]) {
         for object in objects {
-            switch exchangeTypes(object["type"] as String) {
+            switch exchangeTypes(object["type"] as! String) {
             case TableViewCellOptions.Comment:
-                pulledText.append(object["comment"] as String)
-                pulledImages.append(approveImages(object["profileImage"] as UIImage?))
+                pulledText.append(object["comment"] as! String)
+                pulledImages.append(approveImages(object["profileImage"] as! UIImage?))
                 break
             case TableViewCellOptions.NewVideoLocation:
                 pulledText.append("\(username) has posted a new video")
                 pulledImages.append(UIImage(named: "newvideo.png")!)
                 break
             case TableViewCellOptions.NewFollower:
-                let followerName = object["followerName"] as String
+                let followerName = object["followerName"] as! String
                 pulledText.append(followerName + "is now following \(username)")
                 pulledImages.append(UIImage(named: "follower.png")!)
                 break

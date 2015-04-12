@@ -120,6 +120,6 @@ class PostDetailsView: UIView, UITextViewDelegate {
 
 extension UIView {
     class func detailViewFromNib() -> PostDetailsView {
-        return UINib(nibName: "PostDetailsView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as PostDetailsView
+        return UINib(nibName: "PostDetailsView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! PostDetailsView
     }
 }

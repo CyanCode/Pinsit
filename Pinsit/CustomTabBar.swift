@@ -18,11 +18,11 @@ class CustomTabBar: UITabBarController {
         let unselected = UIColor.whiteColor()
         let colorDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
         
-        UITabBarItem.appearance().setTitleTextAttributes(colorDict, forState: .Normal)
-        UITabBarItem.appearance().setTitleTextAttributes(colorDict, forState: .Selected)
+        UITabBarItem.appearance().setTitleTextAttributes(colorDict as [NSObject : AnyObject], forState: .Normal)
+        UITabBarItem.appearance().setTitleTextAttributes(colorDict as [NSObject : AnyObject], forState: .Selected)
         
         //Unselected image color
-        for item in tabBar.items as [UITabBarItem] {
+        for item in tabBar.items as! [UITabBarItem] {
             item.image = item.image?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
         }
         

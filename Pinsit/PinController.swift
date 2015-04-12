@@ -33,7 +33,7 @@ class PinController {
             }
         } else {
             query!.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
-                for obj in objects as [PFObject] {
+                for obj in objects as! [PFObject] {
                     annotations.append(self.objectToAnnotation(obj))
                 }
                 
@@ -48,17 +48,17 @@ class PinController {
     ///:returns: Converted PAnnotation
     func objectToAnnotation(obj: PFObject) -> PAnnotation {
         var annotation = PAnnotation()
-        let point = obj["location"] as PFGeoPoint
-        let downloading = obj["downloading"] as NSNumber
-        let thumbnail = obj["thumbnail"] as PFFile
+        let point = obj["location"] as! PFGeoPoint
+        let downloading = obj["downloading"] as! NSNumber
+        let thumbnail = obj["thumbnail"] as! PFFile
         
-        annotation.title = obj["username"] as String
-        annotation.subtitle = obj["description"] as String
+        annotation.title = obj["username"] as! String
+        annotation.subtitle = obj["description"] as! String
         annotation.coordinate = CLLocationCoordinate2DMake(point.latitude, point.longitude)
         annotation.coord = Coordinate(lat: point.latitude, lon: point.longitude)
         annotation.allowsDownloading = downloading.boolValue
-        annotation.thumbnail = UIImage(data: NSData(contentsOfURL: NSURL(string: thumbnail.url)!)!)
-        annotation.videoURL = NSURL(string: thumbnail.url)
+        annotation.thumbnail = UIImage(data: NSData(contentsOfURL: NSURL(string: thumbnail.url!)!)!)
+        annotation.videoURL = NSURL(string: thumbnail.url!)
         annotation.dataID = obj.objectId
         
         return annotation
@@ -90,8 +90,8 @@ class PinController {
         query.whereKey("id", equalTo: id)
         
         let objects = query.findObjects()
-        if countElements(objects) > 0 {
-            let obj = objects[0] as PFObject
+        if count(objects!) > 0 {
+            let obj = objects![0] as! PFObject
             return self.objectToAnnotation(obj)
         } else { return nil }
     }
@@ -111,8 +111,8 @@ class PinController {
                 done(annotations: [PAnnotation]()); return
             }
             
-            for obj in objects as [PFObject] { //Only add if video isn't private OR we are following them
-                if obj["private"] as NSNumber == false || followerManager.isFollowing(obj["username"] as String) {
+            for obj in objects as! [PFObject] { //Only add if video isn't private OR we are following them
+                if obj["private"] as! NSNumber == false || followerManager.isFollowing(obj["username"] as! String) {
                     annotations.append(self.objectToAnnotation(obj))
                }
             }
