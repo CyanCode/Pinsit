@@ -12,6 +12,11 @@ pod 'SDWebImage'
 pod 'KLCPopup'
 pod 'FCCurrentLocationGeocoder'
 
+#Parse Dependencies
+pod 'Parse'
+pod 'ParseCrashReporting'
+pod 'ParseUI'
+
 end
 
 target 'PinsitTests' do
