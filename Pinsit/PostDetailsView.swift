@@ -46,7 +46,7 @@ class PostDetailsView: UIView, UITextViewDelegate {
         self.layer.cornerRadius = 3
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.whiteColor().CGColor
-
+        
         self.descriptionView.delegate = self
     }
     
@@ -83,16 +83,17 @@ class PostDetailsView: UIView, UITextViewDelegate {
     @IBAction func postPressed(sender: AnyObject) {
         postVideo()
     }
-
+    
     func postVideo() {
         if descriptionSet == false {
             descriptionView.text = ""
         }
         
-        popup.dismiss(true)
+        self.popup.dismiss(true)
         let postingProgress = JGProgressHUD(frame: self.frame)
         postingProgress.textLabel.text = "Posting"
-        postingProgress.showInView(responder.view)
+        postingProgress.showInView(self.responder.view)
+        
         PAnnotation().postAnnotation(self, completion: { (error) -> Void in
             postingProgress.dismissAnimated(true)
             
@@ -106,6 +107,7 @@ class PostDetailsView: UIView, UITextViewDelegate {
                 //segue
             }
         })
+        
     }
     
     private func postingError() {
