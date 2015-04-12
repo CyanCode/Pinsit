@@ -30,17 +30,13 @@ class PinVideoManager {
             self.videoData = videoData
             self.player = self.playerFromData(self.videoData)
         }.main {
-            var layer = self.layer
-            let player = self.player
-            let view = self.videoView
+            self.layer = AVPlayerLayer(player: self.player)
             
-            layer = AVPlayerLayer(player: self.player)
-            layer.videoGravity = AVLayerVideoGravityResizeAspectFill
-            layer.frame = self.videoView.bounds
+            self.layer.videoGravity = AVLayerVideoGravityResizeAspectFill
+            self.layer.frame = self.videoView.bounds
+            self.videoView.layer.insertSublayer(self.layer, atIndex: 1)
             
-            view.layer.insertSublayer(layer, atIndex: 1)
-            player.seekToTime(kCMTimeZero)
-            player.play()
+            self.player.play()
             
             completion()
         }
@@ -75,14 +71,21 @@ class PinVideoManager {
     
     private func playerFromData(data: NSData) -> AVPlayer {
         let directory = File.pulledVideoPath()
-        data.writeToFile(directory, atomically: true)
         
-        return AVPlayer(URL: NSURL(fileURLWithPath: directory))
+        var error: NSError?
+        data.writeToFile(directory, options: nil, error: &error)
+        
+        if error != nil {
+            println("File write error: \(error!.localizedDescription)")
+        }
+        
+        let url = NSURL(fileURLWithPath: directory)
+        return AVPlayer(URL: url)
     }
 }
 
 extension File {
     class func pulledVideoPath() -> String {
-        return NSTemporaryDirectory().stringByAppendingPathComponent("pulledVideo.mp4")
+        return NSTemporaryDirectory().stringByAppendingPathComponent("pulledVideo.mov")
     }
 }

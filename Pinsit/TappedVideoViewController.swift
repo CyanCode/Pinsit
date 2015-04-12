@@ -49,7 +49,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         
         let manager = PinVideoManager(videoView: self.videoView)
         
-        getVideoData(videoObject, completion: { (data) -> Void in
+        VideoManager(object: videoObject).pullVideoData { (data) -> Void in
             if data != nil {
                 manager.startPlayingWithVideoData(data!, completion: { () -> Void in
                     manager.monitorTaps()
@@ -58,7 +58,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
             } else {
                 println("Could not retrieve video data!")
             }
-        })
+        }
     }
     
     private func getVideoData(object: PFObject, completion: (data: NSData?) -> Void) {
@@ -71,7 +71,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
             let video = object["video"] as! String
             let id = object["objectId"] as! String
             
-            VideoCache().cacheDataFromServer(id, url: NSURL(string: video)!, completion: { (data) -> Void in
+            VideoCache().cacheDataFromServer(id, file: object["video"] as! PFFile, completion: { (data) -> Void in
                 completion(data: data)
             })
         }
