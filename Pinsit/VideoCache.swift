@@ -36,32 +36,26 @@ class VideoCache {
     ///:param: id objectId for the PFObject to be cached
     ///:param: url NSURL of the video to be downloaded
     ///:param: completion() called when data has beend downloaded from the server
-    func cacheDataFromServer(id: String, url: NSURL, completion: (data: NSData?) -> Void) {
+    func cacheDataFromServer(id: String, file: PFFile, completion: (data: NSData?) -> Void) {
         var data: NSData?
         
         Async.background {
             let pin = PFObject(className: self.className)
             pin["objectId"] = id
-            pin["videoURL"] = url.absoluteString
+            pin["videoURL"] = file.url!
             
-            data = NSData(contentsOfURL: url)
+            var error: NSError?
+            let data = file.getData(&error)
+            
+            if error != nil {
+                println("data error: \(error!.localizedDescription)")
+            }
+            
             pin["videoData"] = PFFile(data: data!)
             
             pin.pin()
-            }.main {
-                completion(data: data)
+        }.main {
+            completion(data: data)
         }
-    }
-    
-    func objectFromAnnotation(ann: PAnnotation) -> PFObject {
-        var object = PFObject(className: className)
-        object["title"] = ann.title
-        object["location"] = PFGeoPoint(latitude: ann.coord.latitude, longitude: ann.coord.longitude)
-        object["downloading"] = NSNumber(bool: ann.allowsDownloading)
-        object["thumbnail"] = PFFile(data: UIImagePNGRepresentation(ann.thumbnail))
-        object["video"] = ann.videoURL.absoluteString
-        object["objectId"] = ann.dataID
-        
-        return object
     }
 }
