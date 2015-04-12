@@ -16,6 +16,7 @@ pod 'FCCurrentLocationGeocoder'
 pod 'Parse'
 pod 'ParseCrashReporting'
 pod 'ParseUI'
+pod 'Parse+PromiseKit'
 
 end
 

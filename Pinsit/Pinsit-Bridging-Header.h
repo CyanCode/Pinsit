@@ -6,6 +6,7 @@
 #import <Parse/Parse.h>
 #import <ParseCrashReporting/ParseCrashReporting.h>
 #import "ParseUI.h"
+#import "Parse+PromiseKit.h"
 
 //Pull to refresh
 #import "UIScrollView+SVPullToRefresh.h"
