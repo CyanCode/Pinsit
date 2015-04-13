@@ -20,6 +20,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationController?.interactivePopGestureRecognizer.delegate = self
         AppDelegate.loginCheck(self)
         self.startPlaying()
         self.dataHandler = PinVideoData(viewController: self)
@@ -41,7 +42,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func reportButton(sender: AnyObject) {
         self.dataHandler.reportUser(videoObject["username"] as! String, videoId: videoObject.objectId!)
     }
-    
+        
     private func startPlaying() {
         let progress = JGProgressHUD(style: .Dark)
         progress.textLabel.text = "Loading"
