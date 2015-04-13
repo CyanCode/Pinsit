@@ -9,7 +9,7 @@
 import Foundation
 import AVFoundation
 
-class PinVideoManager {
+class PinVideoManager: NSObject {
     var videoView: UIView!
     private var videoEnded: Bool!
     private var videoData: NSData!
@@ -37,6 +37,7 @@ class PinVideoManager {
             self.videoView.layer.insertSublayer(self.layer, atIndex: 1)
             
             self.player.play()
+            NSNotificationCenter.defaultCenter().addObserver(self, selector: "playerDidFinish:", name: AVPlayerItemDidPlayToEndTimeNotification, object: nil) //AVPlayer recording finished selection
             
             completion()
         }
@@ -67,6 +68,11 @@ class PinVideoManager {
         } else { //Video playing: pause
             player.pause()
         }
+    }
+    
+    func playerDidFinish(notification: NSNotification) {
+        player.seekToTime(kCMTimeZero)
+        player.play()
     }
     
     private func playerFromData(data: NSData) -> AVPlayer {
