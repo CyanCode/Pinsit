@@ -10,7 +10,7 @@ import UIKit
 
 class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
     var pinObject: PFObject!
-    var tableUsernames: [String]!
+    var tableUsernames = [String]()
     var tableProfiles: [NSURL?]!
     
     private var offset: Int!
@@ -19,6 +19,8 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
         self.pinObject = pinObject
         self.offset = 0
         
+        self.delegate = self
+        self.dataSource = self
         self.pullToRefresh()
     }
     
@@ -39,34 +41,41 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let identifier = "cell"
-        var cell = self.dequeueReusableCellWithIdentifier(identifier) as! TappedPinLikesCell?
+        let identifier = "TappedPinLikesCell"
+        var cell = self.dequeueReusableCellWithIdentifier(identifier, forIndexPath: indexPath) as? TappedPinLikesCell
         
         if cell == nil {
             cell = TappedPinLikesCell(style: .Default, reuseIdentifier: identifier)
         }
         
-        cell?.profileImage.sd_setImageWithURL(tableProfiles[indexPath.row], placeholderImage: UIImage(named: "profile"))
-        cell?.username.text = tableUsernames[indexPath.row]
+        if tableProfiles[indexPath.row] as NSURL? == nil {
+            cell!.profileImage.image = UIImage(named: "profile.png")!
+        } else {
+            let url = tableProfiles[indexPath.row]!
+            cell!.profileImage.sd_setImageWithURL(url, placeholderImage: UIImage(named: "profile.png")!)
+        }
+        
+        cell!.username.text = tableUsernames[indexPath.row]
         
         return cell!
     }
     
     private func pullToRefresh() {
-        self.addPullToRefreshWithActionHandler { () -> Void in
+        self.addPullToRefreshWithAction { () -> () in
             self.fillTableArrays(true, completion: { () -> Void in
+                self.stopPullToRefresh()
                 self.reloadData()
             })
         }
         
-        self.addInfiniteScrollingWithActionHandler { () -> Void in
-            if self.offset == 0 { self.offset = 15 } //Increment first time
-            
-            self.fillTableArrays(false, completion: { () -> Void in
-                self.offset = self.offset + 15 //+= doesn't work??
-                self.reloadData()
-            })
-        }
+//        self.addInfiniteScrollingWithActionHandler { () -> Void in
+//            if self.offset == 0 { self.offset = 15 } //Increment first time
+//            
+//            self.fillTableArrays(false, completion: { () -> Void in
+//                self.offset = self.offset + 15 //+= doesn't work??
+//                self.reloadData()
+//            })
+//        }
     }
     
     ///Sets both tableView arrays to content from the server with respect to the offset
@@ -80,7 +89,7 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
         likesQuery.limit = offset + 15 //Find next 15 likes
         
         likesQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if count(objects!) > 0 {
+            if error == nil && count(objects!) > 0 {
                 if resetFirst == true {
                     self.tableUsernames = [String]()
                     self.tableProfiles = [NSURL]()
@@ -88,8 +97,18 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
                 
                 for like in objects! {
                     self.tableUsernames.append(like["username"] as! String)
-                    self.tableProfiles.append(like["profileURL"] != nil ? NSURL(string: like["profileURL"] as! String) : NSURL(fileURLWithPath: "profile.png")!)
+                    
+                    var url: NSURL?
+                    if like["profileURL"] as? String == nil {
+                        url = nil
+                    } else {
+                        url = NSURL(string: like["profileURL"] as! String)
+                    }
+                    
+                    self.tableProfiles.append(url)
                 }
+                
+                completion()
             } else {
                 completion()
             }
