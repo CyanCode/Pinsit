@@ -10,7 +10,7 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class AccountViewController: UIViewController, UIGestureRecognizerDelegate {
+class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var map: MKMapView!
     @IBOutlet var karmaLabel: UILabel!
@@ -95,6 +95,63 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     func profileTapped(gesture: UITapGestureRecognizer) {
+        let controller = UIAlertController(title: "Change Profile Picture", message: "", preferredStyle: .ActionSheet)
         
+        controller.addAction(UIAlertAction(title: "Choose Photo", style: .Default, handler: { (action) -> Void in
+            self.profileFromCameraRoll()
+        }))
+        controller.addAction(UIAlertAction(title: "Take Photo", style: .Default, handler: { (action) -> Void in
+            self.profileFromTakenImage()
+        }))
+        controller.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        
+        self.presentViewController(controller, animated: true, completion: nil)
+    }
+    
+    func profileFromCameraRoll() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        picker.sourceType = .PhotoLibrary
+        
+        presentViewController(picker, animated: true, completion: nil)
+    }
+    
+    func profileFromTakenImage() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        picker.sourceType = .Camera
+        
+        presentViewController(picker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+        detailManager.setImage(image)
+        profileImage.image = image
+        uploadNewProfile(image)
+        
+        picker.dismissViewControllerAnimated(false, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+        picker.dismissViewControllerAnimated(false, completion: nil)
+    }
+    
+    func uploadNewProfile(img: UIImage!) {
+        let file = PFFile(data: UIImagePNGRepresentation(img.resize(CGSizeMake(100, 100))))
+        let user = PFUser.currentUser()!
+        user["profileImage"] = file
+        
+        user.saveInBackgroundWithBlock { (success, error) -> Void in
+            if error != nil {
+                let message = UIAlertController(title: "Upload Error", message: "Your profile picture failed to upload to the server, make sure you are connected to the internet!", preferredStyle: .Alert)
+                message.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
+                
+                self.presentViewController(message, animated: true, completion: nil)
+            } else {
+                println("Profile Image upload success")
+            }
+        }
     }
 }
