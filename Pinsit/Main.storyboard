@@ -440,7 +440,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="50" id="rIy-7f-YIG" customClass="TappedPinLikesCell" customModule="Pinsit" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="TappedPinLikesCell" rowHeight="50" id="rIy-7f-YIG" customClass="TappedPinLikesCell" customModule="Pinsit" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rIy-7f-YIG" id="c9h-16-Yo2">
@@ -515,13 +515,13 @@
                                                     <exclude reference="KyK-z4-oEU"/>
                                                 </mask>
                                                 <mask key="constraints">
+                                                    <exclude reference="4OV-yG-tLG"/>
+                                                    <exclude reference="BWU-JU-DlZ"/>
+                                                    <exclude reference="C96-1c-NAP"/>
                                                     <exclude reference="Blw-tg-afQ"/>
                                                     <exclude reference="tk1-21-8LK"/>
                                                     <exclude reference="tzy-me-MwJ"/>
                                                     <exclude reference="xUS-Zw-9i0"/>
-                                                    <exclude reference="4OV-yG-tLG"/>
-                                                    <exclude reference="BWU-JU-DlZ"/>
-                                                    <exclude reference="C96-1c-NAP"/>
                                                     <exclude reference="UMU-IP-LlV"/>
                                                     <exclude reference="W8a-LX-tLT"/>
                                                     <exclude reference="tPC-ik-nKZ"/>
@@ -535,13 +535,13 @@
                                                     <include reference="KyK-z4-oEU"/>
                                                 </mask>
                                                 <mask key="constraints">
+                                                    <include reference="4OV-yG-tLG"/>
+                                                    <include reference="BWU-JU-DlZ"/>
+                                                    <include reference="C96-1c-NAP"/>
                                                     <exclude reference="Blw-tg-afQ"/>
                                                     <include reference="tk1-21-8LK"/>
                                                     <include reference="tzy-me-MwJ"/>
                                                     <include reference="xUS-Zw-9i0"/>
-                                                    <include reference="4OV-yG-tLG"/>
-                                                    <include reference="BWU-JU-DlZ"/>
-                                                    <include reference="C96-1c-NAP"/>
                                                     <include reference="UMU-IP-LlV"/>
                                                     <include reference="W8a-LX-tLT"/>
                                                     <include reference="tPC-ik-nKZ"/>
@@ -611,9 +611,8 @@
                     </view>
                     <nil key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="likesTableView" destination="D2c-4h-GP2" id="fyq-Mi-afc"/>
                         <outlet property="profileImage" destination="XVM-WO-EYP" id="hYK-73-UM3"/>
-                        <outlet property="tableView" destination="D2c-4h-GP2" id="MCG-Kn-eHU"/>
+                        <outlet property="tableView" destination="D2c-4h-GP2" id="OVB-Gw-hvh"/>
                         <outlet property="videoView" destination="EhN-yy-jNL" id="agT-Ih-5BC"/>
                     </connections>
                 </viewController>
@@ -1208,7 +1207,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ond-vD-v0g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1479" y="369"/>
+            <point key="canvasLocation" x="1479" y="360"/>
         </scene>
         <!--Map-->
         <scene sceneID="WMc-es-zvv">
