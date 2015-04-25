@@ -52,10 +52,14 @@ class GenerateReport {
                 completion(error: NSError())
             }
             
+            let reportQuery = PFQuery(className: "Reports")
+            reportQuery.whereKey("videoId", equalTo: object!.objectId!)
+            
+            
             var reportObject = PFObject(className: "Reports")
             reportObject["location"] = object!["location"]
             reportObject["video"] = object!["video"]
-            reportObject["reportedUser"] = report.reportSender
+            reportObject["reportedUser"] = report.reportedUser
             reportObject["reporter"] = report.reportSender
             reportObject.incrementKey("reportAmt")
             
