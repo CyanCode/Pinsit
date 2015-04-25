@@ -16,17 +16,14 @@ class PinVideoData {
     }
     
     func reportUser(reportedUser: String, videoId: String) {
-        let manager = GenerateReport(viewController: viewController, reportedUser: reportedUser, videoId: videoId)
-        let report = manager.createReportObject()
-        manager.presentPrompt { (answer) -> Void in
-            if answer == true {
-                manager.reportUserInBackground(report, completion: { (error) -> Void in
-                    if error != nil {
-                        self.reportError()
-                    } else {
-                        self.reportSucess()
-                    }
-                })
+        let reporter = ReportManager(videoObject: viewController.videoObject, responder: viewController)
+        reporter.reportCanBeSent { (sendable, incrementable) -> Void in
+            if sendable == true {
+                reporter.sendNewReport()
+            } else if incrementable == true {
+                reporter.incrementReport()
+            } else {
+                reporter.reportedUserMessage()
             }
         }
     }
@@ -47,14 +44,22 @@ class PinVideoData {
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error == nil && count(objects!) == 0 {
-                var likeObj = PFObject(className: "Likes")
-                likeObj["username"] = PFUser.currentUser()!.username
-                likeObj["videoId"] = videoId
+                var obj = PFObject(className: "Likes")
+                obj["username"] = PFUser.currentUser()!.username!
+                obj["videoId"] = videoId
                 
-                let profileFile = PFUser.currentUser()!["profileImage"] as! PFFile
-                likeObj["profileURL"] = profileFile.url
+                if PFUser.currentUser()!["profileImage"] != nil {
+                    let image = PFUser.currentUser()!["profileImage"] as! PFFile
+                    obj["profileURL"] = image.url
+                }
                 
-                likeObj.saveInBackgroundWithBlock(nil)
+                obj.saveInBackgroundWithBlock({ (success, error) -> Void in
+                    if error != nil {
+                        println("Like saving error: \(error!.localizedDescription)")
+                    } else {
+                        println("Video liked successfully")
+                    }
+                })
             }
         }
     }
@@ -91,7 +96,7 @@ class PinVideoData {
         return followerExists(name, currentUserList: likesList)
     }
     
-     private func videoStillActive(objectId: String, completion: (active: Bool) -> Void) {
+    private func videoStillActive(objectId: String, completion: (active: Bool) -> Void) {
         let query = PFQuery(className: "SentData")
         query.whereKey("objectId", equalTo: objectId)
         
@@ -106,7 +111,7 @@ class PinVideoData {
     
     ///MARK: Alert Controllers
     private func videoSaveError() {
-        let controller = UIAlertController(title: "Uh-Oh", message: "Your video could not be saved to the camera roll, please try again!", preferredStyle: .Alert)
+        let controller = UIAlertController(title: "Uh-Oh", message: "The video could not be saved to the camera roll, please try again!", preferredStyle: .Alert)
         controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
         self.viewController.presentViewController(controller, animated: true, completion: nil)
     }
@@ -116,16 +121,16 @@ class PinVideoData {
         controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
         self.viewController.presentViewController(controller, animated: true, completion: nil)
     }
-    
-    private func reportError() {
-        let controller = UIAlertController(title: "Nope", message: "An error occured while posting your report, the video may have been deleted.", preferredStyle: .Alert)
-        controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
-        self.viewController.presentViewController(controller, animated: true, completion: nil)
-    }
-    
-    private func reportSucess() {
-        let controller = UIAlertController(title: "Done", message: "Thank you for your report, it has been submitted and will be reviewed shortly.", preferredStyle: .Alert)
-        controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
-        self.viewController.presentViewController(controller, animated: true, completion: nil)
+}
+
+extension PFUser {
+    class func getProfileImage() -> PFFile {
+        if PFUser.currentUser()!["profileImage"] != nil {
+            return PFUser.currentUser()!["profileImage"] as! PFFile
+        } else {
+            let image = UIImage(named: "profile")
+            let data = UIImagePNGRepresentation(image!)
+            return PFFile(data: data)
+        }
     }
 }
