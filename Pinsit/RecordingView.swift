@@ -107,6 +107,24 @@ class RecordingView: VideoProjectionView {
         }
     }
     
+    ///Flip camera light on / off
+    func toggleTorch() {
+        var device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        
+        if (device.hasTorch) {
+            device.lockForConfiguration(nil)
+            
+            let torchOn = device.torchActive
+            device.torchMode = torchOn ? AVCaptureTorchMode.Off : AVCaptureTorchMode.On
+            
+            if (torchOn == false) {
+                device.setTorchModeOnWithLevel(1.0, error: nil)
+            }
+            
+            device.unlockForConfiguration()
+        }
+    }
+    
     ///Toggle loading HUD shown over passed UIViewController
     func toggleHUD(enable: Bool) {
         //Load HUD
