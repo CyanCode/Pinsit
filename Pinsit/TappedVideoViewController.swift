@@ -11,7 +11,6 @@ import UIKit
 class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var videoView: UIView!
     @IBOutlet var profileImage: UIImageView!
-    @IBOutlet var likesTableView: UITableView!
     @IBOutlet var tableView: PinVideoTableView!
     
     var videoObject: PFObject!
@@ -22,6 +21,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         
         self.navigationController?.interactivePopGestureRecognizer.delegate = self
         AppDelegate.loginCheck(self)
+        
         self.startPlaying()
         self.dataHandler = PinVideoData(viewController: self)
         self.tableView.readyTableView(videoObject)
