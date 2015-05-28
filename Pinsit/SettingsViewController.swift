@@ -10,11 +10,11 @@ import UIKit
 
 class SettingsViewController: XLFormViewController {
     var options: [String]!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         AppDelegate.loginCheck(self)
-
+        
         self.createTableForm()
     }
     
@@ -34,7 +34,36 @@ class SettingsViewController: XLFormViewController {
     }
     
     private func deleteAccount() {
+        let controller = UIAlertController(title: "Are You Sure..?", message: "We're sad to see you go, but if you must leave, please enter your login information below.", preferredStyle: .Alert)
+        controller.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            textField.placeholder = "Username"
+        }
+        controller.addTextFieldWithConfigurationHandler { (textField) -> Void in
+            textField.secureTextEntry = true
+            textField.placeholder = "Password"
+        }
+        controller.addAction(UIAlertAction(title: "Continue", style: .Default, handler: { (action) -> Void in
+            let username = controller.textFields![0] as! UITextField
+            let password = controller.textFields![1] as! UITextField
+            
+            DeleteAccount(viewController: self).attemptAuthentication(username.text, password: password.text, done: { (success) -> Void in if success == true {
+                DeleteAccount(viewController: self).beginDeletionInBackground { (success) -> Void in
+                    if success == true {
+                        self.logoutUser()
+                        StoryboardManager.segueRegistration(self)
+                    } else {
+                        let controller = UIAlertController(title: "Not Quite!", message: "The password you entered does not match the password attached to your account, feel free to try again.", preferredStyle: .Alert)
+                        controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
+                        
+                        self.presentViewController(controller, animated: true, completion: nil)
+                    }
+                }
+                }
+            })
+        }))
         
+        controller.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        self.presentViewController(controller, animated: true, completion: nil)
     }
     
     private func emailVerification() {
