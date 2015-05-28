@@ -67,15 +67,6 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
                 self.reloadData()
             })
         }
-        
-//        self.addInfiniteScrollingWithActionHandler { () -> Void in
-//            if self.offset == 0 { self.offset = 15 } //Increment first time
-//            
-//            self.fillTableArrays(false, completion: { () -> Void in
-//                self.offset = self.offset + 15 //+= doesn't work??
-//                self.reloadData()
-//            })
-//        }
     }
     
     ///Sets both tableView arrays to content from the server with respect to the offset
