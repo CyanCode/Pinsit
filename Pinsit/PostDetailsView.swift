@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class PostDetailsView: UIView, UITextViewDelegate {
+class PostDetailsView: SlideInView, UITextViewDelegate {
     @IBOutlet var descriptionView: UITextView!
     @IBOutlet var downloadSwitch: UISwitch!
     @IBOutlet var privateSwitch: UISwitch!
@@ -17,7 +17,7 @@ class PostDetailsView: UIView, UITextViewDelegate {
     @IBOutlet var postButton: UIButton!
     
     var responder: UIViewController!
-    private var popup: KLCPopup!
+    //private var popup: KLCPopup!
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -57,12 +57,14 @@ class PostDetailsView: UIView, UITextViewDelegate {
         self.responder = viewController
         self.prepareView()
         
-        popup = KLCPopup(contentView: self)
-        popup.showAtCenter(responder.view.center, inView: responder.view)
+        self.slideIn { () -> Void in }
+        //        popup = KLCPopup(contentView: self)
+        //        popup.showAtCenter(responder.view.center, inView: responder.view)
     }
     
     @IBAction func cancelPressed(sender: AnyObject) {
-        popup.dismiss(true)
+        //popup.dismiss(true)
+        self.dismissSlide()
     }
     
     var descriptionSet: Bool!
@@ -89,7 +91,8 @@ class PostDetailsView: UIView, UITextViewDelegate {
             descriptionView.text = ""
         }
         
-        self.popup.dismiss(true)
+        //self.popup.dismiss(true)
+        self.dismissSlide()
         let postingProgress = JGProgressHUD(frame: self.frame)
         postingProgress.textLabel.text = "Posting"
         postingProgress.showInView(self.responder.view)
@@ -99,11 +102,12 @@ class PostDetailsView: UIView, UITextViewDelegate {
             
             if error != nil {
                 self.postingError()
-                self.popup.dismiss(true)
+                self.dismissSlide()
+                //self.popup.dismiss(true)
             } else {
                 println("Video post successful")
-                self.popup.dismiss(true)
-                
+                //self.popup.dismiss(true)
+                self.dismissSlide()
                 //segue
             }
         })
