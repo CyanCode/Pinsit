@@ -9,6 +9,7 @@
 import Foundation
 
 class AccountDetails {
+    let profilePic = PFUser.currentUser()!.username! + ".png"
     var viewController: AccountViewController!
     var path: String
 
@@ -53,7 +54,7 @@ class AccountDetails {
     }
     
     func loadImage() -> UIImage {
-        let imgLoc = File.documentsPath().stringByAppendingPathComponent("profilePicture.png")
+        let imgLoc = File.documentsPath().stringByAppendingPathComponent(profilePic)
         let img = UIImage(contentsOfFile: imgLoc)
         
         if (img == nil) {
@@ -67,7 +68,7 @@ class AccountDetails {
     }
     
     func setImage(img: UIImage) {
-        let imgLoc = File.documentsPath().stringByAppendingPathComponent("profilePicture.png")
+        let imgLoc = File.documentsPath().stringByAppendingPathComponent(profilePic)
         UIImagePNGRepresentation(img).writeToFile(imgLoc, atomically: true)
     }
     
