@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "Pinsit": {
+            "applicationId": "syMo0vOlr4iJbpid3CuvRLZ6URKkvsK4neUAtZKa", 
+            "masterKey": "WjjzoQmJy5D5jBtUgaOQm97BeFoNrHxrkYEuDn40"
+        }, 
+        "_default": {
+            "link": "Pinsit"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.4.2"
+    }
+}
