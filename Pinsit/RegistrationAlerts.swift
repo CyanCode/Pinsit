@@ -106,6 +106,20 @@ class RegistrationAlerts {
         vc.presentViewController(alert, animated: true, completion: nil)
     }
     
+    ///If the attempted login failed
+    func loginFailure() {
+        let alert = createAlert("Your account could not be verified as either your username or password was incorrect.", title: "Login Failed")
+        
+        vc.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    ///If the username that was entered does not match the currently logged in user
+    func usernameMismatch() {
+        let alert = createAlert("The username you entered does not match the account that is currently logged in.", title: "Authentication Failed")
+        
+        vc.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     private func createAlert(message: String, title: String) -> UIAlertController {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil))
