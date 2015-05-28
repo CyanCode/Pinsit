@@ -31,7 +31,6 @@ extension UIScrollView {
     
     // Actual UIView subclass which is added as subview to desired UIScrollView. If you want customize appearance of this object, do that after addPullToRefreshWithAction
     public var pullToRefreshView: PullToRefreshView? {
-        
         get {
             var pullToRefreshView = viewWithTag(pullToRefreshTag)
             return pullToRefreshView as? PullToRefreshView
@@ -40,7 +39,6 @@ extension UIScrollView {
     
     // If you want to add pull to refresh functionality to your UIScrollView just call this method and pass action closure you want to execute while pull to refresh is animating. If you want to stop pull to refresh you must do that manually calling stopPullToRefreshView methods on your scroll view
     public func addPullToRefreshWithAction(action :(() -> ())) {
-
         var pullToRefreshView = PullToRefreshView(action: action, frame: CGRectMake(0, -pullToRefreshDefaultHeight, self.frame.size.width, pullToRefreshDefaultHeight))
         pullToRefreshView.tag = pullToRefreshTag
         addSubview(pullToRefreshView)
@@ -56,13 +54,13 @@ extension UIScrollView {
     
     // Manually start pull to refresh
     public func startPullToRefresh() {
-
+        pullToRefreshView?.startAnimating()
         pullToRefreshView?.loading = true
     }
     
     // Manually stop pull to refresh
     public func stopPullToRefresh() {
-        
+        pullToRefreshView?.stopAnimating()
         pullToRefreshView?.loading = false
     }
 }

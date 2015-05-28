@@ -156,8 +156,7 @@ public class PullToRefreshView: UIView {
     
     //MARK: PullToRefreshView methods
 
-    private func startAnimating() {
-        
+    public func startAnimating() {
         var scrollView = superview as! UIScrollView
         var insets = scrollView.contentInset
         insets.top += self.frame.size.height
@@ -174,8 +173,7 @@ public class PullToRefreshView: UIView {
         })
     }
     
-    private func stopAnimating() {
-        
+    public func stopAnimating() {
         self.animator.stopAnimation()
         var scrollView = superview as! UIScrollView
         scrollView.bounces = self.scrollViewBouncesDefaultValue
