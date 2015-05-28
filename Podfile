@@ -14,7 +14,6 @@ pod 'FCCurrentLocationGeocoder'
 
 #Parse Dependencies
 pod 'Parse'
-pod 'ParseCrashReporting'
 pod 'ParseUI'
 
 end

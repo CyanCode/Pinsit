@@ -4,7 +4,6 @@
 
 //Parse
 #import <Parse/Parse.h>
-#import <ParseCrashReporting/ParseCrashReporting.h>
 #import "ParseUI.h"
 
 //Pull to refresh
