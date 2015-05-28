@@ -33,7 +33,7 @@ class ReportManager {
     
     func userAlreadyReported(completion: (Bool) -> Void) {
         let query = PFQuery(className: "Reports")
-        query.whereKey("reporters", containsString: PFUser.currentUser()!.username!)
+        query.whereKey("reporters", equalTo: PFUser.currentUser()!.username!)
         
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil {
