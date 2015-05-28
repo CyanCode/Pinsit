@@ -93,14 +93,14 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
             self.followingValues = [Bool]()
             
             if error == nil {
-            for obj in objects! { //Loop through each returned object
-                if self.userIsFollowing(obj["username"] as! String) == true {
-                    self.followingValues.append(true)
-                } else { self.followingValues.append(false) }
-                
-                self.tableData.append(obj["username"] as! String) //Pull each username
-                self.tableView.reloadData()
-            }
+                for obj in objects! { //Loop through each returned object
+                    if self.userIsFollowing(obj["username"] as! String) == true {
+                        self.followingValues.append(true)
+                    } else { self.followingValues.append(false) }
+                    
+                    self.tableData.append(obj["username"] as! String) //Pull each username
+                    self.tableView.reloadData()
+                }
             }
         }
     }
@@ -157,11 +157,20 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
         var query = PFQuery(className: "Followers")
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.findObjectsInBackgroundWithBlock { (objects: [AnyObject]?, error: NSError?) -> Void in
-            let object = objects![0] as! PFObject
-            object["following"] = self.userFollowing
-            object.saveInBackgroundWithBlock({ (success, error) -> Void in
-                self.tableView.reloadData()
-            })
+            if error == nil && count(objects!) > 0 {
+                let object = objects![0] as! PFObject
+                object["following"] = self.userFollowing
+                object.saveInBackgroundWithBlock({ (success, error) -> Void in
+                    self.tableView.reloadData()
+                })
+            } else if error == nil {
+                let newFollow = PFObject(className: "Followers")
+                newFollow["username"] = PFUser.currentUser()!.username!
+                newFollow["following"] = self.userFollowing
+                newFollow.saveInBackgroundWithBlock({ (success, error) -> Void in
+                    self.tableView.reloadData()
+                })
+            }
         }
     }
     
