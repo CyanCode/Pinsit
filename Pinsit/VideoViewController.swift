@@ -49,7 +49,16 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
     }
     
     //MARK: Button Actions
-    @IBAction func switchCam(sender: AnyObject) {
+    var isBackCam: Bool = true
+    @IBAction func switchCam(sender: UIButton) {
+        if isBackCam == true {
+            sender.setImage(UIImage(named: "back_cam.png"), forState: .Normal)
+            isBackCam = false
+        } else {
+            sender.setImage(UIImage(named: "front_cam.png"), forState: .Normal)
+            isBackCam = true
+        }
+        
         if videoView.recStatus != .RECORDING {
             videoView.switchCameraPositions()
         }
@@ -77,7 +86,16 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
         }
     }
     
+    var isTorchOn: Bool = false
     @IBAction func toggleTorch(sender: AnyObject) {
+        if isTorchOn == true {
+            sender.setImage(UIImage(named: "torch_off.png"), forState: .Normal)
+            isTorchOn = false
+        } else {
+            sender.setImage(UIImage(named: "torch_on.png"), forState: .Normal)
+            isTorchOn = true
+        }
+        
         if inPlaybackMode == nil || inPlaybackMode == false {
             videoView.toggleTorch()
         }
@@ -147,8 +165,8 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
     
     private func changeVideoState(state: VideoState) {
         switch state {
-        case .READY: recordBtn.setImage(UIImage(named: "record-inactive.png"), forState: .Normal)
-        case .RECORDING: recordBtn.setImage(UIImage(named: "progress.png"), forState: .Normal)
+        case .READY: recordBtn.setImage(UIImage(named: "record_inactive.png"), forState: .Normal)
+        case .RECORDING: recordBtn.setImage(UIImage(named: "record_active.png"), forState: .Normal)
         case .DONE: recordBtn.setImage(UIImage(named: "check.png"), forState: .Normal)
         }
     }
