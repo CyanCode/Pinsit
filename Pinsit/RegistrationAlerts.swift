@@ -18,7 +18,7 @@ class RegistrationAlerts {
     
     ///Alert for incorrectly entered password
     ///
-    ///:param: recover() called if user chooses to recover their password
+    ///- parameter recover(): called if user chooses to recover their password
     func wrongPassword(recover: () -> Void) {
         let alert = createAlert("The password you've entered is incorrect, would you like to recover it?", title: "Wrong Password")
         alert.addAction(UIAlertAction(title: "Yes", style: .Default) { (action) -> Void in

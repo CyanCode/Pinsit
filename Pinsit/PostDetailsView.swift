@@ -29,6 +29,8 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     
     ///Used for object initialization, called manually when initialized
     func prepareView() {
+        self.frame = CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width, height: self.bounds.height)
+        
         downloadSwitch.enabled = Upgrade().isUpgraded()
         downloadSwitch.onTintColor = UIColor(string: "#FF2851")
         privateSwitch.onTintColor = UIColor(string: "#FF2851")
@@ -52,10 +54,11 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     
     ///Present PostDetailsView in DetailsViewController, ready to post
     ///
-    ///:param: viewController DetailsViewController instance
+    ///- parameter viewController: DetailsViewController instance
     func presentViewInController(viewController: UIViewController, popupPoint: CGPoint) {
         self.responder = viewController
         self.prepareView()
+        viewController.view.addSubview(self)
         
         self.slideIn { () -> Void in }
         //        popup = KLCPopup(contentView: self)
@@ -77,7 +80,7 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     func textViewDidBeginEditing(textView: UITextView) {
         if descriptionSet == false {
             descriptionView.text = ""
-            descriptionView.textColor = UIColor.whiteColor()
+            descriptionView.textColor = UIColor.blackColor()
             descriptionSet = true
         }
     }
@@ -105,7 +108,7 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
                 self.dismissSlide()
                 //self.popup.dismiss(true)
             } else {
-                println("Video post successful")
+                print("Video post successful")
                 //self.popup.dismiss(true)
                 self.dismissSlide()
                 //segue

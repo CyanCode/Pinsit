@@ -28,8 +28,8 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
     var player: AVPlayer!
     ///Plays back recorded video
     ///
-    ///:param: shouldRestart Is the video restarting (true), or has it just begun (false)
-    ///:param: isLooping Should the video loop over and over again
+    ///- parameter shouldRestart: Is the video restarting (true), or has it just begun (false)
+    ///- parameter isLooping: Should the video loop over and over again
     func playbackRecording(shouldRestart: Bool, isLooping: Bool) {
         self.recStatus = .READY
         
@@ -55,11 +55,11 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
     
     ///Start recording from camera input
     ///
-    ///:param: output URL for video save location, nil for default location
+    ///- parameter output: URL for video save location, nil for default location
     func startRecordingVideo(output: NSURL?) {
         self.recStatus = .RECORDING
         
-        var location = output == nil ? File.getVideoPathURL() : output
+        let location = output == nil ? File.getVideoPathURL() : output
         deviceOutput.startRecordingToOutputFileURL(location, recordingDelegate: self)
     }
     
@@ -78,30 +78,35 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
     ///This does create a global capture session, therefore you must remove
     ///the session before calling this method again
     ///
-    ///:param: loaded called when the sessions have been successfully created
+    ///- parameter loaded: called when the sessions have been successfully created
     func createSessions(loaded: () -> Void) {
         Async.background {
             self.session = AVCaptureSession()
             self.session.sessionPreset = AVCaptureSessionPresetMedium
             self.videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
             let audioDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
+        
+            do {
+                self.videoInput = try AVCaptureDeviceInput(device: self.videoDevice)
+                let audioInput = try AVCaptureDeviceInput(device: audioDevice)
+                self.deviceOutput = AVCaptureMovieFileOutput()
+                
+                if self.session.canAddInput(self.videoInput) { //Video input
+                    self.session.addInput(self.videoInput)
+                }; if self.session.canAddInput(audioInput) { //Audio input
+                    self.session.addInput(audioInput)
+                }; if self.session.canAddOutput(self.deviceOutput) { //Video output
+                    self.session.addOutput(self.deviceOutput)
+                }
             
-            var error: NSError?
-            self.videoInput = AVCaptureDeviceInput.deviceInputWithDevice(self.videoDevice, error: &error) as! AVCaptureDeviceInput
-            let audioInput = AVCaptureDeviceInput.deviceInputWithDevice(audioDevice, error: &error) as! AVCaptureDeviceInput
-            self.deviceOutput = AVCaptureMovieFileOutput()
-            
-            if self.session.canAddInput(self.videoInput) { //Video input
-                self.session.addInput(self.videoInput)
-            }; if self.session.canAddInput(audioInput) { //Audio input
-                self.session.addInput(audioInput)
-            }; if self.session.canAddOutput(self.deviceOutput) { //Video output
-                self.session.addOutput(self.deviceOutput)
+                self.session.startRunning()
+            } catch let error as NSError {
+                fatalError("Could not load capture device: \(error.localizedDescription)")
+            } catch {
+                fatalError("Could not load capture device")
             }
             
-            self.session.startRunning()
-            }.main {
-                loaded()
+            Async.main { loaded() }
         }
     }
     
@@ -121,9 +126,9 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
     ///Video did finish recording delegate
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
         if error != nil {
-            println("Recording Finished, error status: \(error.localizedDescription)")
+            print("Recording Finished, error status: \(error.localizedDescription)")
         } else {
-            println("Video recording successful")
+            print("Video recording successful")
             self.playbackRecording(false, isLooping: true)
         }
     }
@@ -144,11 +149,11 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
 extension UIView {
     ///Inserts layer into view, checking if others exist and deleting them
     ///
-    ///:param: toInsert layer to insert
+    ///- parameter toInsert: layer to insert
     func insertLayerWithCheck(toInsert: CALayer) {
         let sublayers = self.layer.sublayers
         
-        if sublayers != nil && count(sublayers!) > 0 {
+        if sublayers != nil && (sublayers!).count > 0 {
             sublayers![0].removeFromSuperlayer()
         }
         
@@ -156,7 +161,7 @@ extension UIView {
     }
     
     func insertLayerAtTop(toInsert: CALayer) {
-        let index = self.layer.sublayers != nil ? count(self.layer.sublayers) + 1 : 0
+        let index = self.layer.sublayers != nil ? self.layer.sublayers!.count + 1 : 0
         
         self.layer.insertSublayer(toInsert, atIndex: UInt32(index))
     }

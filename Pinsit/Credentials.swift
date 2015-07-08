@@ -19,7 +19,7 @@ class Credentials {
     
     ///Does the password contain more than or 6 characters
     func confirmPassword() -> Bool {
-        if count(password) >= 6 {
+        if password.characters.count >= 6 {
             return true
         } else {
             return false
@@ -28,7 +28,7 @@ class Credentials {
     
     ///Does the username contain more than or 6 characters
     func confirmUsername() -> Bool {
-        if count(username) >= 6 {
+        if username.characters.count >= 6 {
             return true
         } else {
             return false
@@ -37,7 +37,7 @@ class Credentials {
     
     ///Is the username available for use?
     func usernameAvailable(responder: UIViewController) -> Bool {
-        var query = PFQuery(className: "Users")
+        let query = PFQuery(className: "Users")
         query.whereKey("username", equalTo: username)
         
         var error: NSError?

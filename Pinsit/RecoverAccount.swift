@@ -26,16 +26,19 @@ class RecoverAccount {
                 Email.emailVerifiedMessage()
                 completion()
             } else {
-                Email().resendVerification ({ (error) -> Void in
-                    if error != nil {
-                        completion()
-                    } else {
+                do {
+                    try Email().resendVerification({ () -> Void in
                         let controller = UIAlertController(title: "Success", message: "Your recovery email has been sent, please check your email!", preferredStyle: .Alert)
                         controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
                         self.viewController.presentViewController(controller, animated: true, completion: nil)
                         completion()
-                    }
-                })
+                    })
+                } catch {
+                    let controller = UIAlertController(title: "Not Quite..", message: "We were not able to send a verification email, check your connection and try again!", preferredStyle: .Alert)
+                    controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
+                    self.viewController.presentViewController(controller, animated: true, completion: nil)
+                    completion()
+                }
             }
         })
     }

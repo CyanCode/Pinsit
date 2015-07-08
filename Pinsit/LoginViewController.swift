@@ -27,7 +27,7 @@ class LoginViewController: UIViewController {
         let button = sender as! UIButton
         
         button.enabled = false
-        PFUser.logInWithUsernameInBackground(usernameField.text, password: passwordField.text) { (user, error) -> Void in
+        PFUser.logInWithUsernameInBackground(usernameField.text!, password: passwordField.text!) { (user, error) -> Void in
             button.enabled = true
             
             if error != nil {

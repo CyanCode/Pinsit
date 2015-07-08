@@ -16,7 +16,7 @@ class VideoCache {
         query.whereKey("objectId", equalTo: id)
         query.fromLocalDatastore()
         
-        return count(query.findObjects()!) > 0 ? true : false
+        return (query.findObjects()!).count > 0 ? true : false
     }
     
     func getPinWithId(id: String) -> PFObject {
@@ -33,9 +33,9 @@ class VideoCache {
     
     ///Downloads the NSData for the provided NSURL then caches the data
     ///
-    ///:param: id objectId for the PFObject to be cached
-    ///:param: url NSURL of the video to be downloaded
-    ///:param: completion() called when data has beend downloaded from the server
+    ///- parameter id: objectId for the PFObject to be cached
+    ///- parameter url: NSURL of the video to be downloaded
+    ///- parameter completion(): called when data has beend downloaded from the server
     func cacheDataFromServer(id: String, file: PFFile, completion: (data: NSData?) -> Void) {
         var data: NSData?
         
@@ -44,16 +44,15 @@ class VideoCache {
             pin["objectId"] = id
             pin["videoURL"] = file.url!
             
-            var error: NSError?
-            let data = file.getData(&error)
-            
-            if error != nil {
-                println("data error: \(error!.localizedDescription)")
+            do {
+                data = try file.getDataWithError()
+                pin["videoData"] = PFFile(data: data!)
+                pin.pin()
+            } catch let error as NSError {
+                print("data error: \(error.localizedDescription)")
+            } catch {
+                fatalError()
             }
-            
-            pin["videoData"] = PFFile(data: data!)
-            
-            pin.pin()
         }.main {
             completion(data: data)
         }

@@ -25,7 +25,7 @@ class FollowerCache {
                 return
             }
             
-            let followers = count(objects!) > 0 ? objects![0]["following"] as! [String] : [String]()
+            let followers = (objects!).count > 0 ? objects![0]["following"] as! [String] : [String]()
             let object = PFObject(className: "Followers")
             
             object["username"] = PFUser.currentUser()!.username
@@ -34,7 +34,7 @@ class FollowerCache {
             //Reset and Pin
             self.resetCache()
             object.pinInBackgroundWithBlock({ (success, error) -> Void in })
-            println("Follower cache updated successfully")
+            print("Follower cache updated successfully")
             
             self.following = followers
         }
@@ -42,7 +42,7 @@ class FollowerCache {
     
     ///Get the date of the last follower update
     ///
-    ///:returns: last update as NSDate, nil if it doesn't exist
+    ///- returns: last update as NSDate, nil if it doesn't exist
     func getLastPinDate() -> NSDate? {
         let user = getUserObject()
         
@@ -55,7 +55,7 @@ class FollowerCache {
     
     ///Get the last cached list of followers
     ///
-    ///:returns: array of followers, nil if it doesn't exist
+    ///- returns: array of followers, nil if it doesn't exist
     func getCachedFollowers() -> [String]? {
         let user = getUserObject()
         
@@ -68,7 +68,7 @@ class FollowerCache {
     
     ///Checks if the array of followers exists in the cache
     ///
-    ///:returns: true if existant, false if not
+    ///- returns: true if existant, false if not
     func followersExist() -> Bool {
         let user = getUserObject()
         
@@ -77,8 +77,8 @@ class FollowerCache {
     
     ///Checks if currentUser is following specified user
     ///
-    ///:param: user Username to compare
-    ///:returns: true or false depending on result
+    ///- parameter user: Username to compare
+    ///- returns: true or false depending on result
     func isFollowing(user: String) -> Bool {   
         for follower in self.following {
             if user == follower {
@@ -108,7 +108,7 @@ class FollowerCache {
         query.fromLocalDatastore()
         let objects = query.findObjects()
         
-        if objects == nil || count(objects!) <= 0 {
+        if objects == nil || (objects!).count <= 0 {
             return nil
         } else {
             return objects![0] as? PFObject

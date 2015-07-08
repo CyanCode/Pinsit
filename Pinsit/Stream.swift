@@ -26,8 +26,11 @@ class Stream {
         let fManager = NSFileManager.defaultManager()
         
         if (fManager.fileExistsAtPath(vidPath as String)) {
-            var error: NSError?
-            fManager.removeItemAtPath(vidPath as String, error: &error)
+            do {
+                try fManager.removeItemAtPath(vidPath as String)
+            } catch let error as NSError {
+                print("Error removing video file \(error.localizedDescription)")
+            }
         }
         
         let vidData = NSData(contentsOfFile: vidPath as String)
@@ -39,8 +42,11 @@ class Stream {
         let fManager = NSFileManager.defaultManager()
         
         if (fManager.fileExistsAtPath(vidPath as String)) {
-            var error: NSError?
-            fManager.removeItemAtPath(vidPath as String, error: &error)
+            do {
+                try fManager.removeItemAtPath(vidPath as String)
+            } catch let error as NSError {
+                print("Error removing video file \(error.localizedDescription)")
+            }
         }
         
         annotation.videoData?.writeToFile(vidPath as String, atomically: true)

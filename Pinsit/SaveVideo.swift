@@ -9,7 +9,7 @@
 import Foundation
 
 class SaveVideo {
-    var vidURL: NSURL?
+    var vidURL: NSURL
     var error: NSError?
     
     init(vidURL: NSURL) {
@@ -20,9 +20,9 @@ class SaveVideo {
         let err = PError()
         let error = err.constructErrorWithCode(PError.ErrorCode.PVideoSaveError.rawValue)
         
-        if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(vidURL?.path) {
-            let path = vidURL?.path
-            UISaveVideoAtPathToSavedPhotosAlbum(path, nil, nil, nil)
+        if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(vidURL.path!) {
+            let path = vidURL.path
+            UISaveVideoAtPathToSavedPhotosAlbum(path!, nil, nil, nil)
 
             return nil
         } else {

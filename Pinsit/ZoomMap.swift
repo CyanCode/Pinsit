@@ -55,16 +55,16 @@ class ZoomMap: NSObject, MKMapViewDelegate, CLLocationManagerDelegate {
         map.insertSubview(cover, aboveSubview: map)
     }
     
-    //MARK: Location Stuff
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        let location = locations.last as! CLLocation
+    ///MARK: Location Stuff
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        let location = locations.last! as CLLocation
         let span = MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
         let region = MKCoordinateRegionMake(location.coordinate, span)
         
         map.setRegion(region, animated: true)
     }
     
-    func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status == CLAuthorizationStatus.NotDetermined && manager.respondsToSelector("requestAlwaysAuthorization") {
             manager.requestAlwaysAuthorization()
         }

@@ -24,12 +24,12 @@ public class AccountData {
     ///Pulls required data from the server
     ///If successful, collect data from variables, if not, check error message
     func pullInformation(completionHandler: (success: Bool) -> Void) {
-        var query = PFQuery(className: "AccountActivity")
+        let query = PFQuery(className: "AccountActivity")
         query.whereKey("userID", equalTo: userID)
         query.orderByAscending("updatedAt")
         query.cachePolicy = PFCachePolicy.CacheElseNetwork
         
-        var objects = query.findObjects(&error) as! [PFObject]
+        let objects = query.findObjects() as! [PFObject]
         distributeObjectData(objects)
     }
     
@@ -48,8 +48,6 @@ public class AccountData {
                 let followerName = object["followerName"] as! String
                 pulledText.append(followerName + "is now following \(username)")
                 pulledImages.append(UIImage(named: "follower.png")!)
-                break
-            default:
                 break
             }
         }

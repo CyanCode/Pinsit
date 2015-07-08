@@ -9,7 +9,7 @@
 import Foundation
 
 class SlideInView: UIView {
-    private let screenHeight = UIScreen.mainScreen().bounds.height
+    private let screenHeight = UIScreen.mainScreen().bounds.height - 49 //height - tabbar height
     var slideSpeed: NSTimeInterval = 0.5
     var inDisplay: Bool = false
     
@@ -21,7 +21,7 @@ class SlideInView: UIView {
 
         self.frame.origin.y = screenHeight
         UIView.animateWithDuration(slideSpeed, animations: { () -> Void in
-            self.frame.origin.y = self.screenHeight - self.frame.size.height
+            self.frame.origin.y = self.screenHeight - self.bounds.size.height
         }) { (done) -> Void in
             self.inDisplay = true
             

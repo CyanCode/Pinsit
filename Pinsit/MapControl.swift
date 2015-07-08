@@ -33,7 +33,7 @@ class MapControl: NSObject {
     ///* If query is nil default pins are pulled
     ///* Else queried pins are pulled
     ///
-    ///:param: query PFQuery that is to be searched for and added
+    ///- parameter query: PFQuery that is to be searched for and added
     func searchWithSortQuery(query: PFQuery?) {
         var control: PinController?
         
@@ -74,17 +74,17 @@ class MapControl: NSObject {
         var allQueries: [PFQuery]?
         
         Async.background {
-            var following = PFQuery(className: "Followers")
+            let following = PFQuery(className: "Followers")
             following.whereKey("username", equalTo: PFUser.currentUser()!.username!)
             let user = following.findObjects()
             
-            if count(user!) <= 0 {
+            if (user!).count <= 0 {
                 allQueries = nil
             } else {
                 var userQueries = [PFQuery]()
                 
                 for follower in user![0]["following"] as! [String] {
-                    var userQuery = PFQuery(className: "SentData")
+                    let userQuery = PFQuery(className: "SentData")
                     userQuery.whereKey("username", equalTo: follower)
                     userQueries.append(userQuery)
                 }
@@ -118,7 +118,7 @@ class MapControl: NSObject {
     
     ///Pulls pins with the highest view count from the server
     private func getTrendingPins() -> PFQuery {
-        var query = PFQuery(className: "SentData")
+        let query = PFQuery(className: "SentData")
         query.orderByDescending("viewCount")
         
         return query
@@ -126,7 +126,7 @@ class MapControl: NSObject {
     
     ///Pulls newest pins from the server using createdAt
     private func getNewestPins() -> PFQuery {
-        var query = PFQuery(className: "SentData")
+        let query = PFQuery(className: "SentData")
         query.orderByDescending("createdAt")
         
         return query

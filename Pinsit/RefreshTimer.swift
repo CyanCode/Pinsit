@@ -10,7 +10,7 @@ import Foundation
 
 class RefreshTimer {
     class func startTimer() {
-        let time = NSTimer(timeInterval: 1, target: self, selector: Selector("fireUpdate"), userInfo: nil, repeats: true)
+        _ = NSTimer(timeInterval: 1, target: self, selector: Selector("fireUpdate"), userInfo: nil, repeats: true)
     }
     
     class func fireUpdate(timer: NSTimer) {

@@ -12,24 +12,24 @@ class ForgotViewController: UIViewController {
     @IBOutlet var email: UITextField!
     
     @IBAction func resetButton(sender: AnyObject) {
-        var error: NSError?
-        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             let button = sender as! UIButton
-            button.enabled = false
-            let user = PFUser.requestPasswordResetForEmail(self.email.text, error: &error)
             let alert = RegistrationAlerts(vc: self)
-
-            if error != nil {
-                if error!.code == PFErrorCode.ErrorConnectionFailed.rawValue {
+            button.enabled = false
+            
+            do {
+                try PFUser.requestPasswordResetForEmail(self.email.text!, error: ())
+                alert.passwordRecoverSuccess()
+            } catch let error as NSError {
+                if error.code == PFErrorCode.ErrorConnectionFailed.rawValue {
                     alert.passwordRecoverError()
-                } else if error!.code == PFErrorCode.ErrorUserWithEmailNotFound.rawValue {
+                } else if error.code == PFErrorCode.ErrorUserWithEmailNotFound.rawValue {
                     alert.emailNotFound()
                 } else {
                     alert.unknownError()
                 }
-            } else {
-                alert.passwordRecoverSuccess()
+            } catch {
+                fatalError()
             }
         })
     }

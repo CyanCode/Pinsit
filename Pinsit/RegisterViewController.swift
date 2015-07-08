@@ -24,7 +24,7 @@ class RegisterViewController: UIViewController {
     }
     
     @IBAction func registerPressed(sender: AnyObject) {
-        let cred = Credentials(username: username.text, password: password.text)
+        let cred = Credentials(username: username.text!, password: password.text!)
         
         if cred.confirmUsername() != true || cred.confirmPassword() != true {
             let alert = UIAlertController(title: "Almost", message: "Your username and password must both contain atleast 6 characters", preferredStyle: .Alert)
@@ -45,18 +45,24 @@ class RegisterViewController: UIViewController {
         
         let button = sender as! UIButton
         button.enabled = false
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+        
+        Async.background {
             if cred.usernameAvailable(self) {
-                var error: NSError?
                 var newUser = PFUser()
+                var error: NSError?
                 newUser.username = self.username.text
                 newUser.email = self.email.text
                 newUser.password = self.password.text
                 newUser["phone"] = self.number.text
                 
-                newUser.signUp(&error)
-                
-                if error != nil {
+                if newUser.signUp(&error) == true {
+                    let f = File()
+                    if f.tosConfirmed() == false {
+                        self.performSegueWithIdentifier("tos", sender: self)
+                    } else {
+                        StoryboardManager.segueMain(self)
+                    }
+                } else {
                     let alert = RegistrationAlerts(vc: self)
                     
                     if error!.code == PFErrorCode.ErrorConnectionFailed.rawValue {
@@ -66,17 +72,10 @@ class RegisterViewController: UIViewController {
                     } else {
                         alert.unknownError()
                     }
-                } else {
-                    let f = File()
-                    if f.tosConfirmed() == false {
-                        self.performSegueWithIdentifier("tos", sender: self)
-                    } else {
-                        StoryboardManager.segueMain(self)
-                    }
                 }
             }
             
             button.enabled = true
-        })
+        }
     }
 }

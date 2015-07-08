@@ -23,7 +23,7 @@ class ReportManager {
         query.whereKey("videoId", equalTo: videoObject!.objectId!)
         
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error != nil || count(objects!) > 0 {
+            if error != nil || (objects!).count > 0 {
                 completion(true)
             } else {
                 completion(false)
@@ -38,7 +38,7 @@ class ReportManager {
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil {
                 self.reportFailedMessage()
-            } else if count(objects!) > 0 {
+            } else if (objects!).count > 0 {
                 completion(true)
             } else {
                 completion(false)
@@ -85,7 +85,7 @@ class ReportManager {
         query.whereKey("videoId", equalTo: videoObject.objectId!)
         
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error != nil || count(objects!) <= 0 {
+            if error != nil || (objects!).count <= 0 {
                 self.reportFailedMessage()
             } else {
                 let object = objects![0] as! PFObject

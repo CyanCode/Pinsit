@@ -26,7 +26,7 @@ class VideoManager {
         let file = object["video"] as! PFFile
         file.getDataInBackgroundWithBlock { (data, error) -> Void in
             if error != nil {
-                println("Error: \(error!.localizedDescription)")
+                print("Error: \(error!.localizedDescription)")
             }
             
             completion(data)
@@ -35,7 +35,7 @@ class VideoManager {
     
     ///Checks if object is cached
     ///
-    ///:returns: true if found, otherwise false
+    ///- returns: true if found, otherwise false
     func existsInCache() -> Bool {
         let query = PFQuery(className: "SentData")
         query.whereKey("objectId", equalTo: object.objectId!)
@@ -43,12 +43,12 @@ class VideoManager {
         
         let objects = query.findObjects()
         
-        return objects != nil && count(objects!) > 0 ? true : false
+        return objects != nil && (objects!).count > 0 ? true : false
     }
     
     ///Pull video data from cache, assumes data actually exists
     ///
-    ///:returns: video NSData
+    ///- returns: video NSData
     func getCachedData() -> NSData? {
         let query = PFQuery(className: "SentData")
         query.whereKey("objectId", equalTo: object["objectId"] as! String)
@@ -60,7 +60,7 @@ class VideoManager {
     
     ///Writes passed NSData to initialized PFObject
     ///
-    ///:param: data NSData to be written
+    ///- parameter data: NSData to be written
     func cacheData(data: NSData) {
         object["video"] = PFFile(data: data)
         object.pin()

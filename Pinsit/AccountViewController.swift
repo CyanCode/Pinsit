@@ -68,7 +68,7 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
         profileImage.layer.borderColor = UIColor(string: "#FF2951").CGColor
         profileImage.alpha = 1.0
         
-        var imageTap = UITapGestureRecognizer(target: self, action: Selector("profileTapped:"))
+        let imageTap = UITapGestureRecognizer(target: self, action: Selector("profileTapped:"))
         profileImage.userInteractionEnabled = true
         profileImage.addGestureRecognizer(imageTap)
     }
@@ -126,7 +126,7 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
         presentViewController(picker, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
         detailManager.setImage(image)
         profileImage.image = image
         uploadNewProfile(image)
@@ -139,7 +139,7 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
     }
     
     func uploadNewProfile(img: UIImage!) {
-        let file = PFFile(data: UIImagePNGRepresentation(img.resize(CGSizeMake(100, 100))))
+        let file = PFFile(data: UIImagePNGRepresentation(img.resize(CGSizeMake(100, 100)))!)
         let user = PFUser.currentUser()!
         user["profileImage"] = file
         
@@ -150,7 +150,7 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
                 
                 self.presentViewController(message, animated: true, completion: nil)
             } else {
-                println("Profile Image upload success")
+                print("Profile Image upload success")
             }
         }
     }

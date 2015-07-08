@@ -26,36 +26,36 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
     }
     
     ///MARK: Delegate methods
-    func mapViewDidFailLoadingMap(mapView: MKMapView!, withError error: NSError!) {
-        println("Error loading map")
+    func mapViewDidFailLoadingMap(mapView: MKMapView, withError error: NSError) {
+        print("Error loading map")
     }
     
-    func mapView(mapView: MKMapView!, didFailToLocateUserWithError error: NSError!) {
-        println("Error finding current location 😰")
+    func mapView(mapView: MKMapView, didFailToLocateUserWithError error: NSError) {
+        print("Error finding current location 😰")
     }
     
-    func mapView(mapView: MKMapView!, annotationView view: MKAnnotationView!, calloutAccessoryControlTapped control: UIControl!) {
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         let ann = view.annotation as! PAnnotation
         viewControl.currentMap.performSegueWithIdentifier("video", sender: ann)
     }
     
-    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         let identifier = "CustomAnnotation"
         let annView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         
         if (annotation.isKindOfClass(PAnnotation)) {
-            let pointAnn = annotation as! PAnnotation?
+            let pointAnn = annotation as! PAnnotation
             var returnedImg = UIImage()
             
-            if (pointAnn != nil) {
-                returnedImg = pointAnn!.thumbnail
-            }
+            pointAnn.subtitle = ""
             
-            let following = viewControl.followerTracker.followerExists(pointAnn!.title! as String)
+            returnedImg = pointAnn.thumbnail
+            
+            let following = viewControl.followerTracker.followerExists(pointAnn.title! as String)
             annView.pinColor = following ? .Green : .Red //If user is following, make pin green
             
             let style = Styling(manipulate: UIButton())
-            var pushButton = style.encircleButton(returnedImg)
+            let pushButton = style.encircleButton(returnedImg)
             
             annView.draggable = false
             annView.canShowCallout = true
@@ -103,7 +103,7 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
                 let region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(0.05, 0.05))
                 self.viewControl.currentMap.mapView.setRegion(region, animated: true)
             } else {
-                println("Location error")
+                print("Location error")
             }
         }
     }

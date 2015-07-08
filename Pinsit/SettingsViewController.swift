@@ -43,10 +43,10 @@ class SettingsViewController: XLFormViewController {
             textField.placeholder = "Password"
         }
         controller.addAction(UIAlertAction(title: "Continue", style: .Default, handler: { (action) -> Void in
-            let username = controller.textFields![0] as! UITextField
-            let password = controller.textFields![1] as! UITextField
+            let username = controller.textFields![0] as UITextField
+            let password = controller.textFields![1] as UITextField
             
-            DeleteAccount(viewController: self).attemptAuthentication(username.text, password: password.text, done: { (success) -> Void in if success == true {
+            DeleteAccount(viewController: self).attemptAuthentication(username.text!, password: password.text!, done: { (success) -> Void in if success == true {
                 DeleteAccount(viewController: self).beginDeletionInBackground { (success) -> Void in
                     if success == true {
                         self.logoutUser()
@@ -69,14 +69,14 @@ class SettingsViewController: XLFormViewController {
     private func emailVerification() {
         let recover = RecoverAccount(vc: self)
         recover.reverifyEmailAddress { () -> Void in
-            println("Finished verifying email")
+            print("Finished verifying email")
         }
     }
     
     private func numberVerification() {
         let recover = RecoverAccount(vc: self)
         recover.reverifyPhoneNumber { () -> Void in
-            println("Finished verifying phone")
+            print("Finished verifying phone")
         }
     }
     
@@ -96,7 +96,7 @@ class SettingsViewController: XLFormViewController {
         case Tags.TOS.rawValue: self.showTermsOfService()
         case Tags.Logout.rawValue: self.logoutUser()
         case Tags.Delete.rawValue: self.deleteAccount()
-        default: println("Selection index error")
+        default: print("Selection index error")
         }
     }
     

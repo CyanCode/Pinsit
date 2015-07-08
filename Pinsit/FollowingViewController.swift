@@ -50,16 +50,16 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return count(tableData)
+        return tableData.count
     }
     
     ///MARK: SearchBar Delegates
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        sendUpdateRequest(searchBar.text)
+        sendUpdateRequest(searchBar.text!)
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
-        sendUpdateRequest(searchBar.text)
+        sendUpdateRequest(searchBar.text!)
     }
     
     ///MARK: Private Functions
@@ -69,12 +69,12 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         
         query.findObjectsInBackgroundWithBlock { (object, error) -> Void in
-            if error == nil && count(object!) > 0 {
+            if error == nil && (object!).count > 0 {
                 self.userFollowing = object![0]["following"] as! [String]
                 self.tableData = object![0]["following"] as! [String]
                 self.followingValues = [Bool]()
                 
-                for user in object![0]["following"] as! [String] {
+                for _ in object![0]["following"] as! [String] {
                     self.followingValues.append(true)
                 }
                 
@@ -129,7 +129,7 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
     private func removeFollowing(user: String) {
         var index: Int!
         
-        for var i = 0; i < count(userFollowing); i++ {
+        for var i = 0; i < userFollowing.count; i++ {
             if user == userFollowing[i] {
                 index = i
                 break
@@ -138,7 +138,7 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
         
         userFollowing.removeAtIndex(index)
         
-        var query = PFQuery(className: "Followers")
+        let query = PFQuery(className: "Followers")
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         
         query.findObjectsInBackgroundWithBlock { (objects: [AnyObject]?, error: NSError?) -> Void in
@@ -154,10 +154,10 @@ class FollowingViewController: UIViewController, UISearchBarDelegate, UITableVie
     private func addFollowing(user: String) {
         userFollowing.append(user)
         
-        var query = PFQuery(className: "Followers")
+        let query = PFQuery(className: "Followers")
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.findObjectsInBackgroundWithBlock { (objects: [AnyObject]?, error: NSError?) -> Void in
-            if error == nil && count(objects!) > 0 {
+            if error == nil && (objects!).count > 0 {
                 let object = objects![0] as! PFObject
                 object["following"] = self.userFollowing
                 object.saveInBackgroundWithBlock({ (success, error) -> Void in

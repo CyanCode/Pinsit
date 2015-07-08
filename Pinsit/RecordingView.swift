@@ -36,7 +36,6 @@ class RecordingView: VideoProjectionView {
     func switchCameraPositions() {
         session.beginConfiguration()
         
-        var input: AVCaptureDeviceInput
         let oldPosition = self.videoDevice.position
         var newPosition: AVCaptureDevicePosition
         
@@ -54,11 +53,12 @@ class RecordingView: VideoProjectionView {
             videoDevice = frontCamDevice()
         }
         
-        var error: NSError?
         if videoDevice != nil {
-            videoInput = AVCaptureDeviceInput.deviceInputWithDevice(videoDevice, error: &error) as! AVCaptureDeviceInput
-            if (error == nil) {
+            do {
+                try videoInput = AVCaptureDeviceInput(device: videoDevice)
                 session.addInput(videoInput)
+            } catch let error as NSError {
+                print("Device Input error: \(error)")
             }
         }
         
@@ -68,7 +68,7 @@ class RecordingView: VideoProjectionView {
     ///MARK: Management
     ///Reset self CALayer's sublayers
     func resetRootLayer() {
-        for layer in self.layer.sublayers as! [CALayer] {
+        for layer in self.layer.sublayers! as [CALayer] {
             layer.removeFromSuperlayer()
         }
     }
@@ -86,7 +86,7 @@ class RecordingView: VideoProjectionView {
     
     ///Exchanges all inputs or outputs with passed input or output
     ///
-    ///:param: type input or output
+    ///- parameter type: input or output
     func exchangeInputOutput(type: AnyObject) {
         if type is AVCaptureInput {
             session.addInput(type as! AVCaptureInput)
@@ -109,16 +109,22 @@ class RecordingView: VideoProjectionView {
     
     ///Flip camera light on / off
     func toggleTorch() {
-        var device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
         
         if (device.hasTorch) {
-            device.lockForConfiguration(nil)
+            do {
+                try device.lockForConfiguration()
+            } catch _ {
+            }
             
             let torchOn = device.torchActive
             device.torchMode = torchOn ? AVCaptureTorchMode.Off : AVCaptureTorchMode.On
             
             if (torchOn == false) {
-                device.setTorchModeOnWithLevel(1.0, error: nil)
+                do {
+                    try device.setTorchModeOnWithLevel(1.0)
+                } catch _ {
+                }
             }
             
             device.unlockForConfiguration()
@@ -132,8 +138,8 @@ class RecordingView: VideoProjectionView {
     
     ///MARK: Private and Delegates
     private func printAllLayers() {
-        for layer in self.layer.sublayers as! [CALayer] {
-            println("Layer: \(layer.description) \n")
+        for layer in self.layer.sublayers! as [CALayer] {
+            print("Layer: \(layer.description) \n")
         }
     }
 }

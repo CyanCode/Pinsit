@@ -21,7 +21,7 @@ class GenerateReport {
     
     ///Ask user if they /really/ want to report this user
     ///
-    ///:param: answer Did the user select Yes or No?
+    ///- parameter answer: Did the user select Yes or No?
     func presentPrompt(completion: (answer: Bool) -> Void) {
         let controller = UIAlertController(title: "Report User", message: "Are you sure you would like to report user?  Sending false reports can have negative consequences.", preferredStyle: .Alert)
         controller.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: { (action) -> Void in
@@ -35,7 +35,7 @@ class GenerateReport {
     
     ///Create Report object from init information
     ///
-    ///:returns: Newly created report object
+    ///- returns: Newly created report object
     func createReportObject() -> Report {
         let reportSender = PFUser.currentUser()!.username
         
@@ -44,19 +44,19 @@ class GenerateReport {
     
     ///Report user in background with completion block
     ///
-    ///:param: report Report object, use 'createReportObject' to generate
-    ///:param: completion Called when report has finished, error nil if successful
-    func reportUserInBackground(report: Report, completion: (error: NSError?) -> Void) {
+    ///- parameter report: Report object, use 'createReportObject' to generate
+    ///- parameter completion: Called when report has finished, success true or false
+    func reportUserInBackground(report: Report, completion: (success: Bool) -> Void) {
         report.findVideoObject { (object) -> Void in
             if object == nil {
-                completion(error: NSError())
+                completion(success: false)
             }
             
             let reportQuery = PFQuery(className: "Reports")
             reportQuery.whereKey("videoId", equalTo: object!.objectId!)
             
             
-            var reportObject = PFObject(className: "Reports")
+            let reportObject = PFObject(className: "Reports")
             reportObject["location"] = object!["location"]
             reportObject["video"] = object!["video"]
             reportObject["reportedUser"] = report.reportedUser
@@ -65,9 +65,9 @@ class GenerateReport {
             
             reportObject.saveInBackgroundWithBlock({ (success, error) -> Void in
                 if error != nil {
-                    completion(error: error)
+                    completion(success: false)
                 } else {
-                    completion(error: nil)
+                    completion(success: true)
                 }
             })
         }
@@ -75,15 +75,15 @@ class GenerateReport {
     
     ///Check whether a report exists or not
     ///
-    ///:param: increment Increment the PFObject if it does in fact exist
-    ///:param: completion Called when check has finished
+    ///- parameter increment: Increment the PFObject if it does in fact exist
+    ///- parameter completion: Called when check has finished
     func reportAlreadyFiled(increment: Bool, completion: (exists: Bool) -> Void) {
         let query = PFQuery(className: "Reports")
         query.whereKey("reportedUser", equalTo: self.reportedUser)
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil { completion(exists: false) } //If an error was thrown
             
-            if count(objects!) < 1 { //Less than one PFObject exists
+            if (objects!).count < 1 { //Less than one PFObject exists
                 completion(exists: false)
             } else if increment == false { //Does exist, but don't increment
                 completion(exists: true)

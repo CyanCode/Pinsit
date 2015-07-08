@@ -80,7 +80,7 @@ public class PullToRefreshView: UIView {
         self.autoresizingMask = .FlexibleWidth
         labelTitle.frame = bounds
         labelTitle.textAlignment = .Center
-        labelTitle.autoresizingMask = .FlexibleLeftMargin | .FlexibleRightMargin
+        labelTitle.autoresizingMask = [.FlexibleLeftMargin, .FlexibleRightMargin]
         labelTitle.textColor = UIColor.blackColor()
         labelTitle.text = "Pull to refresh"
         addSubview(labelTitle)
@@ -94,7 +94,7 @@ public class PullToRefreshView: UIView {
     
     deinit {
         
-        var scrollView = superview as? UIScrollView
+        let scrollView = superview as? UIScrollView
         scrollView?.removeObserver(self, forKeyPath: contentOffsetKeyPath, context: &KVOContext)
     }
     
@@ -120,16 +120,16 @@ public class PullToRefreshView: UIView {
     
     //MARK: KVO methods
 
-    public override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<()>) {
+    public override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<()>) {
         
         if (context == &KVOContext) {
-            var scrollView = superview as? UIScrollView
+            let scrollView = superview as? UIScrollView
             if (keyPath == contentOffsetKeyPath && object as? UIScrollView == scrollView) {
-                var scrollView = object as? UIScrollView
+                let scrollView = object as? UIScrollView
                 if (scrollView != nil) {
-                    println(scrollView?.contentOffset.y)
+                    print(scrollView?.contentOffset.y)
                     
-                    var offsetWithoutInsets = previousOffset + scrollViewInsetsDefaultValue.top
+                    let offsetWithoutInsets = previousOffset + scrollViewInsetsDefaultValue.top
                     if (offsetWithoutInsets < -self.frame.size.height) {
                         if (scrollView?.dragging == false && loading == false) {
                             loading = true
@@ -157,14 +157,14 @@ public class PullToRefreshView: UIView {
     //MARK: PullToRefreshView methods
 
     public func startAnimating() {
-        var scrollView = superview as! UIScrollView
+        let scrollView = superview as! UIScrollView
         var insets = scrollView.contentInset
         insets.top += self.frame.size.height
         
         // we need to restore previous offset because we will animate scroll view insets and regular scroll view animating is not applied then
         scrollView.contentOffset.y = previousOffset
         scrollView.bounces = false
-        UIView.animateWithDuration(0.3, delay: 0, options:nil, animations: {
+        UIView.animateWithDuration(0.3, delay: 0, options:[], animations: {
             scrollView.contentInset = insets
             scrollView.contentOffset = CGPointMake(scrollView.contentOffset.x, -insets.top)
         }, completion: {finished in
@@ -175,7 +175,7 @@ public class PullToRefreshView: UIView {
     
     public func stopAnimating() {
         self.animator.stopAnimation()
-        var scrollView = superview as! UIScrollView
+        let scrollView = superview as! UIScrollView
         scrollView.bounces = self.scrollViewBouncesDefaultValue
         UIView.animateWithDuration(0.3, animations: { () -> Void in
             scrollView.contentInset = self.scrollViewInsetsDefaultValue

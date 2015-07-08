@@ -16,7 +16,7 @@ class PopupView {
     
     ///Default initialization
     ///
-    ///:param: presentedView The UIView that will be presented inside the popover
+    ///- parameter presentedView: The UIView that will be presented inside the popover
     init(presentedView: UIView) {
         self.presentedView = presentedView
         constructContainer()

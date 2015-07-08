@@ -28,16 +28,12 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
         super.init(frame: frame, style: style)
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return count(tableUsernames)
+        return tableUsernames.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -71,8 +67,8 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
     
     ///Sets both tableView arrays to content from the server with respect to the offset
     ///
-    ///:param: resetFirst Should the tableView arrays be reset before being filled with new values
-    ///:param: completion Called when the values have been added
+    ///- parameter resetFirst: Should the tableView arrays be reset before being filled with new values
+    ///- parameter completion: Called when the values have been added
     private func fillTableArrays(resetFirst: Bool, completion: () -> Void) {
         let likesQuery = PFQuery(className: "Likes")
         likesQuery.whereKey("videoId", equalTo: pinObject.objectId!)
@@ -80,7 +76,7 @@ class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate
         likesQuery.limit = offset + 15 //Find next 15 likes
         
         likesQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error == nil && count(objects!) > 0 {
+            if error == nil && (objects!).count > 0 {
                 if resetFirst == true {
                     self.tableUsernames = [String]()
                     self.tableProfiles = [NSURL]()

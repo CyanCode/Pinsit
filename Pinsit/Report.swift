@@ -22,7 +22,7 @@ class Report {
     
     ///Find the reported video PFObject in the database
     ///
-    ///:param: completion Called when PFObject has been found, nil if not.
+    ///- parameter completion: Called when PFObject has been found, nil if not.
     func findVideoObject(completion: (object: PFObject?) -> Void) {
         let query = PFQuery(className: "SentData")
         query.whereKey("objectId", equalTo: self.videoId)
@@ -30,7 +30,7 @@ class Report {
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil {
                 completion(object: nil)
-            } else if count(objects!) > 0 {
+            } else if (objects!).count > 0 {
                 completion(object: objects![0] as? PFObject)
             } else {
                 completion(object: nil)

@@ -20,11 +20,11 @@ class EditProfile {
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel) { (_) in }
         
         let takeImage = UIAlertAction(title: "Take a picture", style: .Default) {(action) in
-            println("Take Image")
+            print("Take Image")
         }
     
         let chooseImage = UIAlertAction(title: "Choose a picture", style: .Default) {(action) in
-            println("Choose Image")
+            print("Choose Image")
         }
         
         alert.addAction(cancelAction)

@@ -19,7 +19,7 @@ class PinController {
     
     ///Creates PAnnotation array from query variable
     ///
-    ///:param: completion function called when all annotations have been found
+    ///- parameter completion: function called when all annotations have been found
     func annotationsFromQuery(completion: (annotations: [PAnnotation]) -> Void) {
         var annotations = [PAnnotation]()
         
@@ -44,16 +44,16 @@ class PinController {
     
     ///Creates a PAnnotation object from passed PFObject
     ///
-    ///:param: obj PFObject to convert to PAnnotation
-    ///:returns: Converted PAnnotation
+    ///- parameter obj: PFObject to convert to PAnnotation
+    ///- returns: Converted PAnnotation
     func objectToAnnotation(obj: PFObject) -> PAnnotation {
-        var annotation = PAnnotation()
+        let annotation = PAnnotation()
         let point = obj["location"] as! PFGeoPoint
         let downloading = obj["downloading"] as! NSNumber
         let thumbnail = obj["thumbnail"] as! PFFile
         
-        annotation.title = obj["username"] as! String
-        annotation.subtitle = obj["description"] as! String
+        annotation.title = (obj["username"] as! String)
+        annotation.subtitle = (obj["description"] as! String)
         annotation.coordinate = CLLocationCoordinate2DMake(point.latitude, point.longitude)
         annotation.coord = Coordinate(lat: point.latitude, lon: point.longitude)
         annotation.allowsDownloading = downloading.boolValue
@@ -68,13 +68,13 @@ class PinController {
     ///Caches the passed annotation using Parse LocalDatastore
     ///Annotation is cached by its dataId (id)
     ///
-    ///:param: ann PAnnotation to cache
+    ///- parameter ann: PAnnotation to cache
     func cacheAnnotation(ann: PAnnotation) {
-        var object = PFObject(className: "CachedPins")
+        let object = PFObject(className: "CachedPins")
         object["title"] = ann.title
         object["location"] = PFGeoPoint(latitude: ann.coord.latitude, longitude: ann.coord.longitude)
         object["downloading"] = NSNumber(bool: ann.allowsDownloading)
-        object["thumbnail"] = PFFile(data: UIImagePNGRepresentation(ann.thumbnail))
+        object["thumbnail"] = PFFile(data: UIImagePNGRepresentation(ann.thumbnail)!)
         object["videoData"] = PFFile(data: ann.videoData)
         object["id"] = ann.dataID
         
@@ -83,15 +83,15 @@ class PinController {
     
     ///Creates an annotation that has been cached in Parse LocalDatastore
     ///
-    ///:param: id cached PAnnotation's dataId
-    ///:returns: Cached PAnnotation, object is nil if it does not exist
+    ///- parameter id: cached PAnnotation's dataId
+    ///- returns: Cached PAnnotation, object is nil if it does not exist
     func annotationFromCache(id: String) -> PAnnotation? {
-        var query = PFQuery(className: "CachedPins")
+        let query = PFQuery(className: "CachedPins")
         query.fromLocalDatastore()
         query.whereKey("id", equalTo: id)
         
         let objects = query.findObjects()
-        if count(objects!) > 0 {
+        if (objects!).count > 0 {
             let obj = objects![0] as! PFObject
             return self.objectToAnnotation(obj)
         } else { return nil }
@@ -99,8 +99,8 @@ class PinController {
     
     ///Get the default annotations from the map refresh, removing private objects
     ///
-    ///:param: location the PFGeoPoint to query from
-    ///:param: done called when annotations have been found, returns array of PAnnotations
+    ///- parameter location: the PFGeoPoint to query from
+    ///- parameter done: called when annotations have been found, returns array of PAnnotations
     func defaultQueryAnnotations(location: PFGeoPoint, done: (annotations: [PAnnotation]) -> Void) {
         let manager = MapControl()
         let followerManager = FollowerCache()

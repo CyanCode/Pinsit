@@ -22,7 +22,7 @@ class Followers {
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil {
                 completion(success: false)
-            } else if count(objects!) > 0 {
+            } else if (objects!).count > 0 {
                 self.followers = objects![0]["following"] as? [String]
                 completion(success: true)
             } else {

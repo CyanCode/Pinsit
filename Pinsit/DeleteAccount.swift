@@ -14,17 +14,15 @@ class DeleteAccount {
     
     ///Initializes with view controller to act as a responder for alert controllers
     ///
-    ///:param: viewController responder
+    ///- parameter viewController: responder
     init(viewController: UIViewController) {
         self.viewController = viewController
     }
     
     ///Deletes currentUser in background
     ///
-    ///:param: done(success: Bool) called when deletion has finished
+    ///- parameter done(success:: Bool) called when deletion has finished
     func beginDeletionInBackground(done: (success: Bool) -> Void) {
-        var error: NSError?
-        
         Async.background {
             let username = PFUser.currentUser()!.username!
             let likesQuery = PFQuery(className: "Likes").whereKey("username", equalTo: username)
@@ -33,29 +31,28 @@ class DeleteAccount {
             let followerQuery = PFQuery(className: "Followers").whereKey("following", equalTo: username)
             let followingQuery = PFQuery(className: "Followers").whereKey("username", equalTo: username)
          
-            PFUser.currentUser()?.delete(&error)
-            likesQuery.findAndDeleteObjects(&error)
-            videoQuery.findAndDeleteObjects(&error)
-            verificationQuery.findAndDeleteObjects(&error)
-            followingQuery.findAndDeleteObjects(&error)
-            self.handleFollowerObjects(followerQuery.findObjects())
-            }.main {
-                if error != nil {
-                    done(success: false)
-                } else {
-                    done(success: true)
-                }
+            do {
+                try PFUser.currentUser()!.deleteWithError()
+                try likesQuery.findAndDeleteObjects()
+                try videoQuery.findAndDeleteObjects()
+                try verificationQuery.findAndDeleteObjects()
+                try followingQuery.findAndDeleteObjects()
+                self.handleFollowerObjects(followerQuery.findObjects())
+                
+                Async.main { done(success: true) }
+            } catch  {
+                Async.main { done(success: false) }
+            }
         }
     }
     
     ///Attempt to login the current user with passed username and password
     ///
-    ///:param: username Username to compare
-    ///:param: password Password to compare
-    ///:param: done(success) Called when authentication has succeeded or failed
+    ///- parameter username: Username to compare
+    ///- parameter password: Password to compare
+    ///- parameter done(success): Called when authentication has succeeded or failed
     func attemptAuthentication(username: String, password: String, done: (success: Bool) -> Void) {
         let session = PFUser.currentUser()!.sessionToken!
-        var error: NSError?
         
         if username != PFUser.currentUser()!.username! {
             RegistrationAlerts(vc: self.viewController).usernameMismatch()
@@ -65,26 +62,23 @@ class DeleteAccount {
         
         Async.background {
             PFUser.logOut()
-            PFUser.logInWithUsername(username, password: password, error: &error)
-
-            if error != nil {
-                if error!.code == PFErrorCode.ErrorConnectionFailed.rawValue {
+            do {
+                try PFUser.logInWithUsername(username, password: password, error: ())
+                PFUser.logOut()
+                try PFUser.become(session, error: ())
+                
+                Async.main { done(success: true) }
+            } catch let error as NSError {
+                if error.code == PFErrorCode.ErrorConnectionFailed.rawValue {
                     RegistrationAlerts(vc: self.viewController).connectionIssue()
                 } else {
                     RegistrationAlerts(vc: self.viewController).loginFailure()
                 }
                 
                 PFUser.become(session)
-                Async.main {
-                    done(success: false)
-                }
-            } else {
-                PFUser.logOut()
-                PFUser.become(session)
-                
-                Async.main {
-                    done(success: true)
-                }
+                Async.main { done(success: false) }
+            } catch {
+                fatalError()
             }
         }
         
@@ -100,7 +94,7 @@ class DeleteAccount {
             }
         }
         
-        if count(toSave) > 0 {
+        if toSave.count > 0 {
             PFObject.saveAll(toSave)
         }
     }
@@ -117,13 +111,14 @@ class DeleteAccount {
 }
 
 extension PFQuery {
-    func findAndDeleteObjects(error: NSErrorPointer) {
-        let objects = findObjects(error)
-        
-        if error == nil && count(objects!) > 0 {
-            for obj in objects! {
-                obj.delete()
+    func findAndDeleteObjects() throws {
+        do {
+            for object in try findObjectsWithError() {
+                let obj = object as PFObject
+                try obj.deleteWithError()
             }
+        } catch let error as NSError {
+            throw error
         }
     }
 }

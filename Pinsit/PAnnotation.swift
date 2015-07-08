@@ -10,8 +10,8 @@ import Foundation
 import MapKit
 
 class PAnnotation: NSObject, MKAnnotation {
-    var title: String!
-    var subtitle: String!
+    var title: String?
+    var subtitle: String?
     var coord: Coordinate!
     var coordinate: CLLocationCoordinate2D
     var thumbnail: UIImage!
@@ -35,17 +35,15 @@ class PAnnotation: NSObject, MKAnnotation {
     
     ///Posts generated PAnnotation to server
     ///
-    ///:param: vc DetailsViewController instance responsible for annotation creation
-    ///:param: completion Called when video has finished attempting to post
-    ///:param: error Error pointer if an issue occurs, nil if successful
+    ///- parameter vc: DetailsViewController instance responsible for annotation creation
+    ///- parameter completion: Called when video has finished attempting to post
+    ///- parameter error: Error pointer if an issue occurs, nil if successful
     func postAnnotation(vc: PostDetailsView, completion: (error: NSError?) -> Void) {
         self.viewController = vc
-        var ann = PAnnotation()
+        let ann = PAnnotation()
         
-        self.confirmCredentials { (valid, error) -> Void in
-            if error != nil {
-                completion(error: error)
-            } else if valid == true {
+        self.confirmCredentials { (valid) -> Void in
+            if valid == true {
                 let geoCode = FCCurrentLocationGeocoder.sharedGeocoder()
                 
                 geoCode.geocode({ (success) -> Void in
@@ -60,7 +58,7 @@ class PAnnotation: NSObject, MKAnnotation {
                         let send = ServerSend(ann: ann)
                         send.sendDataWithBlock({ (error) -> Void in completion(error: error) })
                     } else {
-                        println("Location Error: \(geoCode.error.localizedDescription)")
+                        print("Location Error: \(geoCode.error.localizedDescription)")
                         completion(error: geoCode.error)
                     }
                 })
@@ -71,34 +69,34 @@ class PAnnotation: NSObject, MKAnnotation {
         
     }
     
-    func confirmCredentials(completion: (valid: Bool, error: NSError?) -> Void) {
-        self.validPostAmount { (valid, error) -> Void in
-            if error != nil || valid == false {
-                completion(valid: false, error: error)
+    func confirmCredentials(completion: (valid: Bool) -> Void) {
+        self.validPostAmount { (valid) -> Void in
+            if valid == false {
+                completion(valid: false)
             } else {
                 let email = self.confirmEmail()
                 let phone = self.confirmNumber()
                 
                 if email == true && phone == true {
-                    completion(valid: true, error: nil)
+                    completion(valid: true)
                 } else {
-                    completion(valid: false, error: nil)
+                    completion(valid: false)
                 }
             }
         }
     }
     
-    func validPostAmount(completion: (valid: Bool, error: NSError?) -> Void) {
+    func validPostAmount(completion: (valid: Bool) -> Void) {
         AccountDetails.findPostAmount { (amount) -> Void in
-            if amount == nil {
-                completion(valid: false, error: NSError())
-            } else {
-                if amount?.integerValue >= 3 {
+            if amount != nil {
+                if amount!.integerValue >= 3 {
                     self.tooManyPosts()
-                    completion(valid: false, error: nil)
+                    completion(valid: false)
                 } else {
-                    completion(valid: true, error: nil)
+                    completion(valid: true)
                 }
+            } else {
+                completion(valid: false)
             }
         }
     }

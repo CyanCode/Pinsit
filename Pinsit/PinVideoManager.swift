@@ -11,10 +11,10 @@ import AVFoundation
 
 class PinVideoManager: NSObject {
     var videoView: UIView!
-    private var videoEnded: Bool!
-    private var videoData: NSData!
-    private var player: AVPlayer!
-    private var layer: AVPlayerLayer!
+    var videoEnded: Bool!
+    var videoData: NSData!
+    var player: AVPlayer!
+    var layer: AVPlayerLayer!
     
     init(videoView: UIView) {
         self.videoView = videoView
@@ -23,23 +23,23 @@ class PinVideoManager: NSObject {
     
     ///Loads video from cache then server, plays it
     ///
-    ///:param: videoData NSData of the video to be played
-    ///:param: completion Called when the video has been rendered and began playing
+    ///- parameter videoData: NSData of the video to be played
+    ///- parameter completion: Called when the video has been rendered and began playing
     func startPlayingWithVideoData(videoData: NSData, completion: () -> Void) {
         Async.background {
             self.videoData = videoData
             self.player = self.playerFromData(self.videoData)
-        }.main {
-            self.layer = AVPlayerLayer(player: self.player)
-            
-            self.layer.videoGravity = AVLayerVideoGravityResizeAspectFill
-            self.layer.frame = self.videoView.bounds
-            self.videoView.layer.insertSublayer(self.layer, atIndex: 1)
-            
-            self.player.play()
-            NSNotificationCenter.defaultCenter().addObserver(self, selector: "playerDidFinish:", name: AVPlayerItemDidPlayToEndTimeNotification, object: nil) //AVPlayer recording finished selection
-            
-            completion()
+            }.main {
+                self.layer = AVPlayerLayer(player: self.player)
+                
+                self.layer.videoGravity = AVLayerVideoGravityResizeAspectFill
+                self.layer.frame = self.videoView.bounds
+                self.videoView.layer.insertSublayer(self.layer, atIndex: 1)
+
+                self.player.play()
+                NSNotificationCenter.defaultCenter().addObserver(self, selector: "playerDidFinish:", name: AVPlayerItemDidPlayToEndTimeNotification, object: nil) //AVPlayer recording finished selection
+                
+                completion()
         }
     }
     
@@ -79,10 +79,14 @@ class PinVideoManager: NSObject {
         let directory = File.pulledVideoPath()
         
         var error: NSError?
-        data.writeToFile(directory, options: nil, error: &error)
+        do {
+            try data.writeToFile(directory, options: [])
+        } catch let error1 as NSError {
+            error = error1
+        }
         
         if error != nil {
-            println("File write error: \(error!.localizedDescription)")
+            print("File write error: \(error!.localizedDescription)")
         }
         
         let url = NSURL(fileURLWithPath: directory)
