@@ -22,9 +22,7 @@ class PError {
     
     func constructErrorWithCode(code: NSNumber) -> NSError {
         let errors = NSDictionary(contentsOfFile: NSBundle.mainBundle().pathForResource("errors", ofType: "plist")!)
-        var value = errors?.objectForKey(code.stringValue) as! String
-        var error: NSError?
-        
+        let value = errors?.objectForKey(code.stringValue) as! String        
         let details = [value : NSLocalizedDescriptionKey]
         
         return NSError(domain: errorDomain, code: code.integerValue, userInfo: details)
