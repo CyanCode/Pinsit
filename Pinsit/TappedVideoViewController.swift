@@ -9,55 +9,105 @@
 import UIKit
 
 class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
-    @IBOutlet var videoView: UIView!
-    @IBOutlet var profileImage: UIImageView!
-    @IBOutlet var tableView: PinVideoTableView!
+    @IBOutlet var navItem: UINavigationItem!
+    @IBOutlet var videoView: ExpandedVideoView!
+    //@IBOutlet var profileImage: UIImageView!
     
     var videoObject: PFObject!
+    var expandView: ExpandedVideoView!
     private var dataHandler: PinVideoData!
+    private var manager: PinVideoManager!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.interactivePopGestureRecognizer.delegate = self
+        self.navigationController?.interactivePopGestureRecognizer!.delegate = self
         AppDelegate.loginCheck(self)
         
         self.startPlaying()
         self.dataHandler = PinVideoData(viewController: self)
-        self.tableView.readyTableView(videoObject)
+        //self.tableView.readyTableView(videoObject)
     }
     
-    @IBAction func downloadButton(sender: AnyObject) {
-        self.dataHandler.downloadVideo()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        videoView.adjustGravityOnResize(manager.layer)
+        
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        navItem.title = videoObject["username"] as? String
     }
     
-    @IBAction func likeVideoButton(sender: AnyObject) {
-        self.dataHandler.addLike(videoObject.objectId!, button: sender as! UIButton)
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        let gesture = UITapGestureRecognizer(target: self, action: "usernameTapped:")
+        
+        let view = navigationController!.navigationBar.subviews[1] as UIView
+        view.userInteractionEnabled = true
+        view.addGestureRecognizer(gesture)
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        if manager.player != nil { manager.player.pause() }
+    }
+    
+    @IBAction func moreButton(sender: AnyObject) {
+        let description = videoObject["description"] as? String != nil ? videoObject["description"] as! String : ""
+        let controller = UIAlertController(title: "", message: description, preferredStyle: .ActionSheet)
+        
+        if dataHandler.isAlreadyLiked(videoObject.objectId!) == false {
+            controller.addAction(UIAlertAction(title: "Like", style: .Default, handler: { (action) -> Void in
+                self.dataHandler.addLike(self.videoObject.objectId!, button: sender as! UIButton)
+            }))
+        }
+        if videoObject["downloading"] as! NSNumber.BooleanLiteralType == true {
+            controller.addAction(UIAlertAction(title: "Download", style: .Default, handler: { (action) -> Void in
+                self.dataHandler.downloadVideo()
+            }))
+        }
+        controller.addAction(UIAlertAction(title: "Report", style: .Default, handler: { (action) -> Void in
+            self.dataHandler.reportUser(self.videoObject["username"] as! String, videoId: self.videoObject.objectId!)
+        }))
+        controller.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
+        
+        self.presentViewController(controller, animated: true, completion: nil)
     }
     
     @IBAction func followButton(sender: AnyObject) {
         self.dataHandler.addFollower(videoObject["username"] as! String, button: sender as! UIButton)
     }
     
-    @IBAction func reportButton(sender: AnyObject) {
-        self.dataHandler.reportUser(videoObject["username"] as! String, videoId: videoObject.objectId!)
-    }
+    var profileDetails: ProfileInfo?
+    func usernameTapped(gesture: UITapGestureRecognizer) {
+        if profileDetails == nil {
+            profileDetails = ProfileInfo.loadViewFromNib()
+        }
         
+        let desc = videoObject["description"] as! String
+        
+        profileDetails?.loadDescriptionWithUsername(PFUser.currentUser()!.username!, description: desc)
+        profileDetails?.loadProfileWithUsername(videoObject["username"] as! String)
+        
+        let popup = KLCPopup(contentView: profileDetails!)
+        popup.showAtCenter(self.view.center, inView: self.view)
+    }
+    
     private func startPlaying() {
         let progress = JGProgressHUD(style: .Dark)
         progress.textLabel.text = "Loading"
         progress.showInView(self.view)
         
-        let manager = PinVideoManager(videoView: self.videoView)
+        manager = PinVideoManager(videoView: self.videoView)
         
         VideoManager(object: videoObject).pullVideoData { (data) -> Void in
             if data != nil {
-                manager.startPlayingWithVideoData(data!, completion: { () -> Void in
-                    manager.monitorTaps()
+                self.manager.startPlayingWithVideoData(data!, completion: { () -> Void in
+                    self.manager.monitorTaps()
                     progress.dismiss()
                 })
             } else {
-                println("Could not retrieve video data!")
+                print("Could not retrieve video data!")
             }
         }
     }
@@ -69,12 +119,22 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
             
             completion(data: file?.getData())
         } else {
-            let video = object["video"] as! String
             let id = object["objectId"] as! String
             
             VideoCache().cacheDataFromServer(id, file: object["video"] as! PFFile, completion: { (data) -> Void in
                 completion(data: data)
             })
         }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier! == "description" {
+            let vc = segue.destinationViewController as! VideoInfoViewController
+            vc.videoObject = self.videoObject
+        }
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
 }
