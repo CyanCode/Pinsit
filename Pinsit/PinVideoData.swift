@@ -10,6 +10,14 @@ import Foundation
 
 class PinVideoData {
     var viewController: TappedVideoViewController!
+    private var likeQuery: PFQuery {
+        get {
+            let query = PFQuery(className: "Likes")
+            query.fromPin()
+            
+            return query
+        }
+    }
     
     init(viewController: TappedVideoViewController) {
         self.viewController = viewController
@@ -43,8 +51,8 @@ class PinVideoData {
         let query = PFQuery(className: "Likes")
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error == nil && count(objects!) == 0 {
-                var obj = PFObject(className: "Likes")
+            if error == nil && (objects!).count == 0 {
+                let obj = PFObject(className: "Likes")
                 obj["username"] = PFUser.currentUser()!.username!
                 obj["videoId"] = videoId
                 
@@ -55,9 +63,10 @@ class PinVideoData {
                 
                 obj.saveInBackgroundWithBlock({ (success, error) -> Void in
                     if error != nil {
-                        println("Like saving error: \(error!.localizedDescription)")
+                        print("Like saving error: \(error!.localizedDescription)")
                     } else {
-                        println("Video liked successfully")
+                        self.addLocalLiked(videoId)
+                        print("Video liked successfully")
                     }
                 })
             }
@@ -70,7 +79,7 @@ class PinVideoData {
         followerQuery.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         
         followerQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error == nil && count(objects!) > 0 {
+            if error == nil && (objects!).count > 0 {
                 let user = objects![0] as! PFObject
                 if self.followerExists(name, currentUserList: user["following"] as! [String]) == false {
                     user.addObject(name, forKey: "following")
@@ -79,6 +88,23 @@ class PinVideoData {
                 }
             }
         }
+    }
+    
+    func isAlreadyLiked(videoId: String) -> Bool {
+        let query = likeQuery.whereKey("videoId", equalTo: videoId)
+        let objects = query.findObjects()
+        
+        if objects == nil || (objects!).count < 1 {
+            return false
+        } else {
+            return true
+        }
+    }
+    
+    private func addLocalLiked(videoId: String) {
+        let obj = PFObject(className: "Likes")
+        obj["videoId"] = videoId
+        obj.pin()
     }
     
     ///Checks to see if the passed followers exist in current user's follower list
@@ -101,7 +127,7 @@ class PinVideoData {
         query.whereKey("objectId", equalTo: objectId)
         
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if count(objects!) > 0 {
+            if (objects!).count > 0 {
                 completion(active: true)
             } else {
                 completion(active: false)
@@ -130,7 +156,7 @@ extension PFUser {
         } else {
             let image = UIImage(named: "profile")
             let data = UIImagePNGRepresentation(image!)
-            return PFFile(data: data)
+            return PFFile(data: data!)
         }
     }
 }
