@@ -9,12 +9,11 @@
 import UIKit
 import MapKit
 
-class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecognizerDelegate {
+class VideoViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var videoView: RecordingView!
     @IBOutlet var switchCamBtn: UIButton!
     @IBOutlet var recordBtn: UIButton!
     @IBOutlet var torchBtn: UIButton!
-    @IBOutlet var loadingActivity: UIActivityIndicatorView!
     @IBOutlet var videoProgress: UIProgressView!
     
     var time: TimeKeeper!
@@ -26,7 +25,7 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
         super.viewDidLoad()
         AppDelegate.loginCheck(self)
 
-        addGesture()
+        videoView.userInteractionEnabled = false
         recordingTime = NSTimer(timeInterval: 0.1, target: self, selector: "timeFired:", userInfo: nil, repeats: true)
         time = TimeKeeper(progress: videoProgress, responder: self)
         recordingFinished = false
@@ -41,11 +40,6 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
                 self.videoView.previewCamera()
             })
         }
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //MARK: Button Actions
@@ -77,15 +71,6 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
         inPlaybackMode = false
     }
     
-    @IBAction func commitVideo(sender: AnyObject) {
-        if videoView.recStatus == .READY {
-            let setDetails = UIView.detailViewFromNib()
-            setDetails.presentViewInController(self, popupPoint: CGPointMake(recordBtn.center.x, recordBtn.center.y + 23))
-            
-            //self.performSegueWithIdentifier("detail", sender: self)
-        }
-    }
-    
     var isTorchOn: Bool = false
     @IBAction func toggleTorch(sender: AnyObject) {
         if isTorchOn == true {
@@ -105,13 +90,27 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
         switchCamBtn.userInteractionEnabled = false
         changeVideoState(VideoState.DONE)
         
+        toggleSwitches(false)
         videoView.endRecordingSession()
         time.endTime()
     }
     
+    private func toggleSwitches(enable: Bool) {
+        switchCamBtn.hidden = !enable
+        torchBtn.hidden = !enable
+        
+        switchCamBtn.enabled = enable
+        torchBtn.enabled = enable
+    }
+    
     var isRecording: Bool = false
     @IBAction func handleRecordingTap(recognizer: UITapGestureRecognizer) {
-        if videoView.recStatus != .READY && videoView.recStatus != .RECORDING { //Start recording
+        if videoView.recStatus == .READY {
+            let setDetails = UIView.detailViewFromNib()
+            setDetails.presentViewInController(self, popupPoint: CGPointMake(recordBtn.center.x, recordBtn.center.y + 23))
+            
+            //self.performSegueWithIdentifier("detail", sender: self)
+        }; if videoView.recStatus != .READY && videoView.recStatus != .RECORDING { //Start recording
             isRecording = true
             
             time.startTime()
@@ -126,13 +125,14 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
     }
     
     //MARK: Shaking
-    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
+    override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
         if (videoView.recStatus == .DONE_RECORDING || videoView.recStatus == .READY) {
-            var alert = UIAlertController(title: "Are you sure?", message: "Do you really want to delete your masterpiece?", preferredStyle: UIAlertControllerStyle.Alert)
+            let alert = UIAlertController(title: "Are you sure?", message: "Do you really want to delete your masterpiece?", preferredStyle: UIAlertControllerStyle.Alert)
             
             alert.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: { action in
-                println("Deletion Cancelled")
+                print("Deletion Cancelled")
             })); alert.addAction(UIAlertAction(title: "Delete It", style: .Default, handler: { action in
+                self.toggleSwitches(true)
                 self.restartVideo()
             }))
             
@@ -144,10 +144,8 @@ class VideoViewController: UIViewController, UITextViewDelegate, UIGestureRecogn
         return true
     }
     
-    //MARK: Toggle Video Playback
-    func addGesture() {
-        let tap = UITapGestureRecognizer(target: self, action: "togglePlayback:")
-        videoView.addGestureRecognizer(tap)
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
     
     //MARK: Times up
