@@ -14,13 +14,16 @@ import UIKit
 class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecognizerDelegate {
     var viewControl: MapControl
     var coordinate: CLLocationCoordinate2D
+    var followerCache = FollowerCache()
     
     init(mapCtrl: MapControl, coord: CLLocationCoordinate2D) {
+        followerCache.updateCache()
         self.viewControl = mapCtrl
         self.coordinate = coord
     }
     
     init(mapCtrl: MapControl) {
+        followerCache.updateCache()
         self.viewControl = mapCtrl
         self.coordinate = CLLocationCoordinate2DMake(0, 0)
     }
@@ -51,7 +54,7 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
             
             returnedImg = pointAnn.thumbnail
             
-            let following = viewControl.followerTracker.followerExists(pointAnn.title! as String)
+            let following = followerCache.isFollowing(pointAnn.title! as String)
             annView.pinColor = following ? .Green : .Red //If user is following, make pin green
             
             let style = Styling(manipulate: UIButton())
@@ -72,23 +75,8 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
     }
     
     ///MARK: Responder
-    var yPos: CGFloat!
     func mapTapped(tap: UITapGestureRecognizer) {
-        let toolbar = self.viewControl.currentMap.toolbar
-        
-        if toolbar.hidden {
-            yPos = 0
-            toolbar.hidden = false
-        } else {
-            yPos = -64
-        }
-        
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
-            toolbar.frame = CGRectMake(0, self.yPos, toolbar.frame.width, toolbar.frame.height)
-            }) { (finished) -> Void in
-                self.viewControl.currentMap.searchBar.resignFirstResponder()
-                if self.yPos == -64 { toolbar.hidden = true }
-        }
+        self.viewControl.currentMap.toggleToolbar()
     }
     
     ///MARK: Methods
