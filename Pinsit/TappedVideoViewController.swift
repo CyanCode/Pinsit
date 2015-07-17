@@ -35,13 +35,13 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         
         navigationController?.setNavigationBarHidden(false, animated: false)
         navItem.title = videoObject["username"] as? String
+
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
         let gesture = UITapGestureRecognizer(target: self, action: "usernameTapped:")
-        
         let view = navigationController!.navigationBar.subviews[1] as UIView
         view.userInteractionEnabled = true
         view.addGestureRecognizer(gesture)
@@ -78,19 +78,21 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         self.dataHandler.addFollower(videoObject["username"] as! String, button: sender as! UIButton)
     }
     
-    var profileDetails: ProfileInfo?
+    //var profileDetails: ProfileInfo?
     func usernameTapped(gesture: UITapGestureRecognizer) {
-        if profileDetails == nil {
-            profileDetails = ProfileInfo.loadViewFromNib()
-        }
+        self.performSegueWithIdentifier("accountSegue", sender: nil)
         
-        let desc = videoObject["description"] as! String
-        
-        profileDetails?.loadDescriptionWithUsername(PFUser.currentUser()!.username!, description: desc)
-        profileDetails?.loadProfileWithUsername(videoObject["username"] as! String)
-        
-        let popup = KLCPopup(contentView: profileDetails!)
-        popup.showAtCenter(self.view.center, inView: self.view)
+//        if profileDetails == nil {
+//            profileDetails = ProfileInfo.loadViewFromNib()
+//        }
+//        
+//        let desc = videoObject["description"] as! String
+//        
+//        profileDetails?.loadDescriptionWithUsername(PFUser.currentUser()!.username!, description: desc)
+//        profileDetails?.loadProfileWithUsername(videoObject["username"] as! String)
+//        
+//        let popup = KLCPopup(contentView: profileDetails!)
+//        popup.showAtCenter(self.view.center, inView: self.view)
     }
     
     private func startPlaying() {
@@ -127,14 +129,14 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier! == "description" {
-            let vc = segue.destinationViewController as! VideoInfoViewController
-            vc.videoObject = self.videoObject
-        }
-    }
-    
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier! == "accountSegue" {
+            let vc = segue.destinationViewController as! AccountViewController
+            vc.user = videoObject["username"] as! String
+        }
     }
 }
