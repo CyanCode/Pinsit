@@ -126,9 +126,3 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
         responder.presentViewController(alert, animated: true, completion: nil)
     }
 }
-
-extension UIView {
-    class func detailViewFromNib() -> PostDetailsView {
-        return UINib(nibName: "PostDetailsView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! PostDetailsView
-    }
-}

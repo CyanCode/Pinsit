@@ -109,16 +109,3 @@ class ProfileInfo: UIView {
         return NSBundle.mainBundle().loadNibNamed("ProfileInfo", owner: self, options: nil).first as! ProfileInfo
     }
 }
-
-extension UILabel {
-    func heightForView(text: String, font: UIFont, width: CGFloat) -> CGFloat {
-        let label = UILabel(frame: CGRectMake(0, 0, width, CGFloat.max))
-        label.numberOfLines = 0
-        label.lineBreakMode = .ByWordWrapping
-        label.font = font
-        label.text = text
-        
-        label.sizeToFit()
-        return label.frame.height
-    }
-}
