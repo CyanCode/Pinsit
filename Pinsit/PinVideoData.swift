@@ -148,15 +148,3 @@ class PinVideoData {
         self.viewController.presentViewController(controller, animated: true, completion: nil)
     }
 }
-
-extension PFUser {
-    class func getProfileImage() -> PFFile {
-        if PFUser.currentUser()!["profileImage"] != nil {
-            return PFUser.currentUser()!["profileImage"] as! PFFile
-        } else {
-            let image = UIImage(named: "profile")
-            let data = UIImagePNGRepresentation(image!)
-            return PFFile(data: data!)
-        }
-    }
-}
