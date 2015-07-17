@@ -16,8 +16,8 @@ class CustomTabBar: UITabBarController {
         //Old pink-red: FF2951
         
         //Unselected text color
-        let unselected = UIColor.whiteColor()
-        let colorDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
+        //let unselected = UIColor.whiteColor()
+        //let colorDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
 
         //UITabBarItem.appearance().setTitleTextAttributes(colorDict as [NSObject : AnyObject], forState: UIControlState.Normal)
         //UITabBarItem.appearance().setTitleTextAttributes(colorDict as [NSObject : AnyObject], forState: .Selected)
