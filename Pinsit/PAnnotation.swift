@@ -63,7 +63,7 @@ class PAnnotation: NSObject, MKAnnotation {
                     }
                 })
             } else {
-                completion(error: nil)
+                completion(error: NSError(domain: "com.walkerchristie.ConnectionError", code: PFErrorCode.ErrorConnectionFailed.rawValue, userInfo: nil))
             }
         }
         
@@ -87,7 +87,7 @@ class PAnnotation: NSObject, MKAnnotation {
     }
     
     func validPostAmount(completion: (valid: Bool) -> Void) {
-        AccountDetails.findPostAmount { (amount) -> Void in
+        AccountDetails.findPostAmount(PFUser.currentUser()!.username!) { (amount) -> Void in
             if amount != nil {
                 if amount!.integerValue >= 3 {
                     self.tooManyPosts()
