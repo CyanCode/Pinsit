@@ -17,16 +17,22 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
     @IBOutlet var followingLabel: UILabel!
     @IBOutlet var postAmountLabel: UILabel!
     @IBOutlet var usernameLabel: UILabel!
+    @IBOutlet var profileActivity: UIActivityIndicatorView!
+    var user: String!
     var locationManager: CLLocationManager!
     var detailManager: AccountDetails!
+    var temporaryImg: UIImage?
     
     override func viewDidLoad() {
-        self.detailManager = AccountDetails(viewController: self)
-        
         super.viewDidLoad()
         AppDelegate.loginCheck(self)
-
+        
+        user = user == nil ? PFUser.currentUser()!.username! : user
+        self.detailManager = AccountDetails(viewController: self, user: user)
+        
+        profileActivity.hidden = true
         map.userInteractionEnabled = false
+        
         loadInformation()
         toggleHiddenLabels(true)
         readyButtons()
@@ -52,7 +58,7 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
     
     func readyButtons() {
         for label in [followingLabel, karmaLabel, postAmountLabel] {
-            label.backgroundColor = UIColor(red: 255/255, green: 41/255, blue: 81/255, alpha: 1)
+            label.backgroundColor = UIColor(string: "#A3BDC9")
             label.layer.cornerRadius = 3
             label.textColor = UIColor.whiteColor()
             label.layer.masksToBounds = true
@@ -61,20 +67,26 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
     }
     
     func prepareInterface() {
-        profileImage.image = detailManager.loadImage()
+        profileImage.image = detailManager.defaultProfile
         profileImage.layer.masksToBounds = true
         profileImage.layer.cornerRadius = 3
         profileImage.layer.borderWidth = 1
-        profileImage.layer.borderColor = UIColor(string: "#FF2951").CGColor
+        profileImage.layer.borderColor = UIColor(string: "#A3BDC9").CGColor
         profileImage.alpha = 1.0
         
-        let imageTap = UITapGestureRecognizer(target: self, action: Selector("profileTapped:"))
-        profileImage.userInteractionEnabled = true
-        profileImage.addGestureRecognizer(imageTap)
+        if user == PFUser.currentUser()!.username! {
+            let imageTap = UITapGestureRecognizer(target: self, action: Selector("profileTapped:"))
+            profileImage.userInteractionEnabled = true
+            profileImage.addGestureRecognizer(imageTap)
+        }
+        
+        detailManager.loadProfileImage { (img) -> Void in
+            self.profileImage.image = img
+        }
     }
     
     func loadInformation() {
-        self.usernameLabel.text = PFUser.currentUser()!.username
+        self.usernameLabel.text = user
         let progress = JGProgressHUD(style: .Dark)
         progress.textLabel.text = "Loading"
         progress.showInView(self.view, animated: true)
@@ -127,10 +139,7 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
     }
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
-        detailManager.setImage(image)
-        profileImage.image = image
         uploadNewProfile(image)
-        
         picker.dismissViewControllerAnimated(false, completion: nil)
     }
     
@@ -141,7 +150,9 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
     func uploadNewProfile(img: UIImage!) {
         let file = PFFile(data: UIImagePNGRepresentation(img.resize(CGSizeMake(100, 100)))!)
         let user = PFUser.currentUser()!
+        
         user["profileImage"] = file
+        self.changeProfileImage(true)
         
         user.saveInBackgroundWithBlock { (success, error) -> Void in
             if error != nil {
@@ -151,7 +162,24 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
                 self.presentViewController(message, animated: true, completion: nil)
             } else {
                 print("Profile Image upload success")
+                self.temporaryImg = img
+                self.detailManager.setImage(img)
             }
+            
+            self.changeProfileImage(false)
+        }
+    }
+    
+    func changeProfileImage(editing: Bool) {
+        if editing == true {
+            temporaryImg = profileImage.image!
+            profileImage.image = UIImage()
+            profileActivity.hidden = false
+            profileActivity.startAnimating()
+        } else {
+            profileImage.image = temporaryImg == nil ? profileImage.image! : temporaryImg!
+            profileActivity.hidden = true
+            profileActivity.stopAnimating()
         }
     }
 }

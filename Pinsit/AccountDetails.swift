@@ -11,10 +11,13 @@ import Foundation
 class AccountDetails {
     let profilePic = PFUser.currentUser()!.username! + ".png"
     var viewController: AccountViewController!
+    var user: String!
     var path: String
 
-    init(viewController: AccountViewController) {
+    init(viewController: AccountViewController, user: String) {
         self.viewController = viewController
+        self.user = user
+        
         let fm = NSFileManager.defaultManager()
         path = File.documentsPath().stringByAppendingPathComponent("account.plist")
 
@@ -28,20 +31,23 @@ class AccountDetails {
     ///:params: completion Called when account details have been updated
     func setAccountDetails(completion: () -> Void) {
         let followQuery = PFQuery(className: "Followers")
-        followQuery.whereKey("username", equalTo: PFUser.currentUser()!.username!)
+        followQuery.whereKey("username", equalTo: user)
 
         followQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if (objects!).count > 0 {
+            if error == nil && (objects!).count > 0 {
                 let amount = (objects![0]["following"] as! [String]).count
                 self.viewController.followingLabel.text = amount == 1 ? "Following \(amount) User" : "Following \(amount) Users"
-            } else {
-                self.viewController.followingLabel.text = "Following 0 Users"
+            } else if error != nil {
+                ErrorReport(viewController: self.viewController).presentWithType(.Network)
+
+                completion()
+                return
             }
             
-            PFUser.currentUser()!.fetchInBackgroundWithBlock({ (object, error) -> Void in
-                AccountDetails.findPostAmount({ (amount) -> Void in
+            PFUser.query()!.whereKey("username", equalTo: self.user).findObjectsInBackgroundWithBlock({ (object, error) -> Void in
+                AccountDetails.findPostAmount(self.user, completion: { (amount) -> Void in
                     let postAmt = amount == nil ?  0 : amount!
-                    var karma = object?["karma"] as? NSNumber
+                    var karma = object![0]["karma"] as? NSNumber
                     karma = karma == nil ? 0 : karma
 
                     self.viewController.postAmountLabel.text = postAmt == 1 ? "\(postAmt) Active Post" : "\(postAmt) Active Posts"
@@ -52,18 +58,30 @@ class AccountDetails {
         }
     }
     
-    func loadImage() -> UIImage {
-        let imgLoc = File.documentsPath().stringByAppendingPathComponent(profilePic)
-        let img = UIImage(contentsOfFile: imgLoc)
-        
-        if (img == nil) {
-            let newImage = UIImage(named: "profile.png")!
-            setImage(newImage)
+    let defaultProfile = UIImage(named: "profile.png")!
+    func loadProfileImage(completion: (img: UIImage) -> Void) {
+        if user == PFUser.currentUser()!.username! {
+            let imgLoc = File.documentsPath().stringByAppendingPathComponent(profilePic)
+            let img = UIImage(contentsOfFile: imgLoc)
             
-            return newImage
+            if (img == nil) {
+                setImage(defaultProfile)
+                completion(img: defaultProfile)
+            }
+            
+            return completion(img: img!)
+        } else {
+            PFUser.query()?.whereKey("username", equalTo: user).findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
+                if error != nil {
+                    self.setImage(self.defaultProfile)
+                    completion(img: self.defaultProfile)
+                } else {
+                    let file = objects![0]["profileImage"] as? PFFile
+                    completion(img: file == nil ? self.defaultProfile : UIImage(data: file!.getData()!)!)
+                }
+            })
+            
         }
-        
-        return img!
     }
     
     func setImage(img: UIImage) {
@@ -74,9 +92,9 @@ class AccountDetails {
     ///Locates the amount of posts currently on the server
     ///
     ///- parameter amount: Amount of posts currently active, nil if error occurs
-    class func findPostAmount(completion: (amount: NSNumber?) -> Void) {
+    class func findPostAmount(user: String, completion: (amount: NSNumber?) -> Void) {
         let query = PFQuery(className: "SentData")
-        query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
+        query.whereKey("username", equalTo: user)
         
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil {
