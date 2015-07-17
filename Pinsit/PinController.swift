@@ -29,10 +29,18 @@ class PinController {
                     self.defaultQueryAnnotations(PFGeoPoint(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude), done: { (annotations) -> Void in
                         completion(annotations: annotations)
                     })
+                } else {
+                    ErrorReport().presentWithType(.Network)
                 }
             }
         } else {
             query!.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
+                if error != nil {
+                    ErrorReport().presentWithType(.Network)
+                    completion(annotations: [PAnnotation]())
+                    return
+                }
+                
                 for obj in objects as! [PFObject] {
                     annotations.append(self.objectToAnnotation(obj))
                 }
@@ -109,6 +117,7 @@ class PinController {
         let query = manager.getDefaultQuery(location)
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil {
+                ErrorReport().presentWithType(.Network)
                 done(annotations: [PAnnotation]()); return
             }
             
