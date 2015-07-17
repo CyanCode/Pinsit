@@ -11,7 +11,6 @@ import MapKit
 
 class MapControl: NSObject {
     var currentMap: MapViewController!
-    var followerTracker: Followers!
     
     init(map: MapViewController) {
         super.init()
@@ -38,11 +37,7 @@ class MapControl: NSObject {
         var control: PinController?
         
         Async.background {
-            if query == nil {
-                control = PinController()
-            } else {
-                control = PinController(query: query!)
-            }
+            control = query == nil ? PinController() : PinController(query: query!)
             }.main { //Return to the main thread
                 control!.annotationsFromQuery({ (annotations) -> Void in
                     self.currentMap.mapView.removeAnnotations(self.currentMap.mapView.annotations)
@@ -138,10 +133,4 @@ enum SortPins {
     case Friends
     case Trending
     case Newest
-}
-
-extension NSNumber {
-    func randomNumberInRange(min: Int, max: Int) -> Int {
-        return min + Int(arc4random_uniform(UInt32(min - max + 1)))
-    }
 }
