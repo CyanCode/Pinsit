@@ -6,10 +6,8 @@
 #import <Parse/Parse.h>
 #import "ParseUI.h"
 
-//Pull to refresh
-#import "UIScrollView+SVInfiniteScrolling.h"
-
 //Other
+#import "UIScrollView+SVInfiniteScrolling.h"
 #import "ColorUtils.h"
 #import "DBAccess/DBAccess.h"
 #import "IQKeyboardManager.h"
@@ -19,3 +17,5 @@
 #import "UIImageView+WebCache.h"
 #import "KLCPopup.h"
 #import "FCCurrentLocationGeocoder.h"
+#import "UIViewController+PPTopMostController.h"
+#import "TSMessageView.h"
