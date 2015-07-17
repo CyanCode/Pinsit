@@ -93,9 +93,3 @@ class PinVideoManager: NSObject {
         return AVPlayer(URL: url)
     }
 }
-
-extension File {
-    class func pulledVideoPath() -> String {
-        return NSTemporaryDirectory().stringByAppendingPathComponent("pulledVideo.mov")
-    }
-}
