@@ -11,24 +11,5 @@ import UIKit
 class FollowersCell: UITableViewCell {
     @IBOutlet var userLabel: UILabel!
     @IBOutlet var followerButton: UIButton!
-    var isFollowing: Bool!
-    
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        isFollowing = false
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
-
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
+    var isFollowing: Bool = false
 }

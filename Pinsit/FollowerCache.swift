@@ -18,10 +18,15 @@ class FollowerCache {
     
     ///Updates current cache with currentUser's follower list
     func updateCache() {
+        updateCacheWithBlock { (error) -> Void in }
+    }
+    
+    func updateCacheWithBlock(done: () -> Void) {
         let query = PFQuery(className: "Followers")
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error != nil {
+                done()
                 return
             }
             
@@ -37,6 +42,7 @@ class FollowerCache {
             print("Follower cache updated successfully")
             
             self.following = followers
+            done()
         }
     }
     
