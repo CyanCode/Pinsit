@@ -48,7 +48,7 @@ class RegisterViewController: UIViewController {
         
         Async.background {
             if cred.usernameAvailable(self) {
-                var newUser = PFUser()
+                let newUser = PFUser()
                 var error: NSError?
                 newUser.username = self.username.text
                 newUser.email = self.email.text
