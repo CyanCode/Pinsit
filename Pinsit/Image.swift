@@ -67,18 +67,3 @@ class Image {
         return videoURL
     }
 }
-
-extension UIImage {
-    func resize(size: CGSize) -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(size, false, 1.0)
-        
-        let rect = CGRectMake(0, 0, size.width, size.height)
-        
-        self.drawInRect(rect)
-        let newImage = UIGraphicsGetImageFromCurrentImageContext()
-        
-        UIGraphicsEndImageContext()
-        
-        return newImage
-    }
-}
