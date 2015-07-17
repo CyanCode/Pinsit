@@ -145,24 +145,3 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
         case READY
     }
 }
-
-extension UIView {
-    ///Inserts layer into view, checking if others exist and deleting them
-    ///
-    ///- parameter toInsert: layer to insert
-    func insertLayerWithCheck(toInsert: CALayer) {
-        let sublayers = self.layer.sublayers
-        
-        if sublayers != nil && (sublayers!).count > 0 {
-            sublayers![0].removeFromSuperlayer()
-        }
-        
-        self.layer.insertSublayer(toInsert, atIndex: 0)
-    }
-    
-    func insertLayerAtTop(toInsert: CALayer) {
-        let index = self.layer.sublayers != nil ? self.layer.sublayers!.count + 1 : 0
-        
-        self.layer.insertSublayer(toInsert, atIndex: UInt32(index))
-    }
-}
