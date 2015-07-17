@@ -11,6 +11,8 @@ pod 'SVPullToRefresh'
 pod 'SDWebImage'
 pod 'KLCPopup'
 pod 'FCCurrentLocationGeocoder'
+pod 'TSMessages'
+pod 'PPTopMostController'
 
 #Parse Dependencies
 pod 'Parse'
