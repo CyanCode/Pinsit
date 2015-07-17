@@ -109,16 +109,3 @@ class DeleteAccount {
         
     }
 }
-
-extension PFQuery {
-    func findAndDeleteObjects() throws {
-        do {
-            for object in try findObjectsWithError() {
-                let obj = object as PFObject
-                try obj.deleteWithError()
-            }
-        } catch let error as NSError {
-            throw error
-        }
-    }
-}
