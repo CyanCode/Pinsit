@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Parse
 
 ///Load all data associated with AccountViewController as fast as possible
 public class AccountData {

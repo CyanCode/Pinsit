@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Parse
 
 ///Used for deleting the currentUser from the Pinsit database
 class DeleteAccount {

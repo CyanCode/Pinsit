@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Parse
 
 class AccountDetails {
     let profilePic = PFUser.currentUser()!.username! + ".png"

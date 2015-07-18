@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Parse
 
 class ProfileInfo: UIView {
     @IBOutlet var desc: UILabel!

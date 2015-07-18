@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Parse
 
 class FollowerCache {
     var following = [String]()

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class FollowerTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     let identifier = "FollowersCell"

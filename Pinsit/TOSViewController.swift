@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class TOSViewController: UIViewController {
     @IBAction func agreePressed(sender: AnyObject) {

@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import PPTopMostController
+import TSMessages
 
 class ErrorReport {
     var viewController: UIViewController!

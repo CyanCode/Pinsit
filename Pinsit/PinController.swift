@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import Parse
+import INTULocationManager
 
 class PinController {
     var query: PFQuery?

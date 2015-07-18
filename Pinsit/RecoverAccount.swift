@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Parse
 
 class RecoverAccount {
     var viewController: UIViewController!

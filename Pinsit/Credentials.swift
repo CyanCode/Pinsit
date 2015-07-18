@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+import Parse
 class Credentials {
     var username: String!
     var password: String!

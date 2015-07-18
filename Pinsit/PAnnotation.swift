@@ -8,6 +8,8 @@
 
 import Foundation
 import MapKit
+import Parse
+import FCCurrentLocationGeocoder
 
 class PAnnotation: NSObject, MKAnnotation {
     var title: String?

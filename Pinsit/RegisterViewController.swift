@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class RegisterViewController: UIViewController {
     @IBOutlet var number: UITextField!
@@ -15,7 +16,7 @@ class RegisterViewController: UIViewController {
     @IBOutlet var email: UITextField!
 
     @IBAction func infoPressed(sender: AnyObject) {
-        let explain = "We ask for your phone number in order to verify your account before you can post.  Your email is required so that we can help reset your password if you ever forget it!"
+        let explain = "We ask for your email address in order to recover your account in the event that you forget your password."
         let alert = UIAlertController(title: "What's This?", message: explain, preferredStyle: .Alert)
         let action = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
         alert.addAction(action)

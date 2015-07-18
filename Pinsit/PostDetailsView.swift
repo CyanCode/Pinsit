@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import Parse
+import JGProgressHUD
 
 class PostDetailsView: SlideInView, UITextViewDelegate {
     @IBOutlet var descriptionView: UITextView!

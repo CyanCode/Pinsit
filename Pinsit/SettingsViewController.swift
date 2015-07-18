@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import XLForm
+import Parse
 
 class SettingsViewController: XLFormViewController {
     var options: [String]!
@@ -109,7 +111,7 @@ class SettingsViewController: XLFormViewController {
         form = XLFormDescriptor(title: "Settings") //Main descriptor
         
         //"Pinsit" section
-        section = XLFormSectionDescriptor.formSectionWithTitle("Pinsit") as! XLFormSectionDescriptor
+        section = XLFormSectionDescriptor.formSectionWithTitle("Pinsit") as XLFormSectionDescriptor
         form.addFormSection(section)
         
         if Upgrade().isUpgraded() == false {
@@ -124,7 +126,7 @@ class SettingsViewController: XLFormViewController {
         section.addFormRow(row)
         
         //Verification section
-        section = XLFormSectionDescriptor.formSectionWithTitle("Verification") as! XLFormSectionDescriptor
+        section = XLFormSectionDescriptor.formSectionWithTitle("Verification") as XLFormSectionDescriptor
         form.addFormSection(section)
         row = XLFormRowDescriptor(tag: Tags.Email.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Resend Email Verification")
         section.addFormRow(row)
@@ -133,7 +135,7 @@ class SettingsViewController: XLFormViewController {
         section.addFormRow(row)
         
         //Account section
-        section = XLFormSectionDescriptor.formSectionWithTitle("Account") as! XLFormSectionDescriptor
+        section = XLFormSectionDescriptor.formSectionWithTitle("Account") as XLFormSectionDescriptor
         form.addFormSection(section)
         row = XLFormRowDescriptor(tag: Tags.TOS.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Terms of Service")
         section.addFormRow(row)

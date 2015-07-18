@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 class ForgotViewController: UIViewController {
     @IBOutlet var email: UITextField!

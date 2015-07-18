@@ -8,6 +8,7 @@
 
 import Foundation
 import Social
+import Parse
 
 class SocialManager {
     var viewController: UIViewController!

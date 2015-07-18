@@ -9,6 +9,8 @@
 import Foundation
 import MapKit
 import UIKit
+import Parse
+import INTULocationManager
 
 ///MapViewController MKMapViewDelegate responder class
 class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecognizerDelegate {

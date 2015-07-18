@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Parse
 
 extension PFFile {
     func getDataWithError() throws -> NSData {

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Parse
+import SDWebImage
 
 class PinVideoTableView: UITableView, UITableViewDataSource, UITableViewDelegate {
     var pinObject: PFObject!

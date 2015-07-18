@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class SlideInView: UIView {
     private let screenHeight = UIScreen.mainScreen().bounds.height - 49 //height - tabbar height

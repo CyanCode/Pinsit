@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Parse
+import JGProgressHUD
 
 class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var navItem: UINavigationItem!

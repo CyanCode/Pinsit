@@ -9,6 +9,9 @@
 import UIKit
 import MapKit
 import CoreLocation
+import Parse
+import INTULocationManager
+import JGProgressHUD
 
 class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet var profileImage: UIImageView!

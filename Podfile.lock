@@ -1,5 +1,6 @@
 PODS:
   - Bolts/Tasks (1.2.0)
+  - DeviceGuru (1.2.0)
   - FCCurrentLocationGeocoder (1.1.10):
     - FCIPAddressGeocoder (~> 1.0.0)
   - FCIPAddressGeocoder (1.0.2)
@@ -8,7 +9,7 @@ PODS:
   - IQKeyboardManager (3.2.4)
   - JGProgressHUD (1.2.7)
   - KLCPopup (1.0)
-  - Parse (1.7.5):
+  - Parse (1.7.5.1):
     - Bolts/Tasks (>= 1.2.0)
   - ParseUI (1.1.4):
     - Parse (~> 1.7)
@@ -22,6 +23,7 @@ PODS:
   - XLForm (3.0.0)
 
 DEPENDENCIES:
+  - DeviceGuru
   - FCCurrentLocationGeocoder
   - INTULocationManager
   - IQKeyboardManager
@@ -37,6 +39,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   Bolts: d176cb1e0012175589e389a9db49b85e27787576
+  DeviceGuru: 34cf5b30fd99e7e3a4cee4c77c03bc94a4362be4
   FCCurrentLocationGeocoder: e3f2cff7ffbbb09a9bc1603e1743650345927938
   FCIPAddressGeocoder: 2622f052eba06c78a707f8b9d9925a406d96ebbd
   HexColors: abfd172e329dab59888614ccba6f216cec59289d
@@ -44,7 +47,7 @@ SPEC CHECKSUMS:
   IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
   JGProgressHUD: a45c1d16adddf7e38092ce3f0d71d3955d2de2ec
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
-  Parse: 7c0f115eff3e0cea3fac08d50bda47154edb8832
+  Parse: 7dd027063c30a010356ec67515aca7787512b0ef
   ParseUI: d1228541b02a36a7354c8f47747f5f7a89cf1ff0
   PPTopMostController: 4e6f1e5f8c645bdcc74cd837a20f607ff262c048
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
@@ -52,4 +55,4 @@ SPEC CHECKSUMS:
   TSMessages: c8cc7b80f2a833af533872cd02010cac061532cc
   XLForm: 10fc7eb9e2d5df21a515fa3a794f4e26319abd0e
 
-COCOAPODS: 0.35.0
+COCOAPODS: 0.37.2

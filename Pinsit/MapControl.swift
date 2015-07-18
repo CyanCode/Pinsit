@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import Parse
 
 class MapControl: NSObject {
     var currentMap: MapViewController!
