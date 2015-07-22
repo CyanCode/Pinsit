@@ -25,6 +25,7 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
     var locationManager: CLLocationManager!
     var detailManager: AccountDetails!
     var temporaryImg: UIImage?
+    var location: CLLocationCoordinate2D?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -102,9 +103,15 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
     }
     
     func startLocating() {
-        INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(.House, timeout: 5) { (location, accuracy, status) -> Void in
-            let span = MKCoordinateSpanMake(0.05, 0.05)
-            let region = MKCoordinateRegionMake(location.coordinate, span)
+        let span = MKCoordinateSpanMake(0.05, 0.05)
+        
+        if location == nil {
+            INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(.House, timeout: 5) { (location, accuracy, status) -> Void in
+                let region = MKCoordinateRegionMake(location.coordinate, span)
+                self.map.setRegion(region, animated: true)
+            }
+        } else {
+            let region = MKCoordinateRegionMake(location!, span)
             self.map.setRegion(region, animated: true)
         }
     }
