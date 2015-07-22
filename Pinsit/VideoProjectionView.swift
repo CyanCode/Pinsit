@@ -16,6 +16,7 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
     var deviceOutput: AVCaptureMovieFileOutput!
     var videoInput: AVCaptureDeviceInput!
     var videoDevice: AVCaptureDevice!
+    var viewActive = true
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -98,6 +99,11 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
                 }; if self.session.canAddOutput(self.deviceOutput) { //Video output
                     self.session.addOutput(self.deviceOutput)
                 }
+                
+                //Monitor focus area changes
+                try self.videoDevice.lockForConfiguration()
+                self.videoDevice.subjectAreaChangeMonitoringEnabled = true
+                self.videoDevice.unlockForConfiguration()
             
                 self.session.startRunning()
             } catch let error as NSError {
@@ -123,6 +129,22 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
         return AVCaptureDevice()
     }
     
+    func trackFocusPointChanges() {
+        NSNotificationCenter.defaultCenter().addObserverForName(AVCaptureDeviceSubjectAreaDidChangeNotification, object: nil, queue: nil) { (notification) -> Void in //Called when subject area changed
+            print("Subject area changed")
+        }
+    }
+    
+    func setFocusPoint(point: CGPoint) {
+        do {
+            try videoDevice.lockForConfiguration()
+            videoDevice.focusPointOfInterest = point
+            videoDevice.unlockForConfiguration()
+        } catch {
+            print("Could not lock device for configuration")
+        }
+    }
+    
     ///Video did finish recording delegate
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
         if error != nil {
@@ -135,13 +157,15 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
     
     ///Called when AVPlayer has finished playing
     func playerDidFinish(notification: NSNotification) {
-        self.playbackRecording(true, isLooping: false)
+        if viewActive == true {
+            self.playbackRecording(true, isLooping: false)
+        }
     }
-    
-    enum RecordingStatus {
-        case DONE_RECORDING
-        case RECORDING
-        case NOT_STARTED
-        case READY
-    }
+}
+
+enum RecordingStatus {
+    case DONE_RECORDING
+    case RECORDING
+    case NOT_STARTED
+    case READY
 }
