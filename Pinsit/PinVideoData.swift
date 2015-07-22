@@ -48,32 +48,6 @@ class PinVideoData {
         }
     }
     
-    func addLike(videoId: String, button: UIButton) {
-        let query = PFQuery(className: "Likes")
-        query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
-        query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error == nil && (objects!).count == 0 {
-                let obj = PFObject(className: "Likes")
-                obj["username"] = PFUser.currentUser()!.username!
-                obj["videoId"] = videoId
-                
-                if PFUser.currentUser()!["profileImage"] != nil {
-                    let image = PFUser.currentUser()!["profileImage"] as! PFFile
-                    obj["profileURL"] = image.url
-                }
-                
-                obj.saveInBackgroundWithBlock({ (success, error) -> Void in
-                    if error != nil {
-                        print("Like saving error: \(error!.localizedDescription)")
-                    } else {
-                        self.addLocalLiked(videoId)
-                        print("Video liked successfully")
-                    }
-                })
-            }
-        }
-    }
-    
     ///Add follower to list of following users
     func addFollower(name: String, button: UIButton) {
         let followerQuery = PFQuery(className: "Followers")
