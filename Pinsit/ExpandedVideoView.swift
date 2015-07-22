@@ -20,7 +20,7 @@ class ExpandedVideoView: UIView {
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
-        self.addHoldGesture()
+        //self.addHoldGesture()
     }
     
     private func adjustSublayers() {
@@ -37,11 +37,11 @@ class ExpandedVideoView: UIView {
         }
         
         if (gesture.scale > 1) { //Expand
-            self.frame = UIApplication.sharedApplication().windows.last!.frame
             if (playerLayer != nil) { playerLayer!.videoGravity = AVLayerVideoGravityResizeAspect }
+            self.frame = UIApplication.sharedApplication().windows.last!.frame
         } else if (gesture.scale < 1) { //Contract
-            self.frame = self.previousCoordinates
             if (playerLayer != nil) { playerLayer!.videoGravity = AVLayerVideoGravityResizeAspectFill }
+            self.frame = self.previousCoordinates
         }
         
         adjustSublayers()
