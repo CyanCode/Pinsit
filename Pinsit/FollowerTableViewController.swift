@@ -10,8 +10,8 @@ import UIKit
 import Parse
 
 class FollowerTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    let identifier = "FollowersCell"
     @IBOutlet var tableView: UITableView!
+    let identifier = "FollowersCell"
     var type: FollowerType = .Following
     var search: String = ""
     var names = [String]()
@@ -24,6 +24,7 @@ class FollowerTableViewController: UIViewController, UITableViewDataSource, UITa
         
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.tableFooterView = UIView(frame: CGRectZero)
         
         followerCache.updateCache()
         followerNet = FollowerManager(user: PFUser.currentUser()!.username!, responder: self)
@@ -43,19 +44,22 @@ class FollowerTableViewController: UIViewController, UITableViewDataSource, UITa
         print("row: \(indexPath.row)")
         cell.userLabel.text = names[indexPath.row]
         
-        var image = UIImage()
         if type == .Followers || type == .Search {
             if followerCache.followersExist() {
-                image = followerCache.isFollowing(names[indexPath.row]) ? UIImage(named: "add")! : UIImage()
+                let isFollowing = followerCache.isFollowing(names[indexPath.row])
+                cell.followerButton.imageView?.image = UIImage(named: "add")
+                cell.followerButton.hidden = isFollowing
+                cell.followerButton.enabled = !isFollowing
             }
+        } else {
+            cell.followerButton.hidden = true
+            cell.followerButton.enabled = false
         }
         
         if cell.gestureRecognizers == nil {
             let gesture = UILongPressGestureRecognizer(target: self, action: "cellLongPress:")
             cell.addGestureRecognizer(gesture)
         }
-        
-        cell.followerButton.imageView?.image = image
         
         return cell
     }

@@ -67,4 +67,8 @@ class FollowingViewController: UIViewController, UISearchBarDelegate {
         followerController.type = .Following
         followerController.updateTableWithType()
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
 }
