@@ -114,8 +114,7 @@ class RecordingView: VideoProjectionView {
         if (device.hasTorch) {
             do {
                 try device.lockForConfiguration()
-            } catch _ {
-            }
+            } catch _ { }
             
             let torchOn = device.torchActive
             device.torchMode = torchOn ? AVCaptureTorchMode.Off : AVCaptureTorchMode.On
@@ -123,8 +122,7 @@ class RecordingView: VideoProjectionView {
             if (torchOn == false) {
                 do {
                     try device.setTorchModeOnWithLevel(1.0)
-                } catch _ {
-                }
+                } catch _ { }
             }
             
             device.unlockForConfiguration()
