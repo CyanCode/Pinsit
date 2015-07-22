@@ -11,17 +11,21 @@ import Parse
 
 class AccountDetails {
     let profilePic = PFUser.currentUser()!.username! + ".png"
+    let path = File.documentsPath().stringByAppendingPathComponent("account.plist")
     var viewController: AccountViewController!
     var user: String!
-    var path: String
 
+    ///Only used for setting profile picture information
+    init() {
+        viewController = AccountViewController()
+        user = ""
+    }
+    
     init(viewController: AccountViewController, user: String) {
         self.viewController = viewController
         self.user = user
         
         let fm = NSFileManager.defaultManager()
-        path = File.documentsPath().stringByAppendingPathComponent("account.plist")
-
         if (fm.fileExistsAtPath(path) == false) {
             fm.createFileAtPath(path, contents: nil, attributes: nil)
         }
