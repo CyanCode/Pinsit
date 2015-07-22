@@ -12,26 +12,29 @@ import Parse
 import FCCurrentLocationGeocoder
 
 class PAnnotation: NSObject, MKAnnotation {
-    var title: String?
-    var subtitle: String?
-    var coord: Coordinate!
-    var coordinate: CLLocationCoordinate2D
-    var thumbnail: UIImage!
-    var allowsDownloading: Bool!
-    var isPrivate: Bool!
-    var videoURL: NSURL!
-    var videoData: NSData!
-    var isFriend: NSNumber!
-    var dataID: NSString!
-    var object: PFObject!
+    var title: String? {
+        get {
+            return self.object != nil ? self.object.username : ""
+        } set {}
+    }
+    var coordinate: CLLocationCoordinate2D {
+        get {
+            let lat = self.object != nil ? self.object.location.latitude : 0
+            let lon = self.object != nil ? self.object.location.longitude : 0
+            return CLLocationCoordinate2DMake(lat, lon)
+        } set {}
+    }
+    var object: PFSentData!
     
     private var viewController: PostDetailsView!
     
     init(coord: CLLocationCoordinate2D) {
+        super.init()
         self.coordinate = coord
     }
     
     override init() {
+        super.init()
         self.coordinate = CLLocationCoordinate2DMake(0, 0)
     }
     
@@ -50,15 +53,18 @@ class PAnnotation: NSObject, MKAnnotation {
                 
                 geoCode.geocode({ (success) -> Void in
                     if success == true {
-                        ann.subtitle = vc.descriptionView.text
-                        ann.coord = Coordinate(lat: geoCode.location.coordinate.latitude, lon: geoCode.location.coordinate.longitude)
-                        ann.allowsDownloading = vc.downloadSwitch.on
-                        ann.isPrivate = vc.privateSwitch.on
-                        ann.thumbnail = Image().generateThumbnail()
-                        ann.videoData = NSData(contentsOfURL: File.getVideoPathURL())
+                        ann.object = PFSentData(view: vc)
+                        ann.object.location = PFGeoPoint(latitude: geoCode.location.coordinate.latitude, longitude: geoCode.location.coordinate.longitude)
                         
-                        let send = ServerSend(ann: ann)
-                        send.sendDataWithBlock({ (error) -> Void in completion(error: error) })
+                        let log = PFLog(videoObject: ann.object)
+                        log.saveInBackgroundWithBlock({ (success, error) -> Void in
+                            if error != nil {
+                                completion(error: error)
+                            } else {
+                                let send = ServerSend(ann: ann)
+                                send.sendDataWithBlock({ (error) -> Void in completion(error: error) })
+                            }
+                        })
                     } else {
                         print("Location Error: \(geoCode.error.localizedDescription)")
                         completion(error: geoCode.error)
