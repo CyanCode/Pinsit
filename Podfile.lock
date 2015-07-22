@@ -4,12 +4,12 @@ PODS:
   - FCCurrentLocationGeocoder (1.1.10):
     - FCIPAddressGeocoder (~> 1.0.0)
   - FCIPAddressGeocoder (1.0.2)
-  - HexColors (2.2.1)
+  - HexColors (2.3.0)
   - INTULocationManager (3.0.3)
   - IQKeyboardManager (3.2.4)
   - JGProgressHUD (1.2.7)
   - KLCPopup (1.0)
-  - Parse (1.7.5.1):
+  - Parse (1.7.5.2):
     - Bolts/Tasks (>= 1.2.0)
   - ParseUI (1.1.4):
     - Parse (~> 1.7)
@@ -17,9 +17,8 @@ PODS:
   - SDWebImage (3.7.3):
     - SDWebImage/Core (= 3.7.3)
   - SDWebImage/Core (3.7.3)
-  - SVPullToRefresh (0.4.1)
-  - TSMessages (0.9.12):
-    - HexColors (~> 2.2.0)
+  - TSMessages (0.9.13):
+    - HexColors (~> 2.3.0)
   - XLForm (3.0.0)
 
 DEPENDENCIES:
@@ -33,26 +32,33 @@ DEPENDENCIES:
   - ParseUI
   - PPTopMostController
   - SDWebImage
-  - SVPullToRefresh
-  - TSMessages
+  - TSMessages (from `https://github.com/KrauseFx/TSMessages.git`)
   - XLForm
+
+EXTERNAL SOURCES:
+  TSMessages:
+    :git: https://github.com/KrauseFx/TSMessages.git
+
+CHECKOUT OPTIONS:
+  TSMessages:
+    :commit: 7ef3990de3c626e8f3e50bfabb53f76997e374ce
+    :git: https://github.com/KrauseFx/TSMessages.git
 
 SPEC CHECKSUMS:
   Bolts: d176cb1e0012175589e389a9db49b85e27787576
   DeviceGuru: 34cf5b30fd99e7e3a4cee4c77c03bc94a4362be4
   FCCurrentLocationGeocoder: e3f2cff7ffbbb09a9bc1603e1743650345927938
   FCIPAddressGeocoder: 2622f052eba06c78a707f8b9d9925a406d96ebbd
-  HexColors: abfd172e329dab59888614ccba6f216cec59289d
+  HexColors: 6ad3947c3447a055a3aa8efa859def096351fe5f
   INTULocationManager: e79327803a163f5fec28eb042bb124ed0c6e4876
   IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
   JGProgressHUD: a45c1d16adddf7e38092ce3f0d71d3955d2de2ec
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
-  Parse: 7dd027063c30a010356ec67515aca7787512b0ef
+  Parse: 9a01b8cb054f113b74211370aaf9d982d355729a
   ParseUI: d1228541b02a36a7354c8f47747f5f7a89cf1ff0
   PPTopMostController: 4e6f1e5f8c645bdcc74cd837a20f607ff262c048
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
-  SVPullToRefresh: ba2e718695a43253d8bea6852d2960097dc15d8c
-  TSMessages: c8cc7b80f2a833af533872cd02010cac061532cc
+  TSMessages: 8f04ffae3ce56a324731dedd3b8fab3766878db2
   XLForm: 10fc7eb9e2d5df21a515fa3a794f4e26319abd0e
 
 COCOAPODS: 0.37.2

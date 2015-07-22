@@ -9,11 +9,10 @@ pod 'IQKeyboardManager'
 pod 'INTULocationManager'
 pod 'JGProgressHUD'
 pod 'XLForm'
-pod 'SVPullToRefresh'
 pod 'SDWebImage'
 pod 'KLCPopup'
 pod 'FCCurrentLocationGeocoder'
-pod 'TSMessages'
+pod 'TSMessages', :git => 'https://github.com/KrauseFx/TSMessages.git' #Temp, Until Cocoapods integration
 pod 'PPTopMostController'
 pod 'DeviceGuru'
 
