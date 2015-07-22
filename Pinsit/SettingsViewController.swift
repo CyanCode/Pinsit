@@ -12,92 +12,38 @@ import Parse
 
 class SettingsViewController: XLFormViewController {
     var options: [String]!
+    var set: SettingsData!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         AppDelegate.loginCheck(self)
         
         self.createTableForm()
+        self.set = SettingsData(vc: self)
+        set.checkUpgraded()
     }
     
-    ///MARK: Button Selectors
-    private func upgradeAccount() {
-        Upgrade().startPurchase(self)
-    }
-    
-    private func social(type: SocialType) {
-        let manager = SocialManager(vc: self)
-        manager.displayShareDialog(type)
-    }
-    
-    private func logoutUser() {
-        PFUser.logOut()
-        StoryboardManager.segueRegistration(self)
-    }
-    
-    private func deleteAccount() {
-        let controller = UIAlertController(title: "Are You Sure..?", message: "We're sad to see you go, but if you must leave, please enter your login information below.", preferredStyle: .Alert)
-        controller.addTextFieldWithConfigurationHandler { (textField) -> Void in
-            textField.placeholder = "Username"
-        }
-        controller.addTextFieldWithConfigurationHandler { (textField) -> Void in
-            textField.secureTextEntry = true
-            textField.placeholder = "Password"
-        }
-        controller.addAction(UIAlertAction(title: "Continue", style: .Default, handler: { (action) -> Void in
-            let username = controller.textFields![0] as UITextField
-            let password = controller.textFields![1] as UITextField
-            
-            DeleteAccount(viewController: self).attemptAuthentication(username.text!, password: password.text!, done: { (success) -> Void in if success == true {
-                DeleteAccount(viewController: self).beginDeletionInBackground { (success) -> Void in
-                    if success == true {
-                        self.logoutUser()
-                        StoryboardManager.segueRegistration(self)
-                    } else {
-                        let controller = UIAlertController(title: "Not Quite!", message: "The password you entered does not match the password attached to your account, feel free to try again.", preferredStyle: .Alert)
-                        controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
-                        
-                        self.presentViewController(controller, animated: true, completion: nil)
-                    }
-                }
-                }
-            })
-        }))
-        
-        controller.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
-        self.presentViewController(controller, animated: true, completion: nil)
-    }
-    
-    private func emailVerification() {
-        let recover = RecoverAccount(vc: self)
-        recover.reverifyEmailAddress { () -> Void in
-            print("Finished verifying email")
-        }
-    }
-    
-    private func numberVerification() {
-        let recover = RecoverAccount(vc: self)
-        recover.reverifyPhoneNumber { () -> Void in
-            print("Finished verifying phone")
-        }
-    }
-    
-    private func showTermsOfService() {
-        
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        set.checkUpgraded()
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let row = self.form.formRowAtIndex(indexPath)
-        
+
         switch row.tag as Tags.RawValue {
-        case Tags.Upgrade.rawValue: self.upgradeAccount()
-        case Tags.Facebook.rawValue: self.social(.Facebook)
-        case Tags.Twitter.rawValue: self.social(.Twitter)
-        case Tags.Email.rawValue: self.emailVerification()
-        case Tags.Phone.rawValue: self.numberVerification()
-        case Tags.TOS.rawValue: self.showTermsOfService()
-        case Tags.Logout.rawValue: self.logoutUser()
-        case Tags.Delete.rawValue: self.deleteAccount()
+        case Tags.Upgrade.rawValue: set.upgradeAccount()
+        case Tags.Facebook.rawValue: set.social(.Facebook)
+        case Tags.Twitter.rawValue: set.social(.Twitter)
+        case Tags.Email.rawValue: set.emailVerification()
+            
+        case Tags.Phone.rawValue: set.verify.verificationPressed()
+        case Tags.PhoneNumDone.rawValue: set.verify.numberEntered()
+        case Tags.PhoneCodeDone.rawValue: set.verify.codeEntered()
+            
+        case Tags.Logout.rawValue: set.logoutUser()
+        case Tags.Delete.rawValue: set.deleteAccount()
         default: print("Selection index error")
         }
     }
@@ -114,10 +60,8 @@ class SettingsViewController: XLFormViewController {
         section = XLFormSectionDescriptor.formSectionWithTitle("Pinsit") as XLFormSectionDescriptor
         form.addFormSection(section)
         
-        if Upgrade().isUpgraded() == false {
             row = XLFormRowDescriptor(tag: Tags.Upgrade.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Upgrade Account")
             section.addFormRow(row)
-        }
         
         row = XLFormRowDescriptor(tag: Tags.Facebook.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Share on Facebook")
         section.addFormRow(row)
@@ -125,20 +69,51 @@ class SettingsViewController: XLFormViewController {
         row = XLFormRowDescriptor(tag: Tags.Twitter.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Share on Twitter")
         section.addFormRow(row)
         
+        let emailVer = PFUser.currentUser()!["emailVerified"] as? Bool
+        let phoneVer = PFUser.currentUser()!["phone"] as? String
+        
         //Verification section
-        section = XLFormSectionDescriptor.formSectionWithTitle("Verification") as XLFormSectionDescriptor
-        form.addFormSection(section)
-        row = XLFormRowDescriptor(tag: Tags.Email.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Resend Email Verification")
+        if (emailVer == nil || emailVer == false) || (phoneVer == nil || phoneVer! == "") {
+            section = XLFormSectionDescriptor.formSectionWithTitle("Verification") as XLFormSectionDescriptor
+            form.addFormSection(section)
+        }
+        
+        if emailVer == nil || emailVer == false {
+            row = XLFormRowDescriptor(tag: Tags.Email.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Resend Email Verification")
+            section.addFormRow(row)
+        }
+        
+        if phoneVer == nil || phoneVer! == "" {
+            row = XLFormRowDescriptor(tag: Tags.Phone.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Verify Phone Number")
+            section.addFormRow(row)
+            
+            set.verify.section = section
+        }
+        
+        //Phone verification credentials
+        row = XLFormRowDescriptor(tag: Tags.PhoneNum.rawValue, rowType: XLFormRowDescriptorTypePhone)
+        row.cellConfigAtConfigure.setObject("Phone Number", forKey: "textField.placeholder")
+        row.value = ""
+        row.hidden = true
         section.addFormRow(row)
         
-        row = XLFormRowDescriptor(tag: Tags.Phone.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Resend Number Verification")
+        row = XLFormRowDescriptor(tag: Tags.PhoneNumDone.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Send Text Message")
+        row.hidden = true
+        section.addFormRow(row)
+        
+        row = XLFormRowDescriptor(tag: Tags.PhoneCode.rawValue, rowType: XLFormRowDescriptorTypeName)
+        row.cellConfigAtConfigure.setObject("Verification Code", forKey: "textField.placeholder")
+        row.value = ""
+        row.hidden = true
+        section.addFormRow(row)
+        
+        row = XLFormRowDescriptor(tag: Tags.PhoneCodeDone.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Confirm Phone Number")
+        row.hidden = true
         section.addFormRow(row)
         
         //Account section
         section = XLFormSectionDescriptor.formSectionWithTitle("Account") as XLFormSectionDescriptor
         form.addFormSection(section)
-        row = XLFormRowDescriptor(tag: Tags.TOS.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Terms of Service")
-        section.addFormRow(row)
         
         row = XLFormRowDescriptor(tag: Tags.Logout.rawValue, rowType: XLFormRowDescriptorTypeButton, title: "Logout")
         section.addFormRow(row)
@@ -148,14 +123,28 @@ class SettingsViewController: XLFormViewController {
         
         self.form = form
     }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "tos" {
+            let vc = segue.destinationViewController as! TOSViewController
+            vc.identifier = "settings"
+        }
+    }
 }
 
 enum Tags: String {
     case Upgrade = "upgrade"
     case Facebook = "facebook"
     case Twitter = "twitter"
+    
     case Email = "email"
     case Phone = "phone"
+    
+    case PhoneNum = "phonenum"
+    case PhoneNumDone = "phonenumdone"
+    case PhoneCode = "phonecode"
+    case PhoneCodeDone = "phonecodedone"
+    
     case TOS = "tos"
     case Logout = "logout"
     case Delete = "delete"
