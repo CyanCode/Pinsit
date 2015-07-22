@@ -52,11 +52,9 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
             let pointAnn = annotation as! PAnnotation
             var returnedImg = UIImage()
             
-            pointAnn.subtitle = ""
+            returnedImg = UIImage(data: pointAnn.object.thumbnail.getData()!)!
             
-            returnedImg = pointAnn.thumbnail
-            
-            let following = followerCache.isFollowing(pointAnn.title! as String)
+            let following = followerCache.isFollowing(pointAnn.object.username as String)
             annView.pinColor = following ? .Green : .Red //If user is following, make pin green
             
             let style = Styling(manipulate: UIButton())
