@@ -49,6 +49,6 @@ class Stream {
             }
         }
         
-        annotation.videoData?.writeToFile(vidPath as String, atomically: true)
+        annotation.object.video.getData()!.writeToFile(vidPath as String, atomically: true)
     }
 }
