@@ -18,7 +18,7 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     @IBOutlet var cancelButton: UIButton!
     @IBOutlet var postButton: UIButton!
     
-    var responder: UIViewController!
+    var responder: VideoViewController!
     //private var popup: KLCPopup!
     
     required init(coder aDecoder: NSCoder) {
@@ -34,20 +34,10 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
         self.frame = CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width, height: self.bounds.height)
         
         downloadSwitch.enabled = Upgrade().isUpgraded()
-        downloadSwitch.onTintColor = UIColor(string: "#FF2851")
-        privateSwitch.onTintColor = UIColor(string: "#FF2851")
+        downloadSwitch.onTintColor = UIColor(string: "#A3BDC9")
+        privateSwitch.onTintColor = UIColor(string: "#A3BDC9")
         fillerText()
-        
-        //Buttons and TextView
-        postButton.layer.cornerRadius = 3
-        postButton.layer.masksToBounds = true
-        cancelButton.layer.cornerRadius = 3
-        cancelButton.layer.masksToBounds = true
-        descriptionView.layer.cornerRadius = 3
-        descriptionView.layer.masksToBounds = true
-        
-        //Full View
-        self.layer.cornerRadius = 3
+
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.whiteColor().CGColor
         
@@ -57,7 +47,7 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     ///Present PostDetailsView in DetailsViewController, ready to post
     ///
     ///- parameter viewController: DetailsViewController instance
-    func presentViewInController(viewController: UIViewController, popupPoint: CGPoint) {
+    func presentViewInController(viewController: VideoViewController, popupPoint: CGPoint) {
         self.responder = viewController
         self.prepareView()
         viewController.view.addSubview(self)
@@ -111,9 +101,11 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
                 //self.popup.dismiss(true)
             } else {
                 print("Video post successful")
-                //self.popup.dismiss(true)
+
                 self.dismissSlide()
-                //segue
+                self.responder.toggleSwitches(true)
+                self.responder.restartVideo()
+                self.responder.switchItem(.Map)
             }
         })
         

@@ -10,22 +10,55 @@ import UIKit
 import Parse
 
 class TOSViewController: UIViewController {
-    @IBAction func agreePressed(sender: AnyObject) {
-        let user = PFUser.currentUser()
-        user!["tosverified"] = NSNumber(bool: true)
-        user!.saveInBackgroundWithBlock { (success, error) -> Void in
+    @IBOutlet var textView: UITextView!
+    @IBOutlet var backButton: UIBarButtonItem!
+    private var showingTOS = true
+    var identifier = ""
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        textView.editable = false
+        textView.attributedText = loadPolicyFile("tos")
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.navigationController?.navigationBarHidden = false
+    }
+    
+    @IBAction func togglePolicy(sender: UIBarButtonItem) {
+        if showingTOS == true {
+            textView.attributedText = loadPolicyFile("privacy")
+            navigationController?.navigationBar.topItem?.title = "Privacy Policy"
+            sender.title = "Terms of Service"
             
-            if error != nil {
-                let alert = RegistrationAlerts(vc: self)
-                
-                if error!.code == PFErrorCode.ErrorConnectionFailed.rawValue {
-                    alert.tosConnection()
-                } else {
-                    alert.unknownError()
-                }
-            } else {
-                StoryboardManager.segueMain(self)
-            }
+            showingTOS = false
+        } else {
+            textView.attributedText = loadPolicyFile("tos")
+            navigationController?.navigationBar.topItem?.title = "Terms of Service"
+            sender.title = "Privacy Policy"
+            
+            showingTOS = true
         }
+    }
+    
+    @IBAction func doneButtonPressed(sender: UIBarButtonItem) {
+        self.performSegueWithIdentifier(identifier, sender: self)
+    }
+    
+    func loadPolicyFile(name: String) -> NSAttributedString {
+        do {
+            let rtf = NSBundle.mainBundle().URLForResource(name, withExtension: "rtf")
+            return try NSAttributedString(fileURL: rtf!, options: [NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType], documentAttributes: nil)
+        } catch {
+            print("Could not load Terms of Service")
+        }
+        
+        return NSAttributedString()
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
 }

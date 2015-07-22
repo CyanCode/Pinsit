@@ -182,6 +182,62 @@
                                                 <action selector="loginButton:" destination="RJe-zK-kE3" eventType="touchUpInside" id="hch-9v-hu9"/>
                                             </connections>
                                         </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YWk-tV-BgI">
+                                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="46" id="1YC-SC-Q32"/>
+                                            </constraints>
+                                            <state key="normal">
+                                                <attributedString key="attributedTitle">
+                                                    <fragment content="By signing in you are agreeing to the Pinsit Terms of Service and Privacy Policy">
+                                                        <attributes>
+                                                            <color key="NSColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
+                                            </state>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="1YC-SC-Q32"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <mask key="constraints">
+                                                    <include reference="1YC-SC-Q32"/>
+                                                </mask>
+                                            </variation>
+                                            <connections>
+                                                <segue destination="ECD-QM-Des" kind="presentation" modalTransitionStyle="crossDissolve" id="lP3-7h-MPm"/>
+                                            </connections>
+                                        </button>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vSA-Ka-BS1">
+                                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="MNO-W0-B6U">
+                                                    <variation key="widthClass=compact" constant="30"/>
+                                                </constraint>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                            <state key="normal" title="Forgot Password?">
+                                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            </state>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="MNO-W0-B6U"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <mask key="constraints">
+                                                    <include reference="MNO-W0-B6U"/>
+                                                </mask>
+                                            </variation>
+                                            <connections>
+                                                <segue destination="QFe-FU-8T6" kind="showDetail" animates="NO" id="IAV-xz-h7P"/>
+                                            </connections>
+                                        </button>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6FP-a4-yzh">
                                             <rect key="frame" x="-23" y="-15" width="46" height="30"/>
                                             <constraints>
@@ -209,37 +265,12 @@
                                                 <segue destination="M9L-AG-ooH" kind="presentation" animates="NO" id="x8H-CH-bCs"/>
                                             </connections>
                                         </button>
-                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YWk-tV-BgI">
-                                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="46" id="1YC-SC-Q32"/>
-                                            </constraints>
-                                            <state key="normal">
-                                                <attributedString key="attributedTitle">
-                                                    <fragment content="By signing in you are agreeing to the Pinsit  Terms of Service">
-                                                        <attributes>
-                                                            <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
-                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
-                                                        </attributes>
-                                                    </fragment>
-                                                </attributedString>
-                                            </state>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="1YC-SC-Q32"/>
-                                                </mask>
-                                            </variation>
-                                            <variation key="widthClass=compact">
-                                                <mask key="constraints">
-                                                    <include reference="1YC-SC-Q32"/>
-                                                </mask>
-                                            </variation>
-                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="YWk-tV-BgI" secondAttribute="bottom" constant="8" id="548-Ao-wJq"/>
                                         <constraint firstAttribute="trailing" secondItem="YWk-tV-BgI" secondAttribute="trailing" constant="8" id="59t-KJ-QgS"/>
+                                        <constraint firstItem="vSA-Ka-BS1" firstAttribute="leading" secondItem="Oi3-YO-hKj" secondAttribute="leading" constant="73" id="B62-c0-I8c"/>
+                                        <constraint firstAttribute="trailing" secondItem="vSA-Ka-BS1" secondAttribute="trailing" constant="72" id="BXC-M2-iqj"/>
                                         <constraint firstAttribute="trailing" secondItem="6FP-a4-yzh" secondAttribute="trailing" constant="72" id="EOb-fJ-54p"/>
                                         <constraint firstItem="6FP-a4-yzh" firstAttribute="leading" secondItem="Oi3-YO-hKj" secondAttribute="leading" constant="73" id="F1V-Ng-cIZ"/>
                                         <constraint firstAttribute="trailing" secondItem="KH6-tC-LfK" secondAttribute="trailing" constant="72" id="GRj-Cl-VUc"/>
@@ -257,6 +288,7 @@
                                         <constraint firstItem="VWr-8c-ArA" firstAttribute="top" secondItem="Z4C-Os-20f" secondAttribute="bottom" constant="126" id="oZR-vi-5Rm"/>
                                         <constraint firstItem="yhe-lU-O6K" firstAttribute="top" secondItem="VWr-8c-ArA" secondAttribute="bottom" id="pks-O5-wdV"/>
                                         <constraint firstItem="YWk-tV-BgI" firstAttribute="leading" secondItem="Oi3-YO-hKj" secondAttribute="leading" constant="8" id="u5W-Qc-mYX"/>
+                                        <constraint firstItem="vSA-Ka-BS1" firstAttribute="top" secondItem="6FP-a4-yzh" secondAttribute="bottom" constant="8" id="uIS-QN-lYE"/>
                                         <constraint firstItem="nTi-J2-Vka" firstAttribute="top" secondItem="Oi3-YO-hKj" secondAttribute="top" constant="40" id="zPe-Rx-7bq"/>
                                     </constraints>
                                     <variation key="default">
@@ -266,30 +298,34 @@
                                             <exclude reference="VWr-8c-ArA"/>
                                             <exclude reference="yhe-lU-O6K"/>
                                             <exclude reference="KH6-tC-LfK"/>
-                                            <exclude reference="6FP-a4-yzh"/>
                                             <exclude reference="YWk-tV-BgI"/>
+                                            <exclude reference="vSA-Ka-BS1"/>
+                                            <exclude reference="6FP-a4-yzh"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <exclude reference="If1-M1-BbV"/>
-                                            <exclude reference="Wae-sh-hhW"/>
-                                            <exclude reference="oZR-vi-5Rm"/>
                                             <exclude reference="IY3-Pt-3cT"/>
                                             <exclude reference="WWF-ll-6av"/>
                                             <exclude reference="hTL-uy-tUg"/>
+                                            <exclude reference="nPA-mU-UW0"/>
+                                            <exclude reference="zPe-Rx-7bq"/>
+                                            <exclude reference="If1-M1-BbV"/>
+                                            <exclude reference="Wae-sh-hhW"/>
+                                            <exclude reference="oZR-vi-5Rm"/>
                                             <exclude reference="Nzu-ng-SYV"/>
                                             <exclude reference="YfG-J2-rur"/>
                                             <exclude reference="pks-O5-wdV"/>
-                                            <exclude reference="EOb-fJ-54p"/>
-                                            <exclude reference="F1V-Ng-cIZ"/>
-                                            <exclude reference="oQ2-UV-D2c"/>
                                             <exclude reference="GRj-Cl-VUc"/>
                                             <exclude reference="NaR-lN-YO1"/>
                                             <exclude reference="brf-e0-MOE"/>
+                                            <exclude reference="EOb-fJ-54p"/>
+                                            <exclude reference="F1V-Ng-cIZ"/>
+                                            <exclude reference="oQ2-UV-D2c"/>
+                                            <exclude reference="B62-c0-I8c"/>
+                                            <exclude reference="BXC-M2-iqj"/>
+                                            <exclude reference="uIS-QN-lYE"/>
                                             <exclude reference="548-Ao-wJq"/>
                                             <exclude reference="59t-KJ-QgS"/>
                                             <exclude reference="u5W-Qc-mYX"/>
-                                            <exclude reference="nPA-mU-UW0"/>
-                                            <exclude reference="zPe-Rx-7bq"/>
                                         </mask>
                                     </variation>
                                     <variation key="widthClass=compact">
@@ -299,30 +335,34 @@
                                             <include reference="VWr-8c-ArA"/>
                                             <include reference="yhe-lU-O6K"/>
                                             <include reference="KH6-tC-LfK"/>
-                                            <include reference="6FP-a4-yzh"/>
                                             <include reference="YWk-tV-BgI"/>
+                                            <include reference="vSA-Ka-BS1"/>
+                                            <include reference="6FP-a4-yzh"/>
                                         </mask>
                                         <mask key="constraints">
-                                            <include reference="If1-M1-BbV"/>
-                                            <include reference="Wae-sh-hhW"/>
-                                            <include reference="oZR-vi-5Rm"/>
                                             <include reference="IY3-Pt-3cT"/>
                                             <include reference="WWF-ll-6av"/>
                                             <include reference="hTL-uy-tUg"/>
+                                            <include reference="nPA-mU-UW0"/>
+                                            <include reference="zPe-Rx-7bq"/>
+                                            <include reference="If1-M1-BbV"/>
+                                            <include reference="Wae-sh-hhW"/>
+                                            <include reference="oZR-vi-5Rm"/>
                                             <include reference="Nzu-ng-SYV"/>
                                             <include reference="YfG-J2-rur"/>
                                             <include reference="pks-O5-wdV"/>
-                                            <include reference="EOb-fJ-54p"/>
-                                            <include reference="F1V-Ng-cIZ"/>
-                                            <include reference="oQ2-UV-D2c"/>
                                             <include reference="GRj-Cl-VUc"/>
                                             <include reference="NaR-lN-YO1"/>
                                             <include reference="brf-e0-MOE"/>
+                                            <include reference="EOb-fJ-54p"/>
+                                            <include reference="F1V-Ng-cIZ"/>
+                                            <include reference="oQ2-UV-D2c"/>
+                                            <include reference="B62-c0-I8c"/>
+                                            <include reference="BXC-M2-iqj"/>
+                                            <include reference="uIS-QN-lYE"/>
                                             <include reference="548-Ao-wJq"/>
                                             <include reference="59t-KJ-QgS"/>
                                             <include reference="u5W-Qc-mYX"/>
-                                            <include reference="nPA-mU-UW0"/>
-                                            <include reference="zPe-Rx-7bq"/>
                                         </mask>
                                     </variation>
                                 </view>
@@ -333,14 +373,18 @@
                         <constraints>
                             <constraint firstItem="apY-fA-WVw" firstAttribute="trailing" secondItem="Y42-bR-nj7" secondAttribute="trailingMargin" id="EI2-BU-liy"/>
                             <constraint firstItem="YXW-2T-nel" firstAttribute="top" secondItem="nux-T5-ZGt" secondAttribute="bottom" id="Edh-Ww-C8V"/>
-                            <constraint firstItem="nux-T5-ZGt" firstAttribute="leading" secondItem="Y42-bR-nj7" secondAttribute="leadingMargin" constant="-16" id="IOC-c1-IAI"/>
+                            <constraint firstItem="nux-T5-ZGt" firstAttribute="leading" secondItem="Y42-bR-nj7" secondAttribute="leadingMargin" constant="-16" id="IOC-c1-IAI">
+                                <variation key="widthClass=compact" constant="-20"/>
+                            </constraint>
                             <constraint firstItem="nux-T5-ZGt" firstAttribute="top" secondItem="Y42-bR-nj7" secondAttribute="topMargin" id="SR8-ue-1Hg"/>
                             <constraint firstItem="bWE-f8-jPm" firstAttribute="trailing" secondItem="Y42-bR-nj7" secondAttribute="trailingMargin" id="YTa-Y3-peC"/>
                             <constraint firstItem="bWE-f8-jPm" firstAttribute="top" secondItem="apY-fA-WVw" secondAttribute="bottom" constant="8" id="aFa-SK-61w"/>
                             <constraint firstItem="ofV-fY-bHa" firstAttribute="top" secondItem="Y42-bR-nj7" secondAttribute="topMargin" id="gRl-Ee-q4y"/>
                             <constraint firstItem="ofV-fY-bHa" firstAttribute="leading" secondItem="Y42-bR-nj7" secondAttribute="leadingMargin" constant="-16" id="kCa-Zv-6Pu"/>
                             <constraint firstAttribute="trailingMargin" secondItem="ofV-fY-bHa" secondAttribute="trailing" constant="-16" id="kZH-Lk-1dt"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="nux-T5-ZGt" secondAttribute="trailing" constant="-16" id="nhB-Ht-xBS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="nux-T5-ZGt" secondAttribute="trailing" constant="-16" id="nhB-Ht-xBS">
+                                <variation key="widthClass=compact" constant="-20"/>
+                            </constraint>
                             <constraint firstItem="apY-fA-WVw" firstAttribute="leading" secondItem="Y42-bR-nj7" secondAttribute="leadingMargin" id="pi0-9W-jO5"/>
                             <constraint firstItem="YXW-2T-nel" firstAttribute="top" secondItem="ofV-fY-bHa" secondAttribute="bottom" id="r5D-kL-N4t"/>
                             <constraint firstItem="YXW-2T-nel" firstAttribute="top" secondItem="bWE-f8-jPm" secondAttribute="bottom" constant="20" id="wad-Lo-Vdb"/>
@@ -390,8 +434,10 @@
                         </variation>
                     </view>
                     <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="passwordField" destination="yhe-lU-O6K" id="iGp-jE-ajr"/>
+                        <outlet property="policyButton" destination="YWk-tV-BgI" id="dt9-iJ-kkp"/>
                         <outlet property="usernameField" destination="VWr-8c-ArA" id="8JK-8i-kuu"/>
                     </connections>
                 </viewController>
@@ -399,7 +445,7 @@
             </objects>
             <point key="canvasLocation" x="909" y="235"/>
         </scene>
-        <!--View Controller-->
+        <!--Terms of Service-->
         <scene sceneID="Vel-oU-wbG">
             <objects>
                 <viewController id="y5E-1D-MQY" customClass="TOSViewController" customModule="Pinsit" customModuleProvider="target" sceneMemberID="viewController">
@@ -411,60 +457,489 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" usesAttributedText="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N5w-eJ-jUH">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <attributedString key="attributedText">
+                                    <fragment>
+                                        <string key="content">The agreement (the "Agreement") is entered into by and between you and Pinsit ("Pinsit") regarding your use of Pinsit mobile application or associated products.  By using Pinsit, you are entering into this Agreement with Pinsit and agreeing to by bound to and by these terms and conditions.  If you do not agree with these Terms and Conditions, please do not use this Service.
+
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="1. Description of Service">
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">
+Pinsit (the "Service") is a mobile service from Walker Christie ("Owner", "we", "us") that offers a way to post videos from your device and display them on a public (map-based) forum.  You understand and agree that the Service is provided on an AS IS and AS AVAILABLE bases.  We disclaim all responsibility and liability for the availibility, timeliness, security, or reliability of the Service.  We also reserves the right to modify, suspend, or discontinue the Service with or without notice at any time and without any liability to you.
+
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">2. Changes
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">We reserve the right to make changes to the Terms of Service at any time.  We may change, update, or add or remove any provisions of these Terms at any time and the new agreement will be effective immediately.
+
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">3. General Use
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">By using the Service, you acknowledge and agree that you are at least 18 years of age.  If you are not at least 18 years old, you may not use the Service at any time, in any manner, or submit any information to the Service or the App Store.  
+We may, and reserve the right to refuse or revoke the usage of the Service to any person or entity.  We may, without notice, terminate your right to use the Services at any time and block your future access to use of the Service.
+
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">4. Personal Use
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">The Service is available to you for personal use only.  You are required to provide current and accurate identification, contact, and other information that may be required during the registration and / or continued use of the Service.  You are held responsible for maintaining the confidentiality and security of your Service password and account, and are responsible for all activities that occur under it.  You may only display the Service's content for personal use and are not allowed to display the Service through non-commercial use.  You may not copy, reproduce, modify, alter, create imitative works, or display any content publically without prior written permission from us.
+
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">5. Privacy Policy
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">As a usage requirement for this Service, you agree to the Pinsit Privacy Policy as it may be changed.  You agree that we may monitor, edit, or disclose your personal information, including your recorded videos, if we are required to do so in order to comply with any valid legal process or governmental request.  This may include search warrants, subpoena, statute, and court orders.  Personal information collected by us is stored and monitored by Parse LLC.  By using this service, you agree and consent to any transfer of information through Parse LLC and it's services.
+
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">6. Warranty
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">THE SERVICE IS PROVIDED "AS IS" WITH NO WARRANTY OF ANY KIND AND YOU USE THE SERVICE AT YOUR OWN RISK. PINSIT EXPRESSLY DISCLAIMS ANY WARRANTY, EXPRESS OR IMPLIED, REGARDING THE SERVICE, INCLUDING ANY IMPLIED WARRANTY OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT. UNDER NO CIRCUMSTANCES WILL PINSIT BE LIABLE TO YOU FOR ANY INDIRECT, INCIDENTAL, CONSEQUENTIAL, SPECIAL OR EXEMPLARY DAMAGES ARISING OUT OF OR IN CONNECTION WITH USE OF THE SERVICE WHETHER OR NOT YOU HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. UNDER NO CIRCUMSTANCES SHALL PINSIT BE LIABLE TO YOU FOR ANY AMOUNT FOR SERVICES RENDERED PURSUANT TO THIS AGREEMENT.
+
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">7. Indemnification
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">You agree to hold the Service harmless and indemnified from any third party claim arising from or in any way related to your use of the Service.  This includes any liability or expense arising from all claims, losses, damages, litigation costs, and attorney fees of any kind.
+
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">8. Liability
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica-Bold"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">To the maximum extent permitted by applicable law, you hereby release, and waive all claims against Pinsit from any and all liability for claims, damages, costs, and expenses of any kind that are in any way connected to the Service.
+
+</string>
+                                        <attributes>
+                                            <font key="NSFont" size="12" name="Helvetica"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural">
+                                                <tabStops>
+                                                    <textTab alignment="left" location="36"/>
+                                                    <textTab alignment="left" location="72"/>
+                                                    <textTab alignment="left" location="108"/>
+                                                    <textTab alignment="left" location="144"/>
+                                                    <textTab alignment="left" location="180"/>
+                                                    <textTab alignment="left" location="216"/>
+                                                    <textTab alignment="left" location="252"/>
+                                                    <textTab alignment="left" location="288"/>
+                                                    <textTab alignment="left" location="324"/>
+                                                    <textTab alignment="left" location="360"/>
+                                                    <textTab alignment="left" location="396"/>
+                                                    <textTab alignment="left" location="432"/>
+                                                </tabStops>
+                                            </paragraphStyle>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                <variation key="widthClass=compact">
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                </variation>
+                            </textView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0a4-H1-aZb">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                 <items>
-                                    <barButtonItem title="Agree" id="QN5-eU-raa">
+                                    <barButtonItem title="Privacy Policy" id="QN5-eU-raa">
                                         <connections>
-                                            <action selector="agreePressed:" destination="y5E-1D-MQY" id="d6K-AP-Ixb"/>
+                                            <action selector="togglePolicy:" destination="y5E-1D-MQY" id="V3D-wV-PpJ"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="sxi-bV-L2H"/>
+                                    <barButtonItem title="Done" id="b1o-98-lpg">
+                                        <connections>
+                                            <action selector="doneButtonPressed:" destination="y5E-1D-MQY" id="mar-ne-B3h"/>
+                                            <segue destination="M9L-AG-ooH" kind="presentation" identifier="register" modalTransitionStyle="crossDissolve" id="3dd-92-ePs"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
                             </toolbar>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="scv-Iv-C8z">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                <variation key="widthClass=compact" fixedFrame="YES">
-                                    <rect key="frame" x="0.0" y="0.0" width="400" height="556"/>
-                                </variation>
-                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="0a4-H1-aZb" firstAttribute="top" secondItem="N5w-eJ-jUH" secondAttribute="bottom" id="ADg-il-Hwh"/>
                             <constraint firstItem="DB2-dg-qSm" firstAttribute="top" secondItem="0a4-H1-aZb" secondAttribute="bottom" id="Brf-Q9-PaG"/>
-                            <constraint firstItem="0a4-H1-aZb" firstAttribute="leading" secondItem="StL-iA-bzK" secondAttribute="leadingMargin" constant="-16" id="H5t-9r-Oav"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="0a4-H1-aZb" secondAttribute="trailing" constant="-16" id="YnY-VK-2LX"/>
+                            <constraint firstItem="0a4-H1-aZb" firstAttribute="leading" secondItem="StL-iA-bzK" secondAttribute="leadingMargin" constant="-16" id="H5t-9r-Oav">
+                                <variation key="widthClass=compact" constant="-20"/>
+                            </constraint>
+                            <constraint firstAttribute="trailingMargin" secondItem="N5w-eJ-jUH" secondAttribute="trailing" constant="-20" id="NnF-RK-29v"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0a4-H1-aZb" secondAttribute="trailing" constant="-16" id="YnY-VK-2LX">
+                                <variation key="widthClass=compact" constant="-20"/>
+                            </constraint>
+                            <constraint firstItem="N5w-eJ-jUH" firstAttribute="leading" secondItem="StL-iA-bzK" secondAttribute="leadingMargin" constant="-20" id="bBF-Dx-eKu"/>
+                            <constraint firstItem="N5w-eJ-jUH" firstAttribute="top" secondItem="oms-JI-7Dq" secondAttribute="bottom" id="h30-n4-2d4"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
+                                <exclude reference="N5w-eJ-jUH"/>
                                 <exclude reference="0a4-H1-aZb"/>
-                                <exclude reference="scv-Iv-C8z"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="Brf-Q9-PaG"/>
+                                <exclude reference="ADg-il-Hwh"/>
                                 <exclude reference="H5t-9r-Oav"/>
                                 <exclude reference="YnY-VK-2LX"/>
+                                <exclude reference="NnF-RK-29v"/>
+                                <exclude reference="bBF-Dx-eKu"/>
+                                <exclude reference="h30-n4-2d4"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
+                                <include reference="N5w-eJ-jUH"/>
                                 <include reference="0a4-H1-aZb"/>
-                                <include reference="scv-Iv-C8z"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="Brf-Q9-PaG"/>
+                                <include reference="ADg-il-Hwh"/>
                                 <include reference="H5t-9r-Oav"/>
                                 <include reference="YnY-VK-2LX"/>
+                                <include reference="NnF-RK-29v"/>
+                                <include reference="bBF-Dx-eKu"/>
+                                <include reference="h30-n4-2d4"/>
                             </mask>
                         </variation>
                     </view>
+                    <navigationItem key="navigationItem" title="Terms of Service" id="cYm-a3-VnC"/>
+                    <connections>
+                        <outlet property="backButton" destination="b1o-98-lpg" id="JTp-Vu-XXH"/>
+                        <outlet property="textView" destination="N5w-eJ-jUH" id="uVx-qX-e2C"/>
+                        <segue destination="RJe-zK-kE3" kind="presentation" identifier="login" modalTransitionStyle="crossDissolve" id="CgX-NB-kj9"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qkz-2z-eHC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="909" y="883"/>
+            <point key="canvasLocation" x="909" y="1016"/>
         </scene>
         <!--Register View Controller-->
         <scene sceneID="SLN-Hm-qfR">
@@ -662,6 +1137,36 @@
                                                 </mask>
                                             </variation>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bL5-Ei-dd2">
+                                            <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="46" id="Y4W-fO-m2a"/>
+                                            </constraints>
+                                            <state key="normal">
+                                                <attributedString key="attributedTitle">
+                                                    <fragment content="By signing in you are agreeing to the Pinsit Terms of Service and Privacy Policy">
+                                                        <attributes>
+                                                            <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <font key="NSFont" size="13" name="HelveticaNeue"/>
+                                                            <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural"/>
+                                                        </attributes>
+                                                    </fragment>
+                                                </attributedString>
+                                            </state>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="Y4W-fO-m2a"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <mask key="constraints">
+                                                    <include reference="Y4W-fO-m2a"/>
+                                                </mask>
+                                            </variation>
+                                            <connections>
+                                                <segue destination="ECD-QM-Des" kind="presentation" modalTransitionStyle="crossDissolve" id="7YQ-yp-iye"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="trailing" secondItem="YEr-x2-8xw" secondAttribute="trailing" constant="72" id="342-R0-jwT"/>
@@ -678,9 +1183,12 @@
                                         <constraint firstItem="i3e-q5-fsW" firstAttribute="leading" secondItem="7nI-cs-Kae" secondAttribute="leading" constant="73" id="TUy-bg-nnU"/>
                                         <constraint firstAttribute="trailing" secondItem="597-Gu-Mbq" secondAttribute="trailing" id="YpT-9v-SW1"/>
                                         <constraint firstItem="qvR-zq-s1i" firstAttribute="top" secondItem="xIX-Wh-EjH" secondAttribute="bottom" constant="71" id="f29-Gy-ers"/>
+                                        <constraint firstAttribute="trailing" secondItem="bL5-Ei-dd2" secondAttribute="trailing" constant="8" id="fng-P7-2Ve"/>
+                                        <constraint firstItem="bL5-Ei-dd2" firstAttribute="leading" secondItem="7nI-cs-Kae" secondAttribute="leading" constant="8" id="hLa-qz-6uN"/>
                                         <constraint firstItem="YEr-x2-8xw" firstAttribute="leading" secondItem="7nI-cs-Kae" secondAttribute="leading" constant="73" id="jZU-Ol-T9n"/>
                                         <constraint firstItem="aKB-Hi-Mj6" firstAttribute="leading" secondItem="7nI-cs-Kae" secondAttribute="leading" id="jck-w5-PGZ"/>
                                         <constraint firstAttribute="trailing" secondItem="i3e-q5-fsW" secondAttribute="trailing" constant="72" id="k7T-Zt-sji"/>
+                                        <constraint firstAttribute="bottom" secondItem="bL5-Ei-dd2" secondAttribute="bottom" constant="8" id="kh5-Bv-Pni"/>
                                         <constraint firstItem="597-Gu-Mbq" firstAttribute="leading" secondItem="7nI-cs-Kae" secondAttribute="leading" id="q6w-Zx-Shv"/>
                                         <constraint firstItem="qvR-zq-s1i" firstAttribute="leading" secondItem="7nI-cs-Kae" secondAttribute="leading" id="t5Q-f1-srt"/>
                                         <constraint firstItem="xIX-Wh-EjH" firstAttribute="top" secondItem="191-11-pEG" secondAttribute="bottom" constant="8" symbolic="YES" id="wGf-Wf-gX4"/>
@@ -696,6 +1204,7 @@
                                             <exclude reference="YEr-x2-8xw"/>
                                             <exclude reference="H3m-Of-AM5"/>
                                             <exclude reference="xIX-Wh-EjH"/>
+                                            <exclude reference="bL5-Ei-dd2"/>
                                         </mask>
                                         <mask key="constraints">
                                             <exclude reference="Oas-Wz-FEk"/>
@@ -713,6 +1222,9 @@
                                             <exclude reference="342-R0-jwT"/>
                                             <exclude reference="MRw-cQ-FfW"/>
                                             <exclude reference="jZU-Ol-T9n"/>
+                                            <exclude reference="fng-P7-2Ve"/>
+                                            <exclude reference="hLa-qz-6uN"/>
+                                            <exclude reference="kh5-Bv-Pni"/>
                                             <exclude reference="CN8-dL-nvU"/>
                                             <exclude reference="TUy-bg-nnU"/>
                                             <exclude reference="k7T-Zt-sji"/>
@@ -731,6 +1243,7 @@
                                             <include reference="YEr-x2-8xw"/>
                                             <include reference="H3m-Of-AM5"/>
                                             <include reference="xIX-Wh-EjH"/>
+                                            <include reference="bL5-Ei-dd2"/>
                                         </mask>
                                         <mask key="constraints">
                                             <include reference="Oas-Wz-FEk"/>
@@ -748,6 +1261,9 @@
                                             <include reference="342-R0-jwT"/>
                                             <include reference="MRw-cQ-FfW"/>
                                             <include reference="jZU-Ol-T9n"/>
+                                            <include reference="fng-P7-2Ve"/>
+                                            <include reference="hLa-qz-6uN"/>
+                                            <include reference="kh5-Bv-Pni"/>
                                             <include reference="CN8-dL-nvU"/>
                                             <include reference="TUy-bg-nnU"/>
                                             <include reference="k7T-Zt-sji"/>
@@ -804,16 +1320,18 @@
                             </mask>
                         </variation>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
                     <connections>
                         <outlet property="email" destination="aKB-Hi-Mj6" id="77g-Pb-8XY"/>
                         <outlet property="password" destination="597-Gu-Mbq" id="f8J-w7-200"/>
+                        <outlet property="policyButton" destination="bL5-Ei-dd2" id="Jdr-TK-EvP"/>
                         <outlet property="username" destination="qvR-zq-s1i" id="2pU-Dn-sSN"/>
-                        <segue destination="y5E-1D-MQY" kind="presentation" identifier="tosModal" animates="NO" id="aY3-K8-Mtn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8kJ-oh-ITW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1536" y="883"/>
+            <point key="canvasLocation" x="1536" y="1016"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="gsY-Ff-cgf">
@@ -1054,10 +1572,30 @@
                             </mask>
                         </variation>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
+                    <nil key="simulatedTopBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Scv-NA-76D" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1536" y="235"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="CQd-0o-26c">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ECD-QM-Des" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="C8o-kG-A1d">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="y5E-1D-MQY" kind="relationship" relationship="rootViewController" id="7US-2Y-Kpy"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="szB-c3-hrM" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="259.5" y="1016"/>
         </scene>
     </scenes>
     <resources>
@@ -1065,6 +1603,8 @@
         <image name="space.jpg" width="744" height="1392"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IMv-Cf-bOa"/>
+        <segue reference="CgX-NB-kj9"/>
+        <segue reference="lP3-7h-MPm"/>
+        <segue reference="3dd-92-ePs"/>
     </inferredMetricsTieBreakers>
 </document>

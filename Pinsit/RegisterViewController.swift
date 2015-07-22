@@ -8,12 +8,21 @@
 
 import UIKit
 import Parse
+import JGProgressHUD
 
 class RegisterViewController: UIViewController {
-    @IBOutlet var number: UITextField!
     @IBOutlet var username: UITextField!
     @IBOutlet var password: UITextField!
     @IBOutlet var email: UITextField!
+    @IBOutlet var policyButton: UIButton!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        policyButton.titleLabel?.lineBreakMode = .ByWordWrapping
+        policyButton.titleLabel?.textAlignment = .Center
+        policyButton.titleLabel?.numberOfLines = 0
+    }
 
     @IBAction func infoPressed(sender: AnyObject) {
         let explain = "We ask for your email address in order to recover your account in the event that you forget your password."
@@ -36,7 +45,7 @@ class RegisterViewController: UIViewController {
             return
         }
         
-        if number.text == "" || email.text == "" {
+        if email.text == "" {
             let alert = UIAlertController(title: "Almost", message: "It looks like you might have left some fields blank, care to try again?", preferredStyle: .Alert)
             let action = UIAlertAction(title: "Okay", style: .Cancel, handler: nil)
             alert.addAction(action)
@@ -46,6 +55,10 @@ class RegisterViewController: UIViewController {
         
         let button = sender as! UIButton
         button.enabled = false
+        let progress = JGProgressHUD(style: .Light)
+        progress.textLabel.text = "Signing Up"
+        progress.showInView(self.view)
+        self.view.bringSubviewToFront(progress)
         
         Async.background {
             if cred.usernameAvailable(self) {
@@ -54,7 +67,6 @@ class RegisterViewController: UIViewController {
                 newUser.username = self.username.text
                 newUser.email = self.email.text
                 newUser.password = self.password.text
-                newUser["phone"] = self.number.text
                 
                 if newUser.signUp(&error) == true {
                     let f = File()
@@ -74,9 +86,22 @@ class RegisterViewController: UIViewController {
                         alert.unknownError()
                     }
                 }
+                
+                progress.dismiss()
             }
             
             button.enabled = true
         }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.destinationViewController is TOSViewController {
+            let vc = segue.destinationViewController as! TOSViewController
+            vc.identifier = "register"
+        }
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
 }

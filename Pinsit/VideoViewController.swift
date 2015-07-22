@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import TSMessages
 
 class VideoViewController: UIViewController, UITextViewDelegate {
     @IBOutlet var videoView: RecordingView!
@@ -24,11 +25,30 @@ class VideoViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         AppDelegate.loginCheck(self)
-
-        videoView.userInteractionEnabled = false
+        
+        //videoView.userInteractionEnabled = false
         recordingTime = NSTimer(timeInterval: 0.1, target: self, selector: "timeFired:", userInfo: nil, repeats: true)
         time = TimeKeeper(progress: videoProgress, responder: self)
         recordingFinished = false
+        
+        let gesture = UITapGestureRecognizer(target: self, action: "videoViewTapped:")
+        videoView.addGestureRecognizer(gesture)
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        if videoView.player != nil && videoView.recStatus == .DONE_RECORDING {
+            self.videoView.player.play()
+            self.videoView.viewActive = true
+        }
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        if videoView.player != nil && videoView.recStatus == .DONE_RECORDING {
+            self.videoView.player.pause()
+            self.videoView.viewActive = false
+        }
     }
     
     var loaded: Bool = false
@@ -67,35 +87,37 @@ class VideoViewController: UIViewController, UITextViewDelegate {
         self.videoView.stopPlayback()
         self.videoView.previewCamera()
         self.videoView.recStatus = .NOT_STARTED
-    
+        
         inPlaybackMode = false
     }
     
     var isTorchOn: Bool = false
     @IBAction func toggleTorch(sender: AnyObject) {
-        if isTorchOn == true {
-            sender.setImage(UIImage(named: "torch_off.png"), forState: .Normal)
-            isTorchOn = false
-        } else {
-            sender.setImage(UIImage(named: "torch_on.png"), forState: .Normal)
-            isTorchOn = true
-        }
-        
-        if inPlaybackMode == nil || inPlaybackMode == false {
-            videoView.toggleTorch()
+        if isBackCam == true {
+            if isTorchOn == true {
+                sender.setImage(UIImage(named: "torch_off.png"), forState: .Normal)
+                isTorchOn = false
+            } else {
+                sender.setImage(UIImage(named: "torch_on.png"), forState: .Normal)
+                isTorchOn = true
+            }
+            
+            if inPlaybackMode == nil || inPlaybackMode == false {
+                videoView.toggleTorch()
+            }
         }
     }
     
-    private func doneRecording() {
+    func doneRecording() {
         switchCamBtn.userInteractionEnabled = false
-        changeVideoState(VideoState.DONE)
+        changeVideoState(.DONE)
         
         toggleSwitches(false)
         videoView.endRecordingSession()
         time.endTime()
     }
     
-    private func toggleSwitches(enable: Bool) {
+    func toggleSwitches(enable: Bool) {
         switchCamBtn.hidden = !enable
         torchBtn.hidden = !enable
         
@@ -121,7 +143,14 @@ class VideoViewController: UIViewController, UITextViewDelegate {
         } else if videoView.recStatus == .RECORDING { //End recording
             isRecording = false
             self.doneRecording()
+            
+            ErrorReport(viewController: self).presentError("Here's a Tip!", message: "You can delete your recording by shaking your device.", type: .Message)
         }
+    }
+    
+    func videoViewTapped(gesture: UITapGestureRecognizer) {
+        let point = gesture.locationInView(videoView)
+        videoView.setFocusPoint(point)
     }
     
     //MARK: Shaking
@@ -168,10 +197,10 @@ class VideoViewController: UIViewController, UITextViewDelegate {
         case .DONE: recordBtn.setImage(UIImage(named: "check.png"), forState: .Normal)
         }
     }
-    
-    enum VideoState {
-        case READY
-        case RECORDING
-        case DONE
-    }
+}
+
+enum VideoState {
+    case READY
+    case RECORDING
+    case DONE
 }
