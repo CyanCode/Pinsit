@@ -11,10 +11,11 @@ import AVFoundation
 
 class PinVideoManager: NSObject {
     var videoView: UIView!
-    var videoEnded: Bool!
     var videoData: NSData!
     var player: AVPlayer!
     var layer: AVPlayerLayer!
+    var videoEnded: Bool!
+    var forceVideoDeallocate = false
     
     init(videoView: UIView) {
         self.videoView = videoView
@@ -71,8 +72,10 @@ class PinVideoManager: NSObject {
     }
     
     func playerDidFinish(notification: NSNotification) {
-        player.seekToTime(kCMTimeZero)
-        player.play()
+        if forceVideoDeallocate == false {
+            player.seekToTime(kCMTimeZero)
+            player.play()
+        }
     }
     
     private func playerFromData(data: NSData) -> AVPlayer {
@@ -91,5 +94,16 @@ class PinVideoManager: NSObject {
         
         let url = NSURL(fileURLWithPath: directory)
         return AVPlayer(URL: url)
+    }
+    
+    func endVideo() {
+        forceVideoDeallocate = true
+        
+        player.pause()
+        layer.removeFromSuperlayer()
+        
+        //Deallocate
+        player = nil
+        layer = nil
     }
 }
