@@ -108,3 +108,41 @@ extension String {
         return decodedString as String?
     }
 }
+
+extension PFObject {
+    func deletePinPost(completion: (error: NSError?) -> Void) {
+        self.deleteInBackgroundWithBlock { (success, error) -> Void in
+            completion(error: error)
+        }
+    }
+}
+
+extension PFFile {
+    convenience init(image: UIImage) {
+        self.init(data: UIImagePNGRepresentation(image)!)
+    }
+}
+
+extension UIViewController {
+    func switchItem(item: TabBarItem) {
+        if self.tabBarController != nil {
+            self.tabBarController?.selectedIndex = item.rawValue
+        }
+    }
+    
+    enum TabBarItem: Int {
+        case Map = 0
+        case Post = 1
+        case Account = 2
+        case Following = 3
+        case Settings = 4
+    }
+}
+
+extension PFGeoPoint {
+    var coordinate: CLLocationCoordinate2D {
+        get {
+            return CLLocationCoordinate2DMake(self.latitude, self.longitude)
+        }
+    }
+}
