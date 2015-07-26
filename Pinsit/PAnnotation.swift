@@ -87,7 +87,11 @@ class PAnnotation: NSObject, MKAnnotation {
                 
                 if email == true && phone == true {
                     completion(valid: true)
-                } else {
+                } else if email == false { //Confirm email
+                    ErrorReport().presentWithType(.Email)
+                    completion(valid: false)
+                } else { //Confirm phone
+                    ErrorReport().presentWithType(.Phone)
                     completion(valid: false)
                 }
             }
