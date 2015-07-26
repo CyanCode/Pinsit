@@ -11,15 +11,22 @@ import Parse
 
 class TOSViewController: UIViewController {
     @IBOutlet var textView: UITextView!
-    @IBOutlet var backButton: UIBarButtonItem!
-    private var showingTOS = true
+    var agreement: Agreement {
+        didSet {
+            setPolicy()
+        }
+    }
     var identifier = ""
+    
+    required init(coder aDecoder: NSCoder) {
+        self.agreement = .TOS
+        super.init(coder: aDecoder)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         textView.editable = false
-        textView.attributedText = loadPolicyFile("tos")
     }
     
     override func viewDidLayoutSubviews() {
@@ -27,24 +34,19 @@ class TOSViewController: UIViewController {
         self.navigationController?.navigationBarHidden = false
     }
     
-    @IBAction func togglePolicy(sender: UIBarButtonItem) {
-        if showingTOS == true {
+    private func setPolicy() {
+        switch agreement {
+        case .Privacy:
             textView.attributedText = loadPolicyFile("privacy")
             navigationController?.navigationBar.topItem?.title = "Privacy Policy"
-            sender.title = "Terms of Service"
-            
-            showingTOS = false
-        } else {
+        case .TOS:
             textView.attributedText = loadPolicyFile("tos")
             navigationController?.navigationBar.topItem?.title = "Terms of Service"
-            sender.title = "Privacy Policy"
-            
-            showingTOS = true
         }
     }
     
-    @IBAction func doneButtonPressed(sender: UIBarButtonItem) {
-        self.performSegueWithIdentifier(identifier, sender: self)
+    @IBAction func donePressed(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func loadPolicyFile(name: String) -> NSAttributedString {
@@ -52,7 +54,7 @@ class TOSViewController: UIViewController {
             let rtf = NSBundle.mainBundle().URLForResource(name, withExtension: "rtf")
             return try NSAttributedString(fileURL: rtf!, options: [NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType], documentAttributes: nil)
         } catch {
-            print("Could not load Terms of Service")
+            print("Could not load \(name) Agreement")
         }
         
         return NSAttributedString()
@@ -61,4 +63,30 @@ class TOSViewController: UIViewController {
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
+    
+    class func loadViewFromNib() -> TOSViewController {
+        return NSBundle.mainBundle().loadNibNamed("TOSView", owner: self, options: nil).first as! TOSViewController
+    }
+    
+    class func conditionsConfirmation(message: String, vc: UIViewController) -> UIAlertController {
+        let controller = UIAlertController(title: "Agreement", message: message, preferredStyle: .ActionSheet)
+        controller.addAction(UIAlertAction(title: "View Privacy Policy", style: .Default, handler: { (action) -> Void in
+            let view = TOSViewController.loadViewFromNib()
+            view.agreement = .Privacy
+            vc.presentViewController(view, animated: true, completion: nil)
+        }))
+        controller.addAction(UIAlertAction(title: "View Terms of Service", style: .Default, handler: { (action) -> Void in
+            let view = TOSViewController.loadViewFromNib()
+            view.agreement = .TOS
+            vc.presentViewController(view, animated: true, completion: nil)
+        }))
+        controller.addAction(UIAlertAction(title: "Nevermind", style: .Default, handler: nil))
+        
+        return controller
+    }
+}
+
+enum Agreement {
+    case TOS
+    case Privacy
 }

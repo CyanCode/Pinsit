@@ -2,62 +2,77 @@
 //  LoginViewController.swift
 //  Pinsit
 //
-//  Created by Walker Christie on 1/11/15.
-//  Copyright (c) 2015 Walker Christie. All rights reserved.
+//  Created by Walker Christie on 7/24/15.
+//  Copyright © 2015 Walker Christie. All rights reserved.
 //
 
 import UIKit
+import ParseUI
 import Parse
 import JGProgressHUD
 
-class LoginViewController: UIViewController {
-    @IBOutlet var usernameField: UITextField!
-    @IBOutlet var passwordField: UITextField!
-    @IBOutlet var policyButton: UIButton!
+class LoginViewController: PFLogInViewController, PFLogInViewControllerDelegate {
+    var progress: JGProgressHUD!
+    var tosAgreed = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        super.delegate = self
+
+        self.logInView?.dismissButton?.removeFromSuperview()
+        self.logInView?.logo = UIImageView(image: UIImage(named: "logo.png"))
         
-        policyButton.titleLabel?.lineBreakMode = .ByWordWrapping
-        policyButton.titleLabel?.textAlignment = .Center
-        policyButton.titleLabel?.numberOfLines = 0
+        self.logInView?.logInButton?.setBackgroundImage(nil, forState: .Normal)
+        self.logInView?.signUpButton?.setBackgroundImage(nil, forState: .Normal)
+        
+        self.logInView?.logInButton?.backgroundColor = UIColor.pinsitWhiteBlue()
+        self.logInView?.signUpButton?.backgroundColor = UIColor.pinsitWhiteBlue()
     }
     
-    @IBAction func loginButton(sender: AnyObject) {
-        let button = sender as! UIButton
-        let progress = JGProgressHUD(style: .Light)
-        
-        progress.textLabel.text = "Logging In"
-        progress.showInView(self.view)
-        self.view.bringSubviewToFront(progress)
-        
-        button.enabled = false
-        PFUser.logInWithUsernameInBackground(usernameField.text!, password: passwordField.text!) { (user, error) -> Void in
-            button.enabled = true
-            progress.dismiss()
-            
-            if error != nil {
-                let alert = RegistrationAlerts(vc: self)
-                
-                if error!.code == PFErrorCode.ErrorConnectionFailed.rawValue {
-                    alert.connectionIssue()
-                } else if error!.code == PFErrorCode.ErrorUsernameTaken.rawValue {
-                    alert.accountExistsAlready()
-                } else if error!.code == PFErrorCode.ErrorObjectNotFound.rawValue {
-                    alert.loginFailure()
+    func logInViewController(logInController: PFLogInViewController, shouldBeginLogInWithUsername username:
+        String, password: String) -> Bool {
+            if tosAgreed {
+                if username != "" && password != "" {
+                    self.progress = JGProgressHUD(style: .Dark)
+                    self.progress.textLabel.text = "Logging In"
+                    self.progress.showInView(self.view, animated: true)
+                    
+                    return true
                 } else {
-                    alert.unknownError()
+                    ErrorReport(viewController: self).presentError("Missing Something", message: "Make sure the username and password fields are filled!", type: .Warning)
+                    
+                    return false
                 }
             } else {
-                StoryboardManager.segueMain(self)
+                let controller = TOSViewController.conditionsConfirmation("By logging into Pinsit you agree to the Terms of Conditions and the Privacy Policy.", vc: self)
+                controller.addAction(UIAlertAction(title: "Agree", style: .Cancel, handler: { (action) -> Void in
+                    self.tosAgreed = true
+                    ErrorReport(viewController: self).presentError("Great!", message: "After agreeing, you may now continue logging in.", type: .Success)
+                }))
+                self.presentViewController(controller, animated: true, completion: nil)
+                
+                return false
             }
+    }
+    
+    func logInViewController(logInController: PFLogInViewController, didFailToLogInWithError error: NSError?) {
+        progress.dismiss()
+        
+        if error != nil {
+            reportLoginError(error!)
         }
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.destinationViewController is TOSViewController {
-            let vc = segue.destinationViewController as! TOSViewController
-            vc.identifier = "login"
+    func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) {
+        progress.dismiss()
+        StoryboardManager.segueMain(self)
+    }
+    
+    private func reportLoginError(error: NSError) {
+        if error.code == PFErrorCode.ErrorObjectNotFound.rawValue {
+            ErrorReport(viewController: self).presentError("Login Issue", message: "The username and password you entered do not match!", type: .Warning)
+        } else {
+            ErrorReport(viewController: self).presentWithType(.Network)
         }
     }
     
