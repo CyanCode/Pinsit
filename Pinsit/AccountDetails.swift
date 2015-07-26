@@ -40,7 +40,7 @@ class AccountDetails {
 
         followQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error == nil && (objects!).count > 0 {
-                let amount = (objects![0]["following"] as! [String]).count
+                let amount = (objects![0] as! PFFollowers).getFollowing().count
                 self.viewController.followingLabel.text = amount == 1 ? "Following \(amount) User" : "Following \(amount) Users"
             } else if error != nil {
                 ErrorReport(viewController: self.viewController).presentWithType(.Network)
@@ -67,7 +67,7 @@ class AccountDetails {
     func loadProfileImage(completion: (img: UIImage) -> Void) {
         if user == PFUser.currentUser()!.username! {
             let imgLoc = File.documentsPath().stringByAppendingPathComponent(profilePic)
-            let img = UIImage(contentsOfFile: imgLoc)
+            let img = UIImage(contentsOfFile: imgLoc) == nil ? defaultProfile : UIImage(contentsOfFile: imgLoc)
             
             if (img == nil) {
                 setImage(defaultProfile)

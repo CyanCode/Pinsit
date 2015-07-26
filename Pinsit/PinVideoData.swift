@@ -55,8 +55,9 @@ class PinVideoData {
         
         followerQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error == nil && (objects!).count > 0 {
-                let user = objects![0] as! PFObject
-                if self.followerExists(name, currentUserList: user["following"] as! [String]) == false {
+                let user = objects![0] as! PFFollowers
+                
+                if self.followerExists(name, currentUserList: user.getFollowing()) == false {
                     user.addObject(name, forKey: "following")
                     user.saveInBackgroundWithBlock(nil)
                     button.userInteractionEnabled = false

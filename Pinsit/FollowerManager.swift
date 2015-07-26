@@ -36,8 +36,8 @@ class FollowerManager {
             if error != nil {
                 self.handleError("Unable to unfollow \(named), check your network connection and try again!")
             } else {
-                let obj = objects![0] as! PFObject
-                var following = obj["following"] as! [String]
+                let obj = PFFollowers()
+                var following = objects!.count > 0 ? (objects as! [PFFollowers])[0].getFollowing() : [String]()
                 
                 for var i = 0; i < following.count; i++ {
                     if following[i] == named {
@@ -45,7 +45,7 @@ class FollowerManager {
                     }
                 }
                 
-                obj["following"] = following
+                obj.following = following
                 obj.saveInBackgroundWithBlock({ (success, error) -> Void in
                     if success == false {
                         self.handleError("Unable to unfollow \(named), check your network connection and try again!")
@@ -64,11 +64,11 @@ class FollowerManager {
             if error != nil {
                 self.handleError("Unable to follow \(named), check your network connection and try again!")
             } else {
-                let obj = objects![0] as! PFObject
-                var following = obj["following"] as! [String]
+                let obj = PFFollowers()
+                var following = objects!.count > 0 ? (objects as! [PFFollowers])[0].getFollowing() : [String]()
                 
                 following.append(named)
-                obj["following"] = following
+                obj.following = following
                 
                 obj.saveInBackgroundWithBlock({ (success, error) -> Void in
                     if success == false {

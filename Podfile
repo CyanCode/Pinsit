@@ -19,6 +19,7 @@ pod 'DeviceGuru'
 #Parse Dependencies
 pod 'Parse'
 pod 'ParseUI'
+pod 'ParseCrashReporting'
 
 end
 

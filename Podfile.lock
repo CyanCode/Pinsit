@@ -11,6 +11,9 @@ PODS:
   - KLCPopup (1.0)
   - Parse (1.7.5.2):
     - Bolts/Tasks (>= 1.2.0)
+  - ParseCrashReporting (1.7.5.2):
+    - Bolts/Tasks (>= 1.2.0)
+    - Parse (~> 1.7.5.2)
   - ParseUI (1.1.4):
     - Parse (~> 1.7)
   - PPTopMostController (0.0.1)
@@ -29,6 +32,7 @@ DEPENDENCIES:
   - JGProgressHUD
   - KLCPopup
   - Parse
+  - ParseCrashReporting
   - ParseUI
   - PPTopMostController
   - SDWebImage
@@ -55,6 +59,7 @@ SPEC CHECKSUMS:
   JGProgressHUD: a45c1d16adddf7e38092ce3f0d71d3955d2de2ec
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
   Parse: 9a01b8cb054f113b74211370aaf9d982d355729a
+  ParseCrashReporting: 75c442d8e89f21644b2a112381cdecdd9240f0bd
   ParseUI: d1228541b02a36a7354c8f47747f5f7a89cf1ff0
   PPTopMostController: 4e6f1e5f8c645bdcc74cd837a20f607ff262c048
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84

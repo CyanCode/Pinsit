@@ -28,8 +28,10 @@ class PopulateFollower {
             if error != nil {
                 self.reportPossibleError(error!)
                 done(values: [String]())
+            } else if objects!.count < 1 {
+                done(values: [String]())
             } else {
-                done(values: objects![0]["following"] as! [String])
+                done(values: (objects![0] as! PFFollowers).getFollowing())
             }
         }
     }
@@ -47,8 +49,8 @@ class PopulateFollower {
             } else {
                 var users = [String]()
                 
-                for obj in objects! as! [PFObject] {
-                    users.append(obj["username"] as! String)
+                for obj in objects! as! [PFFollowers] {
+                    users.append(obj.username)
                 }
                 
                 done(values: users)

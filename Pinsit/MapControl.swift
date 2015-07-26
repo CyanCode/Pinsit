@@ -74,12 +74,13 @@ class MapControl: NSObject {
             following.whereKey("username", equalTo: PFUser.currentUser()!.username!)
             let user = following.findObjects()
             
-            if (user!).count <= 0 {
+            if user == nil || (user!).count <= 0 {
                 allQueries = nil
             } else {
                 var userQueries = [PFQuery]()
+                let followers = (user![0] as! PFFollowers).getFollowing()
                 
-                for follower in user![0]["following"] as! [String] {
+                for follower in followers {
                     let userQuery = PFQuery(className: "SentData")
                     userQuery.whereKey("username", equalTo: follower)
                     userQueries.append(userQuery)

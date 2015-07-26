@@ -26,23 +26,23 @@ class FollowerCache {
         let query = PFQuery(className: "Followers")
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error != nil {
+            if error != nil || objects == nil || objects!.count < 1 {
                 done()
                 return
             }
             
-            let followers = (objects!).count > 0 ? objects![0]["following"] as! [String] : [String]()
-            let object = PFObject(className: "Followers")
+            let follow = (objects as! [PFFollowers])[0].getFollowing()
+            let object = PFFollowers()
             
-            object["username"] = PFUser.currentUser()!.username
-            object["following"] = followers
+            object.username = PFUser.getSafeUsername()
+            object.following = follow
             
             //Reset and Pin
             self.resetCache()
             object.pinInBackgroundWithBlock({ (success, error) -> Void in })
             print("Follower cache updated successfully")
             
-            self.following = followers
+            self.following = follow
             done()
         }
     }

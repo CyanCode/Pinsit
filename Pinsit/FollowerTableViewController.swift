@@ -64,12 +64,12 @@ class FollowerTableViewController: UIViewController, UITableViewDataSource, UITa
         return cell
     }
     
-    @IBAction func cellButtonPressed(sender: AnyObject) {
-        let point = sender.locationInView(self.tableView)
-        let indexPath = tableView.indexPathForRowAtPoint(point)
-        let cell = tableView.cellForRowAtIndexPath(indexPath!)
-        
-        followerNet.addFollower(cell!.textLabel!.text!)
+    @IBAction func cellButtonPressed(sender: UIButton) {
+        let indexPath = tableView.indexPathForRowAtPoint(sender.center)
+        let cell = tableView.cellForRowAtIndexPath(indexPath!) as! FollowersCell
+        cell.followerButton.hidden = true
+
+        followerNet.addFollower(cell.userLabel.text!)
     }
     
     func updateTableWithType() {
