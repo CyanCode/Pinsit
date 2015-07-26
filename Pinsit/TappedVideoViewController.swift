@@ -57,15 +57,18 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         let controller = UIAlertController(title: "", message: videoObject.desc, preferredStyle: .ActionSheet)
         
         if videoObject.username != PFUser.currentUser()!.username! {
-            controller.addAction(UIAlertAction(title: "Report", style: .Default, handler: { (action) -> Void in
-                self.dataHandler.reportUser(self.videoObject.username, videoId: self.videoObject.objectId!)
-            }))
-        } else {
             if videoObject.downloading == true {
                 controller.addAction(UIAlertAction(title: "Download", style: .Default, handler: { (action) -> Void in
                     self.dataHandler.downloadVideo()
                 }))
             }
+            controller.addAction(UIAlertAction(title: "Report", style: .Default, handler: { (action) -> Void in
+                self.dataHandler.reportUser(self.videoObject.username, videoId: self.videoObject.objectId!)
+            }))
+        } else {
+            controller.addAction(UIAlertAction(title: "Download", style: .Default, handler: { (action) -> Void in
+                self.dataHandler.downloadVideo()
+            }))
             controller.addAction(UIAlertAction(title: "Delete Post", style: .Default, handler: { (action) -> Void in
                 self.videoObject.deletePinPost({ (error) -> Void in
                     if error == nil {
