@@ -87,7 +87,7 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
     
     func zoomCurrentLocation() {
         INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(.House, timeout: 5) { (location, accuracy, status) -> Void in
-            if status != .Error {
+            if status != .Error && location != nil {
                 let region = MKCoordinateRegionMake(location.coordinate, MKCoordinateSpanMake(0.05, 0.05))
                 self.viewControl.currentMap.mapView.setRegion(region, animated: true)
             } else {
