@@ -28,10 +28,19 @@ class ErrorReport {
     func presentWithType(type: ErrorReportType) {
         switch type {
         case .Network: presentError("Network Error", message: "Could not connect to the internet.  Check your network connection!", type: .Error)
+        case .Email: presentError("Verify Email", message: "Your email must be verified before you can post videos, do so through Settings", type: .Error)
+        case .Phone: presentError("Verify Phone", message: "Your phone number must be verified before you can post videos, do so through Settings", type: .Error)
+        case .Username: presentError("Too Short", message: "Your username must be atleast 5 characters long!", type: .Warning)
+        case .Password: presentError("Too Short", message: "Your password must be atleast 6 characters long!", type: .Warning)
         }
     }
 }
 
 enum ErrorReportType {
     case Network
+    case Email
+    case Phone
+    
+    case Username
+    case Password
 }
