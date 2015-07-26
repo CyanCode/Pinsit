@@ -23,11 +23,6 @@ class SettingsData {
         Upgrade().startPurchase(settings)
     }
     
-    func social(type: SocialType) {
-        let manager = SocialManager(vc: settings)
-        manager.displayShareDialog(type)
-    }
-    
     func logoutUser() {
         PFUser.logOut()
         StoryboardManager.segueRegistration(settings)
