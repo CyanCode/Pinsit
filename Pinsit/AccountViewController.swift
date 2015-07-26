@@ -49,9 +49,10 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
     }
     
     override func viewDidLayoutSubviews() {
-        //        let cover = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
-        //        cover.frame = map.frame
-        //        map.addSubview(cover)
+        super.viewDidLayoutSubviews()
+        let cover = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
+        cover.frame = map.frame
+        map.addSubview(cover)
     }
     
     func toggleHiddenLabels(hidden: Bool) {
@@ -191,5 +192,9 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
             profileActivity.hidden = true
             profileActivity.stopAnimating()
         }
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
     }
 }
