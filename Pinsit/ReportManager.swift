@@ -91,7 +91,7 @@ class ReportManager {
             } else {
                 let object = objects![0] as! PFObject
                 object.incrementKey("reportAmt")
-                object.addUniqueObject(PFUser.currentUser()!.username!, forKey: "reporters")
+                object.addUniqueObject(PFUser.getSafeUsername(), forKey: "reporters")
                 
                 object.saveInBackgroundWithBlock({ (success, error) -> Void in
                     if success != true {

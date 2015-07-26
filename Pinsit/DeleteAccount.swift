@@ -25,7 +25,7 @@ class DeleteAccount {
     ///- parameter done(success:: Bool) called when deletion has finished
     func beginDeletionInBackground(done: (success: Bool) -> Void) {
         Async.background {
-            let username = PFUser.currentUser()!.username!
+            let username = PFUser.getSafeUsername()
             let likesQuery = PFQuery(className: "Likes").whereKey("username", equalTo: username)
             let videoQuery = PFQuery(className: "SentData").whereKey("username", equalTo: username)
             let verificationQuery = PFQuery(className: "Verification").whereKey("username", equalTo: username)
@@ -38,7 +38,7 @@ class DeleteAccount {
                 try videoQuery.findAndDeleteObjects()
                 try verificationQuery.findAndDeleteObjects()
                 try followingQuery.findAndDeleteObjects()
-                self.handleFollowerObjects(followerQuery.findObjects())
+                self.handleFollowerObjects(followerQuery.findObjects() as? [PFFollowers])
                 
                 Async.main { done(success: true) }
             } catch  {
@@ -85,11 +85,11 @@ class DeleteAccount {
         
     }
     
-    private func handleFollowerObjects(objects: [AnyObject]?) {
+    private func handleFollowerObjects(objects: [PFFollowers]?) {
         var toSave = [PFObject]()
         
         if objects != nil {
-            for obj in objects as! [PFObject]! {
+            for obj in objects! {
                 obj.removeObject(PFUser.currentUser()!.username!, forKey: "following")
                 toSave.append(obj)
             }
