@@ -53,6 +53,11 @@ extension PFUser {
             return PFFile(data: data!)
         }
     }
+    
+    ///Returns the current username if PFUser.currentUser is not nil, if it is, returns an empty String
+    class func getSafeUsername() -> String {
+        return PFUser.currentUser() == nil || PFUser.currentUser()!.username == nil ? "" : PFUser.currentUser()!.username!
+    }
 }
 
 extension UIView {
@@ -107,6 +112,24 @@ extension String {
         
         return decodedString as String?
     }
+    
+    func contains(val: String) -> Bool {
+        if self.rangeOfString(val) != nil {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func containsAny(values: [String]) -> Bool {
+        for val in values {
+            if self.contains(val) {
+                return true
+            }
+        }
+        
+        return false
+    }
 }
 
 extension PFObject {
@@ -144,5 +167,19 @@ extension PFGeoPoint {
         get {
             return CLLocationCoordinate2DMake(self.latitude, self.longitude)
         }
+    }
+}
+
+extension UIColor {
+    class func pinsitWhiteBlue() -> UIColor {
+        return UIColor(string: "A3BDC6")
+    }
+    
+    class func pinsitBlue() -> UIColor {
+        return UIColor(string: "3F6B79")
+    }
+    
+    class func pinsitDarkBlue() -> UIColor {
+        return UIColor(string: "#253E46")
     }
 }
