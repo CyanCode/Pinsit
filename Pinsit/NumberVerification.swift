@@ -9,40 +9,22 @@
 import Foundation
 import UIKit
 import Parse
-import XLForm
 
 class NumberVerification {
     var responder: UIViewController!
-    var form: XLFormDescriptor!
+    var manager: MoreManager!
+    var moreVc: MoreTableViewController {
+        get {
+            return manager.moreVc
+        }
+    }
     
     var generatedCode: String!
     var phone: String!
     
-    //Textfields
-    var numberRow: XLFormRowDescriptor {
-        get { return form.formRowWithTag(Tags.PhoneNum.rawValue) }
-    }
-    var codeRow: XLFormRowDescriptor {
-        get { return form.formRowWithTag(Tags.PhoneCode.rawValue) }
-    }
-    
-    //Buttons
-    var numButtonRow: XLFormRowDescriptor {
-        get { return form.formRowWithTag(Tags.PhoneNumDone.rawValue) }
-    }
-    var codeButtonRow: XLFormRowDescriptor {
-        get { return form.formRowWithTag(Tags.PhoneCodeDone.rawValue) }
-    }
-    var verifyButtonRow: XLFormRowDescriptor {
-        get { return form.formRowWithTag(Tags.Phone.rawValue) }
-    }
-    
-    //Section
-    var section: XLFormSectionDescriptor?
-    
-    init(responder: UIViewController, form: XLFormDescriptor) {
+    init(responder: UIViewController, manager: MoreManager) {
         self.responder = responder
-        self.form = form
+        self.manager = manager
     }
     
     func startNumberVerification(number: String, done: (success: Bool) -> Void) {
@@ -63,48 +45,52 @@ class NumberVerification {
         controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
         responder.presentViewController(controller, animated: true, completion: nil)
         
-        numberRow.hidden = false
-        numButtonRow.hidden = false
+        moreVc.cell(moreVc.phoneNumberEntryCell, setHidden: false)
+        moreVc.cell(moreVc.sendTextCell, setHidden: false)
+        moreVc.reloadDataAnimated(true)
     }
     
     func numberEntered() {
-        let text = numberRow.value as! String
+        let text = moreVc.phoneNumberField.text!
         startNumberVerification(text) { (success) -> Void in
             if success == true {
-                let controller = UIAlertController(title: "Verification Sent!", message: "Your verification code has been sent and will arrive shortly.  Enter the received code below.", preferredStyle: .Alert)
+                let controller = UIAlertController(title: "Verification Sent!", message: "Your verification code has been sent to \(text) and will arrive shortly.  Enter the received code below.", preferredStyle: .Alert)
                 controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
                 self.responder.presentViewController(controller, animated: true, completion: nil)
                 
-                self.codeButtonRow.hidden = false
-                self.codeRow.hidden = false
+                self.moreVc.cell(self.moreVc.receivedCodeCell, setHidden: false)
+                self.moreVc.cell(self.moreVc.checkCodeCell, setHidden: false)
             }
             
-            self.numberRow.hidden = true
-            self.numButtonRow.hidden = true
+            self.moreVc.cell(self.moreVc.phoneNumberEntryCell, setHidden: true)
+            self.moreVc.cell(self.moreVc.sendTextCell, setHidden: true)
+            self.moreVc.reloadDataAnimated(true)
         }
     }
     
     func codeEntered() {
-        let text = codeRow.value as! String
+        let text = moreVc.receivedCodeField.text!
         if text == generatedCode {
             PFUser.currentUser()!["phone"] = phone
             PFUser.currentUser()!.saveEventually({ (success, error) -> Void in })
             
-            self.verifyButtonRow.hidden = true
-            self.codeButtonRow.hidden = true
-            self.codeRow.hidden = true
-            if self.section != nil { self.section!.hidden = true }
+            moreVc.cell(moreVc.checkCodeCell, setHidden: true)
+            moreVc.cell(moreVc.receivedCodeCell, setHidden: true)
+            moreVc.cell(moreVc.verifyPhoneCell, setHidden: true)
             
             ErrorReport(viewController: responder).presentError("Success!", message: "Your phone number has been successfully verified, you may now post.", type: .Success)
         } else {
             let controller = UIAlertController(title: "Not Quite..", message: "The code you entered does not match the one we sent you, care to try again?", preferredStyle: .Alert)
             controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
             controller.addAction(UIAlertAction(title: "Cancel", style: .Default, handler: { (action) -> Void in
-                self.codeButtonRow.hidden = true
-                self.codeRow.hidden = true
+                self.moreVc.cell(self.moreVc.receivedCodeCell, setHidden: true)
+                self.moreVc.cell(self.moreVc.checkCodeCell, setHidden: true)
             }))
+            
             responder.presentViewController(controller, animated: true, completion: nil)
         }
+        
+        moreVc.reloadDataAnimated(true)
     }
     
     private func generateCode() -> String {
@@ -112,9 +98,7 @@ class NumberVerification {
         let generation: NSMutableString = "";
         
         for _ in 1...5 {
-            var random = Int(arc4random())
-            random %= alphabet.characters.count
-            
+            let random = 0 + Int(arc4random_uniform(UInt32(alphabet.characters.count + 1)))
             let c = Array(alphabet.characters)[random]
             generation.appendString(String(c))
         }
