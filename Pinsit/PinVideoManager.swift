@@ -99,11 +99,15 @@ class PinVideoManager: NSObject {
     func endVideo() {
         forceVideoDeallocate = true
         
-        player.pause()
-        layer.removeFromSuperlayer()
-        
-        //Deallocate
-        player = nil
-        layer = nil
+        if player != nil {
+            player.pause()
+        }
+    }
+    
+    func recoverVideo() {
+        if player != nil && forceVideoDeallocate {
+            forceVideoDeallocate = false
+            player.play()
+        }
     }
 }

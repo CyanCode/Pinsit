@@ -25,6 +25,9 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         self.navigationController?.interactivePopGestureRecognizer!.delegate = self
         AppDelegate.loginCheck(self)
         
+        self.startPlaying()
+        self.dataHandler = PinVideoData(viewController: self)
+        videoView.adjustGravityOnResize(manager.layer)
         //self.tableView.readyTableView(videoObject)
     }
     
@@ -38,14 +41,11 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        let gesture = UITapGestureRecognizer(target: self, action: "usernameTapped:")
         let view = navigationController!.navigationBar.subviews[1] as UIView
         view.userInteractionEnabled = true
-        view.addGestureRecognizer(gesture)
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "usernameTapped:"))
         
-        self.startPlaying()
-        self.dataHandler = PinVideoData(viewController: self)
-        videoView.adjustGravityOnResize(manager.layer)
+        manager.recoverVideo()
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -54,7 +54,8 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func moreButton(sender: AnyObject) {
-        let controller = UIAlertController(title: "", message: videoObject.desc, preferredStyle: .ActionSheet)
+        let title = videoObject.desc == "" ? "Post Options" : videoObject.desc
+        let controller = UIAlertController(title: title, message: videoObject.desc, preferredStyle: .ActionSheet)
         
         if videoObject.username != PFUser.currentUser()!.username! {
             if videoObject.downloading == true {
@@ -72,6 +73,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
             controller.addAction(UIAlertAction(title: "Delete Post", style: .Default, handler: { (action) -> Void in
                 self.videoObject.deletePinPost({ (error) -> Void in
                     if error == nil {
+                        PFUser.currentUser()!.incrementKarmaLevel(-3)
                         self.navigationController?.popViewControllerAnimated(true)
                     } else {
                         ErrorReport(viewController: self).presentWithType(.Network)
@@ -88,6 +90,13 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func followButton(sender: AnyObject) {
         self.dataHandler.addFollower(videoObject.username, button: sender as! UIButton)
     }
+    
+    @IBAction func backButton(sender: AnyObject) {
+        if let navController = self.navigationController {
+            navController.popViewControllerAnimated(true)
+        }
+    }
+    
     
     //var profileDetails: ProfileInfo?
     func usernameTapped(gesture: UITapGestureRecognizer) {

@@ -86,7 +86,7 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
             self.session.sessionPreset = AVCaptureSessionPresetMedium
             self.videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
             let audioDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
-        
+            
             do {
                 self.videoInput = try AVCaptureDeviceInput(device: self.videoDevice)
                 let audioInput = try AVCaptureDeviceInput(device: audioDevice)
@@ -104,7 +104,7 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
                 try self.videoDevice.lockForConfiguration()
                 self.videoDevice.subjectAreaChangeMonitoringEnabled = true
                 self.videoDevice.unlockForConfiguration()
-            
+                
                 self.session.startRunning()
             } catch let error as NSError {
                 fatalError("Could not load capture device: \(error.localizedDescription)")
@@ -136,12 +136,14 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
     }
     
     func setFocusPoint(point: CGPoint) {
-        do {
-            try videoDevice.lockForConfiguration()
-            videoDevice.focusPointOfInterest = point
-            videoDevice.unlockForConfiguration()
-        } catch {
-            print("Could not lock device for configuration")
+        if videoInput.device.position == .Back {
+            do {
+                try videoDevice.lockForConfiguration()
+                videoDevice.focusPointOfInterest = point
+                videoDevice.unlockForConfiguration()
+            } catch {
+                print("Could not lock device for configuration")
+            }
         }
     }
     
@@ -161,11 +163,36 @@ class VideoProjectionView: UIView, AVCaptureFileOutputRecordingDelegate {
             self.playbackRecording(true, isLooping: false)
         }
     }
+    
+    private var sessionRunning: Bool = true
+    
+    ///Stops current recording session temporarily
+    func viewDidBecomeInactive() {
+        if sessionRunning {
+            session.stopRunning()
+            sessionRunning = false
+        }
+    }
+    
+    ///Resums current recording session
+    func viewDidBecomeActive() {
+        if !sessionRunning {
+            session.startRunning()
+            sessionRunning = true
+        }
+    }
 }
 
 enum RecordingStatus {
+    ///When the video has finished being recorded
     case DONE_RECORDING
+    
+    ///When the video is currently being recorded
     case RECORDING
+    
+    ///When a preview is showing, not recording
     case NOT_STARTED
+    
+    ///When the video is in playback mode
     case READY
 }

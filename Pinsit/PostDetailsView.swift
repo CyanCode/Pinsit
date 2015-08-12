@@ -18,7 +18,7 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     @IBOutlet var cancelButton: UIButton!
     @IBOutlet var postButton: UIButton!
     
-    var responder: VideoViewController!
+    var responder: NewRecordingViewController!
     //private var popup: KLCPopup!
     
     required init(coder aDecoder: NSCoder) {
@@ -47,7 +47,7 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     ///Present PostDetailsView in DetailsViewController, ready to post
     ///
     ///- parameter viewController: DetailsViewController instance
-    func presentViewInController(viewController: VideoViewController, popupPoint: CGPoint) {
+    func presentViewInController(viewController: NewRecordingViewController, popupPoint: CGPoint) {
         self.responder = viewController
         self.prepareView()
         viewController.view.addSubview(self)
@@ -103,8 +103,8 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
                 print("Video post successful")
 
                 self.dismissSlide()
-                self.responder.toggleSwitches(true)
-                self.responder.restartVideo()
+                self.responder.status = .Recording
+                self.responder.setActiveView(.Recording)
                 self.responder.switchItem(.Map)
             }
         })

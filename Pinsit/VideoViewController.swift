@@ -37,18 +37,25 @@ class VideoViewController: UIViewController, UITextViewDelegate {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        if videoView.player != nil && videoView.recStatus == .DONE_RECORDING {
+        if videoView.player != nil && (videoView.recStatus == .DONE_RECORDING ||
+        videoView.recStatus == .READY) {
             self.videoView.player.play()
             self.videoView.viewActive = true
         }
+        
+        videoView.viewDidBecomeActive()
     }
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-        if videoView.player != nil && videoView.recStatus == .DONE_RECORDING {
+        
+        if videoView.player != nil && (videoView.recStatus == .DONE_RECORDING ||
+        videoView.recStatus == .READY) {
             self.videoView.player.pause()
             self.videoView.viewActive = false
         }
+        
+        videoView.viewDidBecomeInactive()
     }
     
     var loaded: Bool = false
@@ -128,8 +135,6 @@ class VideoViewController: UIViewController, UITextViewDelegate {
     var isRecording: Bool = false
     @IBAction func handleRecordingTap(recognizer: UITapGestureRecognizer) {
         if videoView.recStatus == .READY {
-            let setDetails = UIView.detailViewFromNib()
-            setDetails.presentViewInController(self, popupPoint: CGPointMake(recordBtn.center.x, recordBtn.center.y + 23))
             
             //self.performSegueWithIdentifier("detail", sender: self)
         }; if videoView.recStatus != .READY && videoView.recStatus != .RECORDING { //Start recording
