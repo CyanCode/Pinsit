@@ -36,13 +36,10 @@ class AccountDetails {
     ///:params: completion Called when account details have been updated
     func setAccountDetails(completion: () -> Void) {
         let followQuery = PFQuery(className: "Followers")
-        followQuery.whereKey("username", equalTo: user)
+        followQuery.whereKey("following", equalTo: user)
 
         followQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error == nil && (objects!).count > 0 {
-                let amount = (objects![0] as! PFFollowers).getFollowing().count
-                self.viewController.followingLabel.text = amount == 1 ? "Following \(amount) User" : "Following \(amount) Users"
-            } else if error != nil {
+            if error != nil {
                 ErrorReport(viewController: self.viewController).presentWithType(.Network)
 
                 completion()
@@ -50,15 +47,13 @@ class AccountDetails {
             }
             
             PFUser.query()!.whereKey("username", equalTo: self.user).findObjectsInBackgroundWithBlock({ (object, error) -> Void in
-                AccountDetails.findPostAmount(self.user, completion: { (amount) -> Void in
-                    let postAmt = amount == nil ?  0 : amount!
+                    let followerAmt = objects!.count
+                    let followerText = followerAmt == 1 ? "\(followerAmt) Follower" : "\(followerAmt) Followers"
                     var karma = object![0]["karma"] as? NSNumber
                     karma = karma == nil ? 0 : karma
 
-                    self.viewController.postAmountLabel.text = postAmt == 1 ? "\(postAmt) Active Post" : "\(postAmt) Active Posts"
-                    self.viewController.karmaLabel.text = "Karma Level \(karma!)"
+                    self.viewController.infoLabel.text = "\(karma!) Karma | " + followerText
                     completion()
-                })
             })
         }
     }

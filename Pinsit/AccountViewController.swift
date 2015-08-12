@@ -10,22 +10,27 @@ import UIKit
 import MapKit
 import CoreLocation
 import Parse
-import INTULocationManager
+import ParseUI
 import JGProgressHUD
+import Bolts
+import QuartzCore
 
-class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+@IBDesignable class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet var profileImage: UIImageView!
-    @IBOutlet var map: MKMapView!
-    @IBOutlet var karmaLabel: UILabel!
-    @IBOutlet var followingLabel: UILabel!
-    @IBOutlet var postAmountLabel: UILabel!
+    @IBOutlet var infoLabel: UILabel!
     @IBOutlet var usernameLabel: UILabel!
     @IBOutlet var profileActivity: UIActivityIndicatorView!
+    
     var user: String!
     var locationManager: CLLocationManager!
     var detailManager: AccountDetails!
     var temporaryImg: UIImage?
     var location: CLLocationCoordinate2D?
+    var followTableView: FollowerQueryTableViewController {
+        get {
+            return self.childViewControllers.last as! FollowerQueryTableViewController
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,50 +40,20 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
         self.detailManager = AccountDetails(viewController: self, user: user)
         
         profileActivity.hidden = true
-        map.userInteractionEnabled = false
         
         loadInformation()
-        toggleHiddenLabels(true)
-        readyButtons()
-        startLocating()
+        infoLabel.hidden = true
         prepareInterface()
     }
     
     override func viewDidAppear(animated: Bool) {
         AppDelegate.loginCheck(self)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        let cover = UIVisualEffectView(effect: UIBlurEffect(style: .Light))
-        cover.frame = map.frame
-        map.addSubview(cover)
-    }
-    
-    func toggleHiddenLabels(hidden: Bool) {
-        for label in [followingLabel, karmaLabel, postAmountLabel] {
-            label.hidden = hidden
-        }
-    }
-    
-    func readyButtons() {
-        for label in [followingLabel, karmaLabel, postAmountLabel] {
-            label.backgroundColor = UIColor(string: "#A3BDC9")
-            label.layer.cornerRadius = 3
-            label.textColor = UIColor.whiteColor()
-            label.layer.masksToBounds = true
-            self.view.sendSubviewToBack(label)
-        }
+        
+        followTableView.username = user
+        followTableView.loadObjects()
     }
     
     func prepareInterface() {
-        profileImage.image = detailManager.defaultProfile
-        profileImage.layer.masksToBounds = true
-        profileImage.layer.cornerRadius = 3
-        profileImage.layer.borderWidth = 1
-        profileImage.layer.borderColor = UIColor(string: "#A3BDC9").CGColor
-        profileImage.alpha = 1.0
-        
         if user == PFUser.currentUser()!.username! {
             let imageTap = UITapGestureRecognizer(target: self, action: Selector("profileTapped:"))
             profileImage.userInteractionEnabled = true
@@ -99,21 +74,7 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
         
         detailManager.setAccountDetails { () -> Void in
             progress.dismiss()
-            self.toggleHiddenLabels(false)
-        }
-    }
-    
-    func startLocating() {
-        let span = MKCoordinateSpanMake(0.05, 0.05)
-        
-        if location == nil {
-            INTULocationManager.sharedInstance().requestLocationWithDesiredAccuracy(.House, timeout: 5) { (location, accuracy, status) -> Void in
-                let region = MKCoordinateRegionMake(location.coordinate, span)
-                self.map.setRegion(region, animated: true)
-            }
-        } else {
-            let region = MKCoordinateRegionMake(location!, span)
-            self.map.setRegion(region, animated: true)
+            self.infoLabel.hidden = false
         }
     }
     
@@ -193,8 +154,29 @@ class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIIm
             profileActivity.stopAnimating()
         }
     }
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
+}
+
+///Designable circular profile picture
+@IBDesignable class AccountProfilePicture: UIImageView {
+    @IBInspectable var cornerRadius: CGFloat = 50 {
+        didSet {
+            self.layer.cornerRadius = cornerRadius
+            self.layer.masksToBounds = true
+        }
     }
+    @IBInspectable var borderColor: UIColor = UIColor.whiteColor() {
+        didSet {
+            self.layer.borderColor = borderColor.CGColor
+        }
+    }
+    @IBInspectable var borderWidth: CGFloat = 2.0 {
+        didSet {
+            self.layer.borderWidth = borderWidth
+        }
+    }
+}
+
+class AccountQueryCell: PFTableViewCell {
+    @IBOutlet var usernameLabel: UILabel!
+    @IBOutlet var profileImage: FollowerImageView!
 }

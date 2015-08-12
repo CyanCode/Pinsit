@@ -44,6 +44,11 @@ extension NSNumber {
 }
 
 extension PFUser {
+    func incrementKarmaLevel(amount: Int) {
+        incrementKey("karma", byAmount: amount)
+        self.saveEventually()
+    }
+    
     class func getProfileImage() -> PFFile {
         if PFUser.currentUser()!["profileImage"] != nil {
             return PFUser.currentUser()!["profileImage"] as! PFFile
@@ -82,6 +87,16 @@ extension UIView {
         let index = self.layer.sublayers != nil ? self.layer.sublayers!.count + 1 : 0
         
         self.layer.insertSublayer(toInsert, atIndex: UInt32(index))
+    }
+    
+    func bringSublayerToFront(layer: CALayer) {
+        layer.removeFromSuperlayer()
+        self.layer.insertSublayer(layer, atIndex: UInt32(self.layer.sublayers!.count))
+    }
+    
+    func sendSublayerToBack(layer: CALayer) {
+        layer.removeFromSuperlayer()
+        self.layer.insertSublayer(layer, atIndex: 0)
     }
 }
 
@@ -182,4 +197,8 @@ extension UIColor {
     class func pinsitDarkBlue() -> UIColor {
         return UIColor(string: "#253E46")
     }
+}
+
+extension UIView {
+    
 }
