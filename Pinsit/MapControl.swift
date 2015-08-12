@@ -71,7 +71,7 @@ class MapControl: NSObject {
         
         Async.background {
             let following = PFQuery(className: "Followers")
-            following.whereKey("username", equalTo: PFUser.currentUser()!.username!)
+            following.whereKey("username", equalTo: PFUser.getSafeUsername())
             let user = following.findObjects()
             
             if user == nil || (user!).count <= 0 {
@@ -105,7 +105,7 @@ class MapControl: NSObject {
     ///Pulls follower's pins from server
     private func getFriendQuery(completion: (query: PFQuery?) -> Void) {
         self.getFriendQueries { (queries) -> Void in
-            if queries == nil {
+            if queries == nil || queries!.count < 1 {
                 completion(query: nil)
             } else {
                 completion(query: PFQuery.orQueryWithSubqueries(queries!))
