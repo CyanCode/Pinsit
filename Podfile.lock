@@ -1,6 +1,8 @@
 PODS:
+  - AsyncImageView (1.5.1)
   - Bolts/Tasks (1.2.0)
   - DeviceGuru (1.2.0)
+  - DZNEmptyDataSet (1.6.1)
   - FCCurrentLocationGeocoder (1.1.10):
     - FCIPAddressGeocoder (~> 1.0.0)
   - FCIPAddressGeocoder (1.0.2)
@@ -17,15 +19,15 @@ PODS:
   - ParseUI (1.1.4):
     - Parse (~> 1.7)
   - PPTopMostController (0.0.1)
-  - SDWebImage (3.7.3):
-    - SDWebImage/Core (= 3.7.3)
-  - SDWebImage/Core (3.7.3)
+  - StaticDataTableViewController (2.0.3)
   - TSMessages (0.9.13):
     - HexColors (~> 2.3.0)
-  - XLForm (3.0.0)
+  - VIMVideoPlayer (5.5.1)
 
 DEPENDENCIES:
+  - AsyncImageView
   - DeviceGuru
+  - DZNEmptyDataSet
   - FCCurrentLocationGeocoder
   - INTULocationManager
   - IQKeyboardManager
@@ -35,9 +37,9 @@ DEPENDENCIES:
   - ParseCrashReporting
   - ParseUI
   - PPTopMostController
-  - SDWebImage
+  - StaticDataTableViewController
   - TSMessages (from `https://github.com/KrauseFx/TSMessages.git`)
-  - XLForm
+  - VIMVideoPlayer
 
 EXTERNAL SOURCES:
   TSMessages:
@@ -49,8 +51,10 @@ CHECKOUT OPTIONS:
     :git: https://github.com/KrauseFx/TSMessages.git
 
 SPEC CHECKSUMS:
+  AsyncImageView: db9433939160710b34a5c249479e03af2a2121b0
   Bolts: d176cb1e0012175589e389a9db49b85e27787576
   DeviceGuru: 34cf5b30fd99e7e3a4cee4c77c03bc94a4362be4
+  DZNEmptyDataSet: 3d31c27758230f03c71199f8c522bcfa99fba16c
   FCCurrentLocationGeocoder: e3f2cff7ffbbb09a9bc1603e1743650345927938
   FCIPAddressGeocoder: 2622f052eba06c78a707f8b9d9925a406d96ebbd
   HexColors: 6ad3947c3447a055a3aa8efa859def096351fe5f
@@ -62,8 +66,8 @@ SPEC CHECKSUMS:
   ParseCrashReporting: 75c442d8e89f21644b2a112381cdecdd9240f0bd
   ParseUI: d1228541b02a36a7354c8f47747f5f7a89cf1ff0
   PPTopMostController: 4e6f1e5f8c645bdcc74cd837a20f607ff262c048
-  SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
+  StaticDataTableViewController: 76e67fe2af5596fa77ffbc1ae450d8127172942d
   TSMessages: 8f04ffae3ce56a324731dedd3b8fab3766878db2
-  XLForm: 10fc7eb9e2d5df21a515fa3a794f4e26319abd0e
+  VIMVideoPlayer: 4314a5f2cbf7fed66c06d3ba5dbd8158376b08c3
 
-COCOAPODS: 0.37.2
+COCOAPODS: 0.38.2

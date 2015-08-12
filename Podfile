@@ -8,13 +8,15 @@ use_frameworks!
 pod 'IQKeyboardManager'
 pod 'INTULocationManager'
 pod 'JGProgressHUD'
-pod 'XLForm'
-pod 'SDWebImage'
 pod 'KLCPopup'
 pod 'FCCurrentLocationGeocoder'
 pod 'TSMessages', :git => 'https://github.com/KrauseFx/TSMessages.git' #Temp, Until Cocoapods integration
 pod 'PPTopMostController'
 pod 'DeviceGuru'
+pod 'StaticDataTableViewController'
+pod 'AsyncImageView'
+pod 'DZNEmptyDataSet'
+pod 'VIMVideoPlayer'
 
 #Parse Dependencies
 pod 'Parse'
@@ -28,11 +30,11 @@ target 'PinsitTests' do
 end
 
 post_install do |installer|
-    installer.project.targets.each do |target|
-        installer.project.build_configurations.each do |config|
+    installer.pods_project.targets.each do |target|
+        installer.pods_project.build_configurations.each do |config|
             config.build_settings['ENABLE_BITCODE'] = 'NO'
         end
-        
+
         target.build_configurations.each do |config|
             config.build_settings['ENABLE_BITCODe'] = 'NO'
         end
