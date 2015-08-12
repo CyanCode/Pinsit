@@ -8,8 +8,9 @@
 
 import UIKit
 import Parse
+import DZNEmptyDataSet
 
-class FollowerTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class FollowerTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITableViewDragLoadDelegate {
     @IBOutlet var tableView: UITableView!
     let identifier = "FollowersCell"
     var type: FollowerType = .Following
@@ -64,11 +65,15 @@ class FollowerTableViewController: UIViewController, UITableViewDataSource, UITa
         return cell
     }
     
+    func dragTableDidTriggerRefresh(tableView: UITableView!) {
+        updateTableWithType()
+    }
+    
     @IBAction func cellButtonPressed(sender: UIButton) {
         let indexPath = tableView.indexPathForRowAtPoint(sender.center)
         let cell = tableView.cellForRowAtIndexPath(indexPath!) as! FollowersCell
         cell.followerButton.hidden = true
-
+        
         followerNet.addFollower(cell.userLabel.text!)
     }
     

@@ -18,6 +18,7 @@ All operations are performed async
 class FollowerManager {
     var user: String!
     var responder: UIViewController?
+    var shouldUpdateCacheAfterwards = false
     
     ///User to perform follower operations on
     ///
@@ -36,19 +37,14 @@ class FollowerManager {
             if error != nil {
                 self.handleError("Unable to unfollow \(named), check your network connection and try again!")
             } else {
-                let obj = PFFollowers()
-                var following = objects!.count > 0 ? (objects as! [PFFollowers])[0].getFollowing() : [String]()
+                let obj = objects![0] as! PFFollowers
+                obj.removeFollower(named)
                 
-                for var i = 0; i < following.count; i++ {
-                    if following[i] == named {
-                        following.removeAtIndex(i)
-                    }
-                }
-                
-                obj.following = following
                 obj.saveInBackgroundWithBlock({ (success, error) -> Void in
-                    if success == false {
+                    if !success {
                         self.handleError("Unable to unfollow \(named), check your network connection and try again!")
+                    } else if self.shouldUpdateCacheAfterwards {
+                        FollowerCache().updateCache()
                     }
                 })
             }
@@ -64,15 +60,18 @@ class FollowerManager {
             if error != nil {
                 self.handleError("Unable to follow \(named), check your network connection and try again!")
             } else {
-                let obj = PFFollowers()
-                var following = objects!.count > 0 ? (objects as! [PFFollowers])[0].getFollowing() : [String]()
-                
-                following.append(named)
-                obj.following = following
+                let obj = objects![0] as! PFFollowers
+                obj.addFollower(named)
                 
                 obj.saveInBackgroundWithBlock({ (success, error) -> Void in
                     if success == false {
                         self.handleError("Unable to follow \(named), check your network connection and try again!")
+                    } else {
+                        if self.responder != nil {
+                            ErrorReport(viewController: self.responder!).presentError("Great!", message: "You are now following \(named); nice work!", type: .Success)
+                        }; if self.responder != nil && self.shouldUpdateCacheAfterwards {
+                            FollowerCache().updateCache()
+                        }
                     }
                 })
             }
@@ -80,11 +79,8 @@ class FollowerManager {
     }
     
     private func handleError(message: String) {
-        let controller = UIAlertController(title: "Hmm..", message: message, preferredStyle: .Alert)
-        controller.addAction(UIAlertAction(title: "Dismiss", style: .Cancel, handler: nil))
-        
         if responder != nil {
-            responder!.presentViewController(controller, animated: true, completion: nil)
+            ErrorReport(viewController: responder!).presentError("Uh Oh!", message: message, type: .Error)
         }
     }
 }

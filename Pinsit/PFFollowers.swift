@@ -17,6 +17,29 @@ class PFFollowers: PFObject, PFSubclassing {
         return following != nil ? following as! [String] : [String]()
     }
     
+    func addFollower(name: String) {
+        if !FollowerCache().isFollowing(name) {
+            if following == nil {
+                following = [String]()
+                following!.append(name)
+            } else {
+                following!.append(name)
+            }
+        }
+    }
+    
+    func removeFollower(name: String) {
+        for var i = 0; i < following!.count; i++ {
+            if following![i] as! String == name {
+                self.following!.removeAtIndex(i)
+            }
+        }
+        
+        if following != nil && following!.count == 0 {
+            following = nil
+        }
+    }
+    
     override class func initialize() {
         struct Static {
             static var onceToken : dispatch_once_t = 0
@@ -30,5 +53,4 @@ class PFFollowers: PFObject, PFSubclassing {
     static func parseClassName() -> String {
         return "Followers"
     }
-
 }
