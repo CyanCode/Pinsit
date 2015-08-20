@@ -24,7 +24,7 @@ class ExpandedVideoView: UIView {
     }
     
     private func adjustSublayers() {
-        for layer in self.layer.sublayers! as [CALayer] {
+        for layer in self.layer.sublayers! as! [CALayer] {
             layer.frame = self.frame
         }
     }

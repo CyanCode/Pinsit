@@ -19,7 +19,7 @@ class StoryboardManager {
     
     class func segueMain(vc: UIViewController) {
         let board = UIStoryboard(name: "Main", bundle: nil)
-        let initial = board.instantiateViewControllerWithIdentifier("main") as UIViewController
+        let initial = board.instantiateViewControllerWithIdentifier("main") as! UIViewController
 
         vc.presentViewController(initial, animated: true, completion: nil)
     }

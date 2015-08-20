@@ -26,10 +26,11 @@ class Stream {
         let fManager = NSFileManager.defaultManager()
         
         if (fManager.fileExistsAtPath(vidPath as String)) {
-            do {
-                try fManager.removeItemAtPath(vidPath as String)
-            } catch let error as NSError {
-                print("Error removing video file \(error.localizedDescription)")
+            var error: NSError?
+            fManager.removeItemAtPath(vidPath as String, error: &error)
+            
+            if error != nil {
+                print("Error removing video file \(error!.localizedDescription)")
             }
         }
         
@@ -42,10 +43,11 @@ class Stream {
         let fManager = NSFileManager.defaultManager()
         
         if (fManager.fileExistsAtPath(vidPath as String)) {
-            do {
-                try fManager.removeItemAtPath(vidPath as String)
-            } catch let error as NSError {
-                print("Error removing video file \(error.localizedDescription)")
+            var error: NSError?
+            fManager.removeItemAtPath(vidPath as String, error: &error)
+            
+            if error != nil {
+                print("Error removing video file \(error!.localizedDescription)")
             }
         }
         

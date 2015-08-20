@@ -45,17 +45,17 @@ class VideoCache {
             pin["objectId"] = id
             pin["videoURL"] = file.url!
             
-            do {
-                data = try file.getDataWithError()
+            var error: NSError?
+            data = file.getData(&error)
+            
+            if error != nil {
+                print("data error: \(error!.localizedDescription)")
+            } else {
                 pin["videoData"] = PFFile(data: data!)
                 pin.pin()
-            } catch let error as NSError {
-                print("data error: \(error.localizedDescription)")
-            } catch {
-                fatalError()
             }
-        }.main {
-            completion(data: data)
+            }.main {
+                completion(data: data)
         }
     }
 }

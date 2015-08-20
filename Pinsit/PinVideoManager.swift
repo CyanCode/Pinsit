@@ -80,17 +80,7 @@ class PinVideoManager: NSObject {
     
     private func playerFromData(data: NSData) -> AVPlayer {
         let directory = File.pulledVideoPath()
-        
-        var error: NSError?
-        do {
-            try data.writeToFile(directory, options: [])
-        } catch let error1 as NSError {
-            error = error1
-        }
-        
-        if error != nil {
-            print("File write error: \(error!.localizedDescription)")
-        }
+        data.writeToFile(directory, atomically: true)
         
         let url = NSURL(fileURLWithPath: directory)
         return AVPlayer(URL: url)

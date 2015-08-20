@@ -57,10 +57,10 @@ class SignUpViewController: PFSignUpViewController, PFSignUpViewControllerDelega
         let user = username == nil ? "" : username!
         let pass = password == nil ? "" : password!
         
-        if user.characters.count <= 4 {
+        if count(user) <= 4 {
             ErrorReport(viewController: self).presentWithType(.Username)
             return false
-        }; if pass.characters.count <= 5 {
+        }; if count(pass) <= 5 {
             ErrorReport(viewController: self).presentWithType(.Password)
             return false
         }; if user.containsAny([" ", "*", "%", "/", "\\", ":", ";", "\""]) {

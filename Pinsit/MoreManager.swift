@@ -61,8 +61,8 @@ class MoreManager {
             textField.placeholder = "Password"
         }
         controller.addAction(UIAlertAction(title: "Continue", style: .Default, handler: { (action) -> Void in
-            let username = controller.textFields![0] as UITextField
-            let password = controller.textFields![1] as UITextField
+            let username = controller.textFields![0] as! UITextField
+            let password = controller.textFields![1]as! UITextField
             
             DeleteAccount(viewController: self.moreVc).attemptAuthentication(username.text!, password: password.text!, done: { (success) -> Void in if success == true {
                 DeleteAccount(viewController: self.moreVc).beginDeletionInBackground { (success) -> Void in

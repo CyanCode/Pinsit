@@ -98,8 +98,8 @@ class NumberVerification {
         let generation: NSMutableString = "";
         
         for _ in 1...5 {
-            let random = 0 + Int(arc4random_uniform(UInt32(alphabet.characters.count + 1)))
-            let c = Array(alphabet.characters)[random]
+            let random = 0 + Int(arc4random_uniform(UInt32(count(alphabet) + 1)))
+            let c = Array(alphabet)[random]
             generation.appendString(String(c))
         }
         

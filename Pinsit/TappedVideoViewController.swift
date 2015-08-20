@@ -41,7 +41,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        let view = navigationController!.navigationBar.subviews[1] as UIView
+        let view = navigationController!.navigationBar.subviews[1] as! UIView
         view.userInteractionEnabled = true
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "usernameTapped:"))
         

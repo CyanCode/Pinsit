@@ -31,18 +31,19 @@ class DeleteAccount {
             let verificationQuery = PFQuery(className: "Verification").whereKey("username", equalTo: username)
             let followerQuery = PFQuery(className: "Followers").whereKey("following", equalTo: username)
             let followingQuery = PFQuery(className: "Followers").whereKey("username", equalTo: username)
-         
-            do {
-                try PFUser.currentUser()!.deleteWithError()
-                try likesQuery.findAndDeleteObjects()
-                try videoQuery.findAndDeleteObjects()
-                try verificationQuery.findAndDeleteObjects()
-                try followingQuery.findAndDeleteObjects()
-                self.handleFollowerObjects(followerQuery.findObjects() as? [PFFollowers])
-                
-                Async.main { done(success: true) }
-            } catch  {
+            var error: NSError?
+            
+            PFUser.currentUser()!.delete(&error)
+            likesQuery.findAndDeleteObjects()
+            videoQuery.findAndDeleteObjects()
+            verificationQuery.findAndDeleteObjects()
+            followingQuery.findAndDeleteObjects()
+            self.handleFollowerObjects(followerQuery.findObjects() as? [PFFollowers])
+            
+            if error != nil {
                 Async.main { done(success: false) }
+            } else {
+                Async.main { done(success: true) }
             }
         }
     }
@@ -62,15 +63,16 @@ class DeleteAccount {
         }
         
         Async.background {
+            var error: NSError?
             PFUser.logOut()
-            do {
-                try PFUser.logInWithUsername(username, password: password, error: ())
-                PFUser.logOut()
-                try PFUser.become(session, error: ())
-                
-                Async.main { done(success: true) }
-            } catch let error as NSError {
-                if error.code == PFErrorCode.ErrorConnectionFailed.rawValue {
+            
+            PFUser.logInWithUsername(username, password: password, error: &error)
+            PFUser.logOut()
+            PFUser.become(session, error: &error)
+            
+            //Error
+            if error != nil {
+                if error!.code == PFErrorCode.ErrorConnectionFailed.rawValue {
                     RegistrationAlerts(vc: self.viewController).connectionIssue()
                 } else {
                     RegistrationAlerts(vc: self.viewController).loginFailure()
@@ -78,9 +80,9 @@ class DeleteAccount {
                 
                 PFUser.become(session)
                 Async.main { done(success: false) }
-            } catch {
-                fatalError()
             }
+            
+            Async.main { done(success: true) }
         }
         
     }

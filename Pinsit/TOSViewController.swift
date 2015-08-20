@@ -50,14 +50,8 @@ class TOSViewController: UIViewController {
     }
     
     func loadPolicyFile(name: String) -> NSAttributedString {
-        do {
-            let rtf = NSBundle.mainBundle().URLForResource(name, withExtension: "rtf")
-            return try NSAttributedString(fileURL: rtf!, options: [NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType], documentAttributes: nil)
-        } catch {
-            print("Could not load \(name) Agreement")
-        }
-        
-        return NSAttributedString()
+        let rtf = NSBundle.mainBundle().URLForResource(name, withExtension: "rtf")
+        return NSAttributedString(fileURL: rtf!, options: [NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType], documentAttributes: nil, error: nil)!
     }
     
     override func prefersStatusBarHidden() -> Bool {

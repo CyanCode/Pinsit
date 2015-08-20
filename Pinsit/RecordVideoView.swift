@@ -76,29 +76,29 @@ class RecordingSession {
             session = AVCaptureSession()
             
             Async.background {
+                var error: NSError?
                 self.session!.sessionPreset = AVCaptureSessionPresetMedium
                 self.videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
                 self.audioDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
                 
-                do {
-                    self.videoInput = try AVCaptureDeviceInput(device: self.videoDevice)
-                    self.audioInput = try AVCaptureDeviceInput(device: self.audioDevice)
-                    self.deviceOutput = AVCaptureMovieFileOutput()
-                    
-                    if self.session!.canAddInput(self.videoInput) {
-                        self.session!.addInput(self.videoInput)
-                    }; if self.session!.canAddInput(self.audioInput) {
-                        self.session!.addInput(self.audioInput)
-                    }; if self.session!.canAddOutput(self.deviceOutput) {
-                        self.session!.addOutput(self.deviceOutput)
-                    }
-                    
-                    self.session!.startRunning()
-                } catch let error as NSError {
-                    print("Could not prepare capture session: \(error.localizedDescription)")
-                } catch {
-                    print("Could not prepare capture session")
+                self.videoInput =  AVCaptureDeviceInput(device: self.videoDevice, error: &error)
+                self.audioInput =  AVCaptureDeviceInput(device: self.audioDevice, error: &error)
+                self.deviceOutput = AVCaptureMovieFileOutput()
+                
+                if error != nil {
+                    fatalError("Failed to start capture session")
                 }
+                
+                if self.session!.canAddInput(self.videoInput) {
+                    self.session!.addInput(self.videoInput)
+                }; if self.session!.canAddInput(self.audioInput) {
+                    self.session!.addInput(self.audioInput)
+                }; if self.session!.canAddOutput(self.deviceOutput) {
+                    self.session!.addOutput(self.deviceOutput)
+                }
+                
+                self.session!.startRunning()
+                
                 }.main {
                     ready()
             }
@@ -135,11 +135,13 @@ class RecordingSession {
         }
         
         if videoDevice != nil {
-            do {
-                try videoInput = AVCaptureDeviceInput(device: videoDevice)
-                session!.addInput(videoInput)
-            } catch let error as NSError {
-                print("Device Input error: \(error)")
+            var error: NSError?
+            videoInput = AVCaptureDeviceInput(device: videoDevice, error: &error)
+            
+            if error == nil {
+            session!.addInput(videoInput)
+            } else {
+                println("Could not add capture device: \(error!.localizedDescription)")
             }
         }
         
@@ -150,20 +152,22 @@ class RecordingSession {
         let device = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
         
         if (device.hasTorch) {
-            do {
-                try device.lockForConfiguration()
-            } catch {
-                print("Could not lock device for configuration")
+            var error: NSError?
+            device.lockForConfiguration(&error)
+
+            if error != nil {
+                return
             }
             
             let torchOn = device.torchActive
             device.torchMode = torchOn ? AVCaptureTorchMode.Off : AVCaptureTorchMode.On
             
             if (torchOn == false) {
-                do {
-                    try device.setTorchModeOnWithLevel(1.0)
-                } catch {
-                    print("Could not enable flash for the current device")
+                device.setTorchModeOnWithLevel(1.0, error: &error)
+                
+                if error != nil {
+                    println("This device does not support torch")
+                    return
                 }
             }
             

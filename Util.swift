@@ -10,14 +10,13 @@ import Foundation
 import Parse
 
 extension PFQuery {
-    func findAndDeleteObjects() throws {
-        do {
-            for object in try findObjectsWithError() {
-                let obj = object as PFObject
-                try obj.deleteWithError()
+    func findAndDeleteObjects() {
+        self.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
+            if error == nil {
+                for obj in objects as! [PFObject] {
+                    obj.delete()
+                }
             }
-        } catch let error as NSError {
-            throw error
         }
     }
 }
@@ -34,6 +33,34 @@ extension UIImage {
         UIGraphicsEndImageContext()
         
         return newImage
+    }
+    
+    func makeImageWithColorAndSize(color: UIColor, size: CGSize) -> UIImage {
+        UIGraphicsBeginImageContext(size)
+        color.setFill()
+        UIRectFill(CGRectMake(0, 0, 100, 100))
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image
+    }
+    
+    func imageWithColor(color: UIColor) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
+        color.setFill()
+
+        let c = UIGraphicsGetCurrentContext()
+        CGContextTranslateCTM(c, 0, size.height)
+        CGContextScaleCTM(c, 1, -1)
+        CGContextSetBlendMode(c, kCGBlendModeNormal)
+        
+        let rect = CGRectMake(0, 0, size.width, size.height)
+        CGContextClipToMask(c, rect, self.CGImage)
+        
+        CGContextFillRect(c, rect)
+        let image =  UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image
     }
 }
 
