@@ -52,7 +52,7 @@ class AccountDetails {
                     var karma = object![0]["karma"] as? NSNumber
                     karma = karma == nil ? 0 : karma
 
-                    self.viewController.infoLabel.text = "\(karma!) Karma | " + followerText
+                    //self.viewController.infoLabel.text = "\(karma!) Karma | " + followerText
                     completion()
             })
         }

@@ -121,7 +121,7 @@ class FollowingQueryTableViewController: PFQueryTableViewController, DZNEmptyDat
     
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let text = NSMutableAttributedString(string: "You aren't following any users!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 15)!])
-        text.addAttribute(NSForegroundColorAttributeName, value: UIColor.pinsitWhiteBlue(), range: NSMakeRange(0, text.string.characters.count))
+        text.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(text.string)))
         
         return text
     }

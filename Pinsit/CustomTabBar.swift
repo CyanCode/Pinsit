@@ -10,22 +10,19 @@ import UIKit
 
 class CustomTabBar: UITabBarController {
     override func viewDidLoad() {
-        tabBar.barTintColor = UIColor(string: "#252B2D") //Dark-Gray
-        tabBar.tintColor = UIColor(string: "#A3BDC6") //Lightblue-white
-        tabBar.selectedImageTintColor = UIColor(string: "#A3BDC6") //Lightblue-white
-        //Old pink-red: FF2951
+        //Bar background color
+        tabBar.barTintColor = UIColor(string: "#2F343B")
         
-        //Unselected text color
-        //let unselected = UIColor.whiteColor()
-        //let colorDict: NSDictionary = [NSForegroundColorAttributeName: UIColor.whiteColor()]
-
-        //UITabBarItem.appearance().setTitleTextAttributes(colorDict as [NSObject : AnyObject], forState: UIControlState.Normal)
-        //UITabBarItem.appearance().setTitleTextAttributes(colorDict as [NSObject : AnyObject], forState: .Selected)
+        //Selected tint color
+        tabBar.tintColor = UIColor.whiteColor()
         
         //Unselected image color
-        for item in tabBar.items! as [UITabBarItem] {
-            item.image = item.image?.imageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal)
+        for item in tabBar.items! as! [UITabBarItem] {
+            item.image = item.selectedImage.imageWithColor(UIColor(string: "#7E827A")).imageWithRenderingMode(.AlwaysOriginal)
         }
+                
+        UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : UIColor(string: "#7E827A")], forState: .Normal)
+        UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : UIColor.whiteColor()], forState: .Selected)
         
         tabBarController?.selectedIndex = 0
     }

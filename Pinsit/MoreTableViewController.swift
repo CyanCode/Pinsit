@@ -10,7 +10,7 @@ import UIKit
 import StaticDataTableViewController
 import Parse
 
-class MoreTableViewController: StaticDataTableViewController {
+@IBDesignable class MoreTableViewController: StaticDataTableViewController {
     var manager: MoreManager!
     
     //Pinsit
@@ -27,6 +27,8 @@ class MoreTableViewController: StaticDataTableViewController {
     //Fields
     @IBOutlet var phoneNumberField: UITextField!
     @IBOutlet var receivedCodeField: UITextField!
+    
+    @IBInspectable var headerTextColor: UIColor = UIColor.whiteColor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +68,19 @@ class MoreTableViewController: StaticDataTableViewController {
     
     @IBAction func deleteAccountPressed(sender: AnyObject) {
         manager.deleteAccount()
+    }
+    
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        (view as! UITableViewHeaderFooterView).textLabel.textColor = headerTextColor
+    }
+}
+
+@IBDesignable class SettingsTextField: UITextField {
+    @IBInspectable var placeholderColor: UIColor = UIColor.whiteColor() {
+        didSet {
+            let text = self.placeholder == nil ? "" : self.placeholder!
+            self.attributedPlaceholder = NSAttributedString(string: text, attributes: [NSForegroundColorAttributeName : placeholderColor])
+        }
     }
 }
 

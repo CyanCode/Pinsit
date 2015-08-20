@@ -17,7 +17,6 @@ import QuartzCore
 
 @IBDesignable class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet var profileImage: UIImageView!
-    @IBOutlet var infoLabel: UILabel!
     @IBOutlet var usernameLabel: UILabel!
     @IBOutlet var profileActivity: UIActivityIndicatorView!
     
@@ -42,7 +41,7 @@ import QuartzCore
         profileActivity.hidden = true
         
         loadInformation()
-        infoLabel.hidden = true
+        //infoLabel.hidden = true
         prepareInterface()
     }
     
@@ -74,7 +73,7 @@ import QuartzCore
         
         detailManager.setAccountDetails { () -> Void in
             progress.dismiss()
-            self.infoLabel.hidden = false
+            //self.infoLabel.hidden = false
         }
     }
     
@@ -110,7 +109,7 @@ import QuartzCore
         presentViewController(picker, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage, editingInfo: [String : AnyObject]?) {
+     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         uploadNewProfile(image)
         picker.dismissViewControllerAnimated(false, completion: nil)
     }
@@ -154,11 +153,15 @@ import QuartzCore
             profileActivity.stopAnimating()
         }
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
 }
 
 ///Designable circular profile picture
-@IBDesignable class AccountProfilePicture: UIImageView {
-    @IBInspectable var cornerRadius: CGFloat = 50 {
+@IBDesignable class ExtendedImageView: UIImageView {
+    @IBInspectable var cornerRadius: CGFloat = 0 {
         didSet {
             self.layer.cornerRadius = cornerRadius
             self.layer.masksToBounds = true
@@ -169,7 +172,7 @@ import QuartzCore
             self.layer.borderColor = borderColor.CGColor
         }
     }
-    @IBInspectable var borderWidth: CGFloat = 2.0 {
+    @IBInspectable var borderWidth: CGFloat = 0 {
         didSet {
             self.layer.borderWidth = borderWidth
         }

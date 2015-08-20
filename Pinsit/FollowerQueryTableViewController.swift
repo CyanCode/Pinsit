@@ -21,8 +21,10 @@ import DZNEmptyDataSet
         self.tableView.emptyDataSetDelegate = self
         self.tableView.emptyDataSetSource = self
         
-        self.tableView.separatorColor = UIColor.pinsitWhiteBlue()
-        self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        self.tableView.separatorColor = UIColor.whiteColor()
+        self.tableView.backgroundView = nil
+        self.tableView.backgroundColor = UIColor(string: "#35A5D4")
+        //self.tableView.tableFooterView = UIView(frame: CGRectZero)
     }
     
     override func queryForTable() -> PFQuery {
@@ -58,21 +60,13 @@ import DZNEmptyDataSet
         return 62
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return username == "" ? "Followers" : "\(username)'s Followers"
-    }
-    
     override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        let header = view as! UITableViewHeaderFooterView
-
-        header.textLabel?.textColor = UIColor.pinsitWhiteBlue()
-        header.contentView.backgroundColor = UIColor.whiteColor()
-        header.textLabel?.font = UIFont(name: "Helvetica", size: (header.textLabel?.font.pointSize)!)
+        (view as! UITableViewHeaderFooterView).contentView.backgroundColor = UIColor(string: "#35A5D4")
     }
     
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = NSMutableAttributedString(string: "Sadly, \(username) has no followers yet!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 15)!])
-        text.addAttribute(NSForegroundColorAttributeName, value: UIColor.pinsitWhiteBlue(), range: NSMakeRange(0, text.string.characters.count))
+        let text = NSMutableAttributedString(string: "Sadly, \(username) has no followers yet!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 24)!])
+        text.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(text.string)))
 
         return text
     }
@@ -89,6 +83,16 @@ import DZNEmptyDataSet
         didSet {
             self.layer.cornerRadius = cornerRadius
             self.layer.masksToBounds = true
+        }
+    }
+    @IBInspectable var borderColor: UIColor = UIColor.whiteColor() {
+        didSet {
+            self.layer.borderColor = borderColor.CGColor
+        }
+    }
+    @IBInspectable var borderWidth: CGFloat = 1 {
+        didSet {
+            self.layer.borderWidth = borderWidth
         }
     }
     

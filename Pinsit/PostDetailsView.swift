@@ -15,8 +15,6 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     @IBOutlet var descriptionView: UITextView!
     @IBOutlet var downloadSwitch: UISwitch!
     @IBOutlet var privateSwitch: UISwitch!
-    @IBOutlet var cancelButton: UIButton!
-    @IBOutlet var postButton: UIButton!
     
     var responder: NewRecordingViewController!
     //private var popup: KLCPopup!
@@ -34,8 +32,6 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
         self.frame = CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width, height: self.bounds.height)
         
         downloadSwitch.enabled = Upgrade().isUpgraded()
-        downloadSwitch.onTintColor = UIColor(string: "#A3BDC9")
-        privateSwitch.onTintColor = UIColor(string: "#A3BDC9")
         fillerText()
 
         self.layer.borderWidth = 1
@@ -53,12 +49,9 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
         viewController.view.addSubview(self)
         
         self.slideIn { () -> Void in }
-        //        popup = KLCPopup(contentView: self)
-        //        popup.showAtCenter(responder.view.center, inView: responder.view)
     }
     
-    @IBAction func cancelPressed(sender: AnyObject) {
-        //popup.dismiss(true)
+    func cancelPost() {
         self.dismissSlide()
     }
     
@@ -75,10 +68,6 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
             descriptionView.textColor = UIColor.blackColor()
             descriptionSet = true
         }
-    }
-    
-    @IBAction func postPressed(sender: AnyObject) {
-        postVideo()
     }
     
     func postVideo() {
@@ -108,7 +97,6 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
                 self.responder.switchItem(.Map)
             }
         })
-        
     }
     
     private func postingError() {
