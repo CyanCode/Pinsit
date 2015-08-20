@@ -66,7 +66,7 @@ class MapControl: NSObject {
     }
     
     ///Get individual friend queries
-    private func getFriendQueries(completion: (queries: [PFQuery]?) -> Void) {
+    func getFriendQueries(completion: (queries: [PFQuery]?) -> Void) {
         var allQueries: [PFQuery]?
         
         Async.background {
@@ -103,7 +103,7 @@ class MapControl: NSObject {
     
     ///MARK: Private query methods
     ///Pulls follower's pins from server
-    private func getFriendQuery(completion: (query: PFQuery?) -> Void) {
+    func getFriendQuery(completion: (query: PFQuery?) -> Void) {
         self.getFriendQueries { (queries) -> Void in
             if queries == nil || queries!.count < 1 {
                 completion(query: nil)
@@ -114,7 +114,7 @@ class MapControl: NSObject {
     }
     
     ///Pulls pins with the highest view count from the server
-    private func getTrendingPins() -> PFQuery {
+    func getTrendingPins() -> PFQuery {
         let query = PFQuery(className: "SentData")
         query.orderByDescending("viewCount")
         
@@ -122,7 +122,7 @@ class MapControl: NSObject {
     }
     
     ///Pulls newest pins from the server using createdAt
-    private func getNewestPins() -> PFQuery {
+    func getNewestPins() -> PFQuery {
         let query = PFQuery(className: "SentData")
         query.orderByDescending("createdAt")
         

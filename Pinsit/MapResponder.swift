@@ -76,7 +76,7 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
     
     ///MARK: Responder
     func mapTapped(tap: UITapGestureRecognizer) {
-        self.viewControl.currentMap.toggleToolbar()
+        viewControl.currentMap.searchBar.toggleHidden(true)
     }
     
     ///MARK: Methods

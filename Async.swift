@@ -289,11 +289,11 @@ public extension qos_class_t {
 
 // Binary operator for qos_class_t allows for comparison in switch-statements
 func ~=(lhs: qos_class_t, rhs: qos_class_t) -> Bool {
-    return lhs.rawValue ~= rhs.rawValue
+    return lhs.value ~= rhs.value
 }
 
 // Make qos_class_t equatable
 extension qos_class_t: Equatable {}
 public func ==(lhs: qos_class_t, rhs: qos_class_t) -> Bool {
-    return lhs.rawValue == rhs.rawValue
+    return lhs.value == rhs.value
 }
