@@ -20,6 +20,10 @@ import QuartzCore
     @IBOutlet var usernameLabel: UILabel!
     @IBOutlet var profileActivity: UIActivityIndicatorView!
     
+    @IBOutlet var followingLabel: AccountInformationLabel!
+    @IBOutlet var followerLabel: AccountInformationLabel!
+    @IBOutlet var karmaLabel: AccountInformationLabel!
+    
     var user: String!
     var locationManager: CLLocationManager!
     var detailManager: AccountDetails!
@@ -39,9 +43,9 @@ import QuartzCore
         self.detailManager = AccountDetails(viewController: self, user: user)
         
         profileActivity.hidden = true
+        self.followingLabel.selected = true
         
         loadInformation()
-        //infoLabel.hidden = true
         prepareInterface()
     }
     
@@ -64,52 +68,73 @@ import QuartzCore
         }
     }
     
+    ///MARK: Information labels
     func loadInformation() {
-        self.usernameLabel.text = user
         let progress = JGProgressHUD(style: .Dark)
         progress.textLabel.text = "Loading"
         progress.showInView(self.view, animated: true)
+        
+        self.usernameLabel.text = user
         self.view.bringSubviewToFront(progress)
+        self.setInfoHidden(true)
         
         detailManager.setAccountDetails { () -> Void in
+            self.setInfoHidden(false)
             progress.dismiss()
-            //self.infoLabel.hidden = false
         }
     }
     
+    func setInfoHidden(hidden: Bool) {
+        followingLabel.hidden = hidden
+        followerLabel.hidden = hidden
+        karmaLabel.hidden = hidden
+    }
+    
+    @IBAction func followingPressed(sender: UIButton) {
+        if followTableView.queryType != .Following {
+            followingLabel.selected = true
+            followerLabel.selected = false
+            
+            followTableView.queryType = .Following
+            followTableView.loadObjects()
+        }
+    }
+    
+    @IBAction func followerPressed(sender: UIButton) {
+        if followTableView.queryType != .Followers {
+            followingLabel.selected = false
+            followerLabel.selected = true
+            
+            followTableView.queryType = .Followers
+            followTableView.loadObjects()
+        }
+    }
+    
+    ///MARK: Profile picture
     func profileTapped(gesture: UITapGestureRecognizer) {
         let controller = UIAlertController(title: "Change Profile Picture", message: "", preferredStyle: .ActionSheet)
         
         controller.addAction(UIAlertAction(title: "Choose Photo", style: .Default, handler: { (action) -> Void in
-            self.profileFromCameraRoll()
+            self.profileWithType(.PhotoLibrary)
         }))
         controller.addAction(UIAlertAction(title: "Take Photo", style: .Default, handler: { (action) -> Void in
-            self.profileFromTakenImage()
+            self.profileWithType(.Camera)
         }))
         controller.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         
         self.presentViewController(controller, animated: true, completion: nil)
     }
     
-    func profileFromCameraRoll() {
+    func profileWithType(type: UIImagePickerControllerSourceType) {
         let picker = UIImagePickerController()
         picker.delegate = self
         picker.allowsEditing = true
-        picker.sourceType = .PhotoLibrary
+        picker.sourceType = type
         
         presentViewController(picker, animated: true, completion: nil)
     }
     
-    func profileFromTakenImage() {
-        let picker = UIImagePickerController()
-        picker.delegate = self
-        picker.allowsEditing = true
-        picker.sourceType = .Camera
-        
-        presentViewController(picker, animated: true, completion: nil)
-    }
-    
-     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         uploadNewProfile(image)
         picker.dismissViewControllerAnimated(false, completion: nil)
     }
@@ -154,6 +179,7 @@ import QuartzCore
         }
     }
     
+    ///Status bar
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }
@@ -179,7 +205,30 @@ import QuartzCore
     }
 }
 
+class AccountInformationLabel: UILabel {
+    var oldFont: UIFont?
+    var alreadySelected: Bool = false
+    var selected: Bool = false {
+        didSet {
+            if selected && !alreadySelected {
+                oldFont = self.font
+                alreadySelected = true
+                
+                let font = UIFont(name: "\(self.font.fontName)-Bold", size: self.font.pointSize)
+                self.font = font
+            } else {
+                alreadySelected = false
+                
+                if oldFont != nil {
+                    self.font = oldFont
+                }
+            }
+        }
+    }
+}
+
 class AccountQueryCell: PFTableViewCell {
     @IBOutlet var usernameLabel: UILabel!
+    @IBOutlet var karmaLabel: UILabel!
     @IBOutlet var profileImage: FollowerImageView!
 }

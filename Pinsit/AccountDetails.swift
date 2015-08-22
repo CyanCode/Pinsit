@@ -14,7 +14,7 @@ class AccountDetails {
     let path = File.documentsPath().stringByAppendingPathComponent("account.plist")
     var viewController: AccountViewController!
     var user: String!
-
+    
     ///Only used for setting profile picture information
     init() {
         viewController = AccountViewController()
@@ -31,30 +31,49 @@ class AccountDetails {
         }
     }
     
-    ///Sets following, active posts, and karma level from the server
+    ///Sets following, followers, and karma level from the server
     ///
     ///:params: completion Called when account details have been updated
     func setAccountDetails(completion: () -> Void) {
-        let followQuery = PFQuery(className: "Followers")
-        followQuery.whereKey("following", equalTo: user)
-
-        followQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
-            if error != nil {
-                ErrorReport(viewController: self.viewController).presentWithType(.Network)
-
-                completion()
-                return
+        var completionCount = 0
+        
+        let followingQuery = PFQuery(className: "Followers")
+        let followerQuery = PFQuery(className: "Followers")
+        let karmaQuery = PFUser.query()!
+        
+        followingQuery.whereKey("username", equalTo: user)
+        followerQuery.whereKey("following", equalTo: user)
+        karmaQuery.whereKey("username", equalTo: user)
+        
+        followingQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
+            if error == nil && objects!.count > 0 {
+                let count = (objects! as! [PFFollowers])[0].getFollowing().count
+                self.viewController.followingLabel.text = "Following \(count)"
+            } else {
+                self.viewController.followingLabel.text = "Following 0"
             }
             
-            PFUser.query()!.whereKey("username", equalTo: self.user).findObjectsInBackgroundWithBlock({ (object, error) -> Void in
-                    let followerAmt = objects!.count
-                    let followerText = followerAmt == 1 ? "\(followerAmt) Follower" : "\(followerAmt) Followers"
-                    var karma = object![0]["karma"] as? NSNumber
-                    karma = karma == nil ? 0 : karma
-
-                    //self.viewController.infoLabel.text = "\(karma!) Karma | " + followerText
-                    completion()
-            })
+            if ++completionCount == 3 { completion() }
+        }
+        followerQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
+            if error == nil && objects!.count > 0 {
+                let count = (objects! as! [PFFollowers]).count
+                self.viewController.followerLabel.text = count == 1 ? "1 Follower" : "\(count) Followers"
+            } else {
+                self.viewController.followerLabel.text = "0 Followers"
+            }
+            
+            if ++completionCount == 3 { completion() }
+        }
+        karmaQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
+            if error == nil && objects!.count > 0 {
+                let count = (objects! as! [PFUser])[0]["karma"] as! NSNumber
+                self.viewController.karmaLabel.text = "\(count) Karma"
+            } else {
+                self.viewController.karmaLabel.text = "0 Karma"
+            }
+            
+            if ++completionCount == 3 { completion() }
         }
     }
     
