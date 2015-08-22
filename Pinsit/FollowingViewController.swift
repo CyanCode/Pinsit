@@ -25,11 +25,14 @@ class FollowingViewController: UIViewController, UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+        
+        followerController.searchQuery = false
+        followerController.loadObjects()
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
-        followerController.query = PFUser.query()!
-        followerController.query?.whereKey("username", equalTo: PFUser.currentUser()!.username!)
+        followerController.query = PFQuery(className: "Followers")
+        followerController.query?.whereKey("username", containsString: searchBar.text)
         followerController.searchQuery = true
         followerController.awaitingReload = false
         followerController.loadObjects()
@@ -55,7 +58,7 @@ class FollowingQueryTableViewController: PFQueryTableViewController, DZNEmptyDat
     }
     
     override func queryForTable() -> PFQuery {
-        if query == nil {
+        if !searchQuery {
             query = PFQuery(className: "Followers")
             query?.whereKey("username", equalTo: PFUser.currentUser()!.username!)
             query?.whereKeyExists("following")
@@ -91,11 +94,11 @@ class FollowingQueryTableViewController: PFQueryTableViewController, DZNEmptyDat
         followerCache = FollowerCache() //Refresh cache each time
         
         if searchQuery {
-            let followerObject = object as! PFUser
+            let followerObject = object as! PFFollowers
             
             cell.usernameLabel.text = followerObject.username
-            cell.profileImage.username = followerObject.username!
-            cell.addFollowerButton.hidden = followerCache.isFollowing(followerObject.username!)
+            cell.profileImage.username = followerObject.username
+            cell.addFollowerButton.hidden = followerCache.isFollowing(followerObject.username)
             
             awaitingReload = true
         } else {
@@ -120,7 +123,14 @@ class FollowingQueryTableViewController: PFQueryTableViewController, DZNEmptyDat
     }
     
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = NSMutableAttributedString(string: "You aren't following any users!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 15)!])
+        var text: NSMutableAttributedString!
+        
+        if searchQuery {
+            text = NSMutableAttributedString(string: "Your search didn't return any users.", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 15)!])
+        } else {
+            text = NSMutableAttributedString(string: "You aren't following any users!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 15)!])
+        }
+        
         text.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(text.string)))
         
         return text

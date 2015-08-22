@@ -14,6 +14,7 @@ import DZNEmptyDataSet
 
 @IBDesignable class FollowerQueryTableViewController: PFQueryTableViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     let identifier = "AccountQueryCell"
+    var queryType: FollowerQuerySearchType = .Following
     var username = ""
     
     override convenience init(style: UITableViewStyle, className: String?) {
@@ -28,10 +29,20 @@ import DZNEmptyDataSet
     }
     
     override func queryForTable() -> PFQuery {
-        let query = PFQuery(className: "Followers")
-        query.whereKey("following", equalTo: username)
-        
-        return query
+        if queryType == .Following {
+            let query = PFQuery(className: "Followers")
+            query.whereKey("username", equalTo: username)
+            query.selectKeys(["following"])
+            query.whereKeyExists("following")
+            
+            return query
+        } else {
+            let query = PFQuery(className: "Followers")
+            query.whereKey("following", equalTo: username)
+            query.includeKey("following")
+
+            return query
+        }
     }
     
     override func objectsDidLoad(error: NSError?) {
@@ -47,7 +58,7 @@ import DZNEmptyDataSet
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath, object: PFObject?) -> PFTableViewCell? {
         let cell = tableView.dequeueReusableCellWithIdentifier(identifier) as! AccountQueryCell
         let followerObject = object as! PFFollowers
-        
+
         cell.usernameLabel.text = followerObject.username
         cell.profileImage.image = UIImage(named: "profile")
         cell.profileImage.username = followerObject.username
@@ -65,10 +76,12 @@ import DZNEmptyDataSet
     }
     
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = NSMutableAttributedString(string: "Sadly, \(username) has no followers yet!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 24)!])
-        text.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(text.string)))
+        let text = queryType == .Following ? "\(username) isn't following anyone yet!" : "\(username) has no followers yet!  You could change that.."
+        
+        let attr = NSMutableAttributedString(string: "Sadly, \(username) has no followers yet!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 24)!])
+        attr.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(text)))
 
-        return text
+        return attr
     }
     
     func emptyDataSetShouldAllowScroll(scrollView: UIScrollView!) -> Bool {
@@ -77,8 +90,9 @@ import DZNEmptyDataSet
 }
 
 @IBDesignable class FollowerImageView: AsyncImageView {
-    var username: String?
+    var username: String!
     var usernameURL: NSURL?
+    
     @IBInspectable var cornerRadius: CGFloat = 3 {
         didSet {
             self.layer.cornerRadius = cornerRadius
@@ -99,7 +113,7 @@ import DZNEmptyDataSet
     func loadUserImage() {
         if usernameURL == nil {
             let query = PFUser.query()!
-            query.whereKey("username", equalTo: username!)
+            query.whereKey("username", equalTo: username)
             query.findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
                 if error == nil && objects!.count > 0 {
                     let file = objects![0]["profileImage"] as? PFFile
@@ -110,4 +124,9 @@ import DZNEmptyDataSet
             self.imageURL = usernameURL!
         }
     }
+}
+
+enum FollowerQuerySearchType {
+    case Followers
+    case Following
 }
