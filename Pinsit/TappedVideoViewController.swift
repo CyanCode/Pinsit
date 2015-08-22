@@ -12,12 +12,18 @@ import JGProgressHUD
 import TSMessages
 
 class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
-    @IBOutlet var navItem: UINavigationItem!
     @IBOutlet var videoView: ExpandedVideoView!
+    @IBOutlet var commentsView: AnimateUpwardsView!
     
     var videoObject: PFSentData!
     private var dataHandler: PinVideoData!
     private var manager: PinVideoManager!
+    
+    var commentController: CommentsViewController {
+        get {
+            return self.childViewControllers[0] as! CommentsViewController
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,25 +33,25 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         
         self.startPlaying()
         self.dataHandler = PinVideoData(viewController: self)
-        videoView.adjustGravityOnResize(manager.layer)
-        //self.tableView.readyTableView(videoObject)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
         
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        navItem.title = videoObject.username
+        videoView.adjustGravityOnResize(manager.layer)
+        commentController.videoId = videoObject.objectId!
+        commentController.loadObjects()
     }
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
-        let view = navigationController!.navigationBar.subviews[1] as! UIView
-        view.userInteractionEnabled = true
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "usernameTapped:"))
-        
+        self.navigationController?.navigationBar.hidden = true
+
         manager.recoverVideo()
+    }
+    
+    var isHiddenFirst = false
+    override func viewDidLayoutSubviews() {
+        if !isHiddenFirst {
+            commentsView.hidden = true
+            isHiddenFirst = true
+        }
     }
     
     override func viewDidDisappear(animated: Bool) {
@@ -53,7 +59,24 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         manager.endVideo()
     }
     
-    @IBAction func moreButton(sender: AnyObject) {
+    ///MARK: Actions
+    var showingComments = false
+    @IBAction func showCommentsButton(sender: UIButton) {
+        if commentsView.hidden { //Reveal UIView but send to bottom
+            commentsView.isHidden(true)
+            commentsView.hidden = false
+        }
+        
+        if showingComments {
+            commentsView.isHiddenAnimated(true)
+            showingComments = false
+        } else {
+            commentsView.isHiddenAnimated(false)
+            showingComments = true
+        }
+    }
+    
+    @IBAction func moreButton(sender: UIButton) {
         let title = videoObject.desc == "" ? "Post Options" : videoObject.desc
         let controller = UIAlertController(title: title, message: videoObject.desc, preferredStyle: .ActionSheet)
         
@@ -87,19 +110,13 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         self.presentViewController(controller, animated: true, completion: nil)
     }
     
-    @IBAction func followButton(sender: AnyObject) {
-        self.dataHandler.addFollower(videoObject.username, button: sender as! UIButton)
-    }
-    
     @IBAction func backButton(sender: AnyObject) {
         if let navController = self.navigationController {
             navController.popViewControllerAnimated(true)
         }
     }
     
-    
-    //var profileDetails: ProfileInfo?
-    func usernameTapped(gesture: UITapGestureRecognizer) {
+    @IBAction func usernameTapped(gesture: UITapGestureRecognizer) {
         self.performSegueWithIdentifier("accountSegue", sender: nil)
     }
     
@@ -127,10 +144,37 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier! == "accountSegue" {
+        if segue.identifier == "accountSegue" {
             let vc = segue.destinationViewController as! AccountViewController
             vc.user = videoObject.username
             vc.location = videoObject.location.coordinate
+        }
+    }
+}
+
+class AnimateUpwardsView: UIView {
+    var hasTabBar: Bool = true
+    let tabBarSize = 49
+    
+    func isHidden(hidden: Bool) {
+        if hidden {
+            self.frame = CGRectMake(0, superview!.frame.height, frame.width, frame.height)
+        } else {
+            let yPos = (superview!.frame.height - frame.height) - CGFloat(hasTabBar ? tabBarSize : 0)
+            self.frame = CGRectMake(0, yPos, frame.width, frame.height)
+        }
+    }
+    
+    func isHiddenAnimated(hidden: Bool) {
+        if hidden {
+            UIView.animateWithDuration(0.4, animations: { () -> Void in
+                self.frame = CGRectMake(0, self.superview!.frame.height, self.frame.width, self.frame.height)
+            })
+        } else {
+            UIView.animateWithDuration(0.4, animations: { () -> Void in
+                let yPos = (self.superview!.frame.height - self.frame.height) - CGFloat(self.hasTabBar ? self.tabBarSize : 0)
+                self.frame = CGRectMake(0, yPos, self.frame.width, self.frame.height)
+            })
         }
     }
 }
