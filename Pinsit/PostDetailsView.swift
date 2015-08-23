@@ -17,7 +17,6 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     @IBOutlet var privateSwitch: UISwitch!
     
     var responder: NewRecordingViewController!
-    //private var popup: KLCPopup!
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -30,14 +29,10 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     ///Used for object initialization, called manually when initialized
     func prepareView() {
         self.frame = CGRect(x: 0, y: 0, width: UIScreen.mainScreen().bounds.width, height: self.bounds.height)
+        self.descriptionView.delegate = self
         
         downloadSwitch.enabled = Upgrade().isUpgraded()
         fillerText()
-
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.whiteColor().CGColor
-        
-        self.descriptionView.delegate = self
     }
     
     ///Present PostDetailsView in DetailsViewController, ready to post
@@ -68,6 +63,14 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
             descriptionView.textColor = UIColor.blackColor()
             descriptionSet = true
         }
+    }
+    
+    @IBAction func postPressed(sender: UIButton) {
+        postVideo()
+    }
+    
+    @IBAction func cancelPressed(sender: UIButton) {
+        self.dismissSlide()
     }
     
     func postVideo() {

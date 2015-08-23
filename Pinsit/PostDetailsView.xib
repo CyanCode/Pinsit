@@ -7,7 +7,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="bottom" id="iN0-l3-epB" customClass="PostDetailsView" customModule="Pinsit" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="350" height="174"/>
+            <rect key="frame" x="0.0" y="0.0" width="350" height="230"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="esU-ua-V8d">
@@ -35,13 +35,6 @@
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BMo-Ig-T2w">
-                    <rect key="frame" x="8" y="131" width="51" height="31"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="31" id="LlK-u6-ohg"/>
-                    </constraints>
-                    <color key="onTintColor" red="0.78593450779999996" green="0.46075755359999998" blue="0.47489035130000001" alpha="1" colorSpace="calibratedRGB"/>
-                </switch>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ON9-Fy-4g8">
                     <rect key="frame" x="0.0" y="0.0" width="350" height="84"/>
                     <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -51,6 +44,43 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j9X-9l-jOW">
+                    <rect key="frame" x="0.0" y="170" width="350" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="oar-6x-TpO"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
+                    <state key="normal" title="Cancel">
+                        <color key="titleColor" red="0.78593450779999996" green="0.46075755359999998" blue="0.47489035130000001" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="cancelPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="T5e-iA-4qZ"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dxy-qO-brW">
+                    <rect key="frame" x="0.0" y="200" width="350" height="30"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="30" id="CwB-8e-CoB"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="HelveticaNeue-Bold" family="Helvetica Neue" pointSize="15"/>
+                    <state key="normal" title="Post">
+                        <color key="titleColor" red="0.1843137255" green="0.22352941179999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="postPressed:" destination="iN0-l3-epB" eventType="touchUpInside" id="Bv0-Ia-TnF"/>
+                    </connections>
+                </button>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="BMo-Ig-T2w">
+                    <rect key="frame" x="8" y="131" width="51" height="31"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="31" id="LlK-u6-ohg"/>
+                    </constraints>
+                    <color key="onTintColor" red="0.78593450779999996" green="0.46075755359999998" blue="0.47489035130000001" alpha="1" colorSpace="calibratedRGB"/>
+                </switch>
             </subviews>
             <color key="backgroundColor" red="0.1843137255" green="0.22352941179999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
@@ -61,14 +91,20 @@
                 <constraint firstItem="ON9-Fy-4g8" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="H3U-4s-ZrO"/>
                 <constraint firstItem="TWv-N8-qxM" firstAttribute="leading" secondItem="BMo-Ig-T2w" secondAttribute="trailing" constant="8" id="IB6-wz-UqW"/>
                 <constraint firstItem="BMo-Ig-T2w" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="Iel-8y-faw"/>
+                <constraint firstAttribute="bottom" secondItem="Dxy-qO-brW" secondAttribute="bottom" id="KAB-pf-gsU"/>
+                <constraint firstItem="Dxy-qO-brW" firstAttribute="top" secondItem="j9X-9l-jOW" secondAttribute="bottom" id="N3b-LJ-MCM"/>
+                <constraint firstAttribute="trailing" secondItem="j9X-9l-jOW" secondAttribute="trailing" id="RbP-o7-eie"/>
+                <constraint firstItem="Dxy-qO-brW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="W0p-UI-B7j"/>
                 <constraint firstItem="1I1-j7-g3i" firstAttribute="top" secondItem="ON9-Fy-4g8" secondAttribute="bottom" constant="8" id="Ybt-JU-Y6J"/>
                 <constraint firstItem="esU-ua-V8d" firstAttribute="top" secondItem="ON9-Fy-4g8" secondAttribute="bottom" constant="8" id="a8j-VV-Msc"/>
                 <constraint firstItem="1I1-j7-g3i" firstAttribute="leading" secondItem="esU-ua-V8d" secondAttribute="trailing" constant="8" id="dN7-TC-JMm"/>
                 <constraint firstItem="esU-ua-V8d" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="gbl-8O-95b"/>
+                <constraint firstAttribute="trailing" secondItem="Dxy-qO-brW" secondAttribute="trailing" id="l9g-hf-l2d"/>
                 <constraint firstAttribute="trailing" secondItem="ON9-Fy-4g8" secondAttribute="trailing" id="mVP-w3-knb"/>
                 <constraint firstItem="BMo-Ig-T2w" firstAttribute="top" secondItem="esU-ua-V8d" secondAttribute="bottom" constant="8" id="nhS-LN-q5W"/>
                 <constraint firstAttribute="trailing" secondItem="1I1-j7-g3i" secondAttribute="trailing" constant="8" id="rWU-3m-dag"/>
                 <constraint firstItem="TWv-N8-qxM" firstAttribute="top" secondItem="1I1-j7-g3i" secondAttribute="bottom" constant="8" id="wUD-9o-Rvh"/>
+                <constraint firstItem="j9X-9l-jOW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="zh1-vJ-lLy"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -77,7 +113,7 @@
                 <outlet property="downloadSwitch" destination="esU-ua-V8d" id="Et4-n5-kvy"/>
                 <outlet property="privateSwitch" destination="BMo-Ig-T2w" id="lZs-Sc-i2y"/>
             </connections>
-            <point key="canvasLocation" x="388" y="374"/>
+            <point key="canvasLocation" x="388" y="402"/>
         </view>
     </objects>
 </document>
