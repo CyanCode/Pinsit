@@ -2,27 +2,28 @@ PODS:
   - AsyncImageView (1.5.1)
   - Bolts/Tasks (1.2.0)
   - DeviceGuru (1.2.0)
-  - DZNEmptyDataSet (1.6.1)
+  - DZNEmptyDataSet (1.7.1)
   - FCCurrentLocationGeocoder (1.1.10):
     - FCIPAddressGeocoder (~> 1.0.0)
   - FCIPAddressGeocoder (1.0.2)
   - HexColors (2.3.0)
-  - INTULocationManager (3.0.3)
+  - INTULocationManager (4.0.0)
   - IQKeyboardManager (3.2.4)
-  - JGProgressHUD (1.2.7)
+  - JGProgressHUD (1.3)
   - KLCPopup (1.0)
-  - Parse (1.7.5.2):
+  - Parse (1.8.1):
     - Bolts/Tasks (>= 1.2.0)
-  - ParseCrashReporting (1.7.5.2):
+  - ParseCrashReporting (1.8.1):
     - Bolts/Tasks (>= 1.2.0)
-    - Parse (~> 1.7.5.2)
-  - ParseUI (1.1.4):
-    - Parse (~> 1.7)
+    - Parse (~> 1.8.0)
+  - ParseUI (1.1.5):
+    - Bolts/Tasks (~> 1.2)
+    - Parse (~> 1.8)
   - PPTopMostController (0.0.1)
   - StaticDataTableViewController (2.0.3)
   - TSMessages (0.9.13):
     - HexColors (~> 2.3.0)
-  - VIMVideoPlayer (5.5.1)
+  - VIMVideoPlayer (5.5.3)
 
 DEPENDENCIES:
   - AsyncImageView
@@ -33,7 +34,7 @@ DEPENDENCIES:
   - IQKeyboardManager
   - JGProgressHUD
   - KLCPopup
-  - Parse
+  - Parse (>= 1.8.1)
   - ParseCrashReporting
   - ParseUI
   - PPTopMostController
@@ -47,27 +48,27 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   TSMessages:
-    :commit: 7ef3990de3c626e8f3e50bfabb53f76997e374ce
+    :commit: f7d0e8cece3ca79852e49807812601e2d89f5719
     :git: https://github.com/KrauseFx/TSMessages.git
 
 SPEC CHECKSUMS:
   AsyncImageView: db9433939160710b34a5c249479e03af2a2121b0
   Bolts: d176cb1e0012175589e389a9db49b85e27787576
   DeviceGuru: 34cf5b30fd99e7e3a4cee4c77c03bc94a4362be4
-  DZNEmptyDataSet: 3d31c27758230f03c71199f8c522bcfa99fba16c
+  DZNEmptyDataSet: 2a398066c2bf5848f7f693fb50954b5064debd12
   FCCurrentLocationGeocoder: e3f2cff7ffbbb09a9bc1603e1743650345927938
   FCIPAddressGeocoder: 2622f052eba06c78a707f8b9d9925a406d96ebbd
   HexColors: 6ad3947c3447a055a3aa8efa859def096351fe5f
-  INTULocationManager: e79327803a163f5fec28eb042bb124ed0c6e4876
+  INTULocationManager: 754f2800415378b7bb2c07be103449e1f6a2cc70
   IQKeyboardManager: 555b1231fefafb21b19278d7cca72986a27b748b
-  JGProgressHUD: a45c1d16adddf7e38092ce3f0d71d3955d2de2ec
+  JGProgressHUD: a58f62d3afac173d201250c3ba628fe44bd67017
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
-  Parse: 9a01b8cb054f113b74211370aaf9d982d355729a
-  ParseCrashReporting: 75c442d8e89f21644b2a112381cdecdd9240f0bd
-  ParseUI: d1228541b02a36a7354c8f47747f5f7a89cf1ff0
+  Parse: 2155953b1565494095d5fa5c83b3c77f2c677c09
+  ParseCrashReporting: 56bfe3cff4818b2c602f04af0f58366a149ee14f
+  ParseUI: 2c53621ed028ee793f5ab92a551b099689265525
   PPTopMostController: 4e6f1e5f8c645bdcc74cd837a20f607ff262c048
   StaticDataTableViewController: 76e67fe2af5596fa77ffbc1ae450d8127172942d
-  TSMessages: 8f04ffae3ce56a324731dedd3b8fab3766878db2
-  VIMVideoPlayer: 4314a5f2cbf7fed66c06d3ba5dbd8158376b08c3
+  TSMessages: 6e403b790139636c15ab4f51946537095e03e79c
+  VIMVideoPlayer: 63bc82d3cabbe104d6be7e281b6d0271b490280c
 
 COCOAPODS: 0.38.2

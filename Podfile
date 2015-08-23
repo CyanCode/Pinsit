@@ -19,7 +19,7 @@ pod 'DZNEmptyDataSet'
 pod 'VIMVideoPlayer'
 
 #Parse Dependencies
-pod 'Parse'
+pod 'Parse', '>= 1.8.1'
 pod 'ParseUI'
 pod 'ParseCrashReporting'
 
