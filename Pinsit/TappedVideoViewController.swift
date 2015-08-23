@@ -11,9 +11,12 @@ import Parse
 import JGProgressHUD
 import TSMessages
 
-class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
+class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
     @IBOutlet var videoView: ExpandedVideoView!
     @IBOutlet var commentsView: AnimateUpwardsView!
+    @IBOutlet var textField: TextLimitTextField!
+    @IBOutlet var limitLabel: UILabel!
+    @IBOutlet var usernameButton: UIButton!
     
     var videoObject: PFSentData!
     private var dataHandler: PinVideoData!
@@ -33,6 +36,10 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         
         self.startPlaying()
         self.dataHandler = PinVideoData(viewController: self)
+        self.usernameButton.titleLabel?.text = videoObject.username
+        
+        self.textField.delegate = self
+        self.textField.limitLabel = limitLabel
         
         videoView.adjustGravityOnResize(manager.layer)
         commentController.videoId = videoObject.objectId!
@@ -42,7 +49,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         self.navigationController?.navigationBar.hidden = true
-
+        
         manager.recoverVideo()
     }
     
@@ -109,15 +116,34 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
         
         self.presentViewController(controller, animated: true, completion: nil)
     }
+
+    @IBAction func usernameTapped(gesture: UITapGestureRecognizer) {
+        self.performSegueWithIdentifier("accountSegue", sender: nil)
+    }
     
-    @IBAction func backButton(sender: AnyObject) {
-        if let navController = self.navigationController {
-            navController.popViewControllerAnimated(true)
+    @IBAction func postCommentPressed(sender: UIButton) {
+        if count(textField.text) > 0 && count(textField.text) <= 300 {
+            let comment = PFComments()
+            comment.username = videoObject.username
+            comment.videoId = videoObject.objectId!
+            comment.comment = textField.text
+            
+            comment.saveInBackgroundWithBlock({ (success, error) -> Void in
+                if error != nil {
+                    ErrorReport(viewController: self).presentWithType(.Network)
+                } else {
+                    self.commentController.loadObjects()
+                }
+            })
+        } else if count(textField.text) == 0 {
+            ErrorReport(viewController: self).presentError("Missing Something?", message: "You need to add some text before you post a comment!", type: .Error)
+        } else {
+            ErrorReport(viewController: self).presentError("Bit Wordy..", message: "Comments cannot exede 300 characters!  Try rewording it.", type: .Error)
         }
     }
     
-    @IBAction func usernameTapped(gesture: UITapGestureRecognizer) {
-        self.performSegueWithIdentifier("accountSegue", sender: nil)
+    @IBAction func returnButtonPressed(sender: UIButton) {
+        self.navigationController?.popViewControllerAnimated(true)
     }
     
     private func startPlaying() {
@@ -137,6 +163,24 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate {
                 print("Could not retrieve video data!")
             }
         }
+    }
+    
+    ///MARK: Textfield delegate
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        if range.length + range.location > count(textField.text) {
+            return false
+        }
+        
+        let length = count(textField.text) + count(string) - range.length
+        self.textField.limitLabel.text = "\(self.textField.characterLimit - length)"
+        
+        if length > self.textField.characterLimit {
+            self.textField.limitLabel.textColor = self.textField.incorrectLengthColor
+        } else {
+            self.textField.limitLabel.textColor = self.textField.correctLengthColor
+        }
+        
+        return true
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -177,4 +221,11 @@ class AnimateUpwardsView: UIView {
             })
         }
     }
+}
+
+@IBDesignable class TextLimitTextField: UITextField {
+    var limitLabel: UILabel!
+    @IBInspectable var correctLengthColor: UIColor = UIColor.grayColor()
+    @IBInspectable var incorrectLengthColor: UIColor = UIColor.redColor()
+    @IBInspectable var characterLimit: Int = 200
 }
