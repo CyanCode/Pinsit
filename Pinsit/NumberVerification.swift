@@ -78,7 +78,7 @@ class NumberVerification {
             moreVc.cell(moreVc.receivedCodeCell, setHidden: true)
             moreVc.cell(moreVc.verifyPhoneCell, setHidden: true)
             
-            ErrorReport(viewController: responder).presentError("Success!", message: "Your phone number has been successfully verified, you may now post.", type: .Success)
+            ErrorReport(viewController: responder).presentError("Success!", message: "Your phone number has been successfully verified!", type: .Success)
         } else {
             let controller = UIAlertController(title: "Not Quite..", message: "The code you entered does not match the one we sent you, care to try again?", preferredStyle: .Alert)
             controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
@@ -94,7 +94,7 @@ class NumberVerification {
     }
     
     private func generateCode() -> String {
-        let alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let generation: NSMutableString = "";
         
         for _ in 1...5 {
