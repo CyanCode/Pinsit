@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8121.20" systemVersion="14E36b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E36b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8101.16"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -15,15 +14,15 @@
                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="100" id="2pu-N8-fAb"/>
-                        <constraint firstAttribute="width" constant="100" id="FJW-bk-UdW"/>
-                        <constraint firstAttribute="height" constant="100" id="WYb-Pu-eMu"/>
+                        <constraint firstAttribute="width" constant="75" id="9cX-Ry-0Q0"/>
+                        <constraint firstAttribute="height" constant="75" id="Rv7-Ge-7dT"/>
                         <constraint firstAttribute="width" constant="100" id="fQa-9y-j8c"/>
                     </constraints>
                     <variation key="default">
                         <mask key="constraints">
                             <exclude reference="2pu-N8-fAb"/>
-                            <exclude reference="FJW-bk-UdW"/>
-                            <exclude reference="WYb-Pu-eMu"/>
+                            <exclude reference="9cX-Ry-0Q0"/>
+                            <exclude reference="Rv7-Ge-7dT"/>
                             <exclude reference="fQa-9y-j8c"/>
                         </mask>
                     </variation>
@@ -36,17 +35,17 @@
                     <variation key="heightClass=regular-widthClass=compact">
                         <mask key="constraints">
                             <exclude reference="2pu-N8-fAb"/>
-                            <include reference="FJW-bk-UdW"/>
-                            <include reference="WYb-Pu-eMu"/>
+                            <include reference="9cX-Ry-0Q0"/>
+                            <include reference="Rv7-Ge-7dT"/>
                             <exclude reference="fQa-9y-j8c"/>
                         </mask>
                     </variation>
                 </imageView>
             </subviews>
-            <color key="backgroundColor" red="0.63921568630000003" green="0.74117647060000003" blue="0.78823529410000004" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="0.1843137255" green="0.22352941179999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstItem="x0Z-8U-si6" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="npX-ao-is0"/>
-                <constraint firstItem="x0Z-8U-si6" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="o1d-mh-cHW"/>
+                <constraint firstAttribute="centerY" secondItem="x0Z-8U-si6" secondAttribute="centerY" id="5Vr-MO-5JL"/>
+                <constraint firstAttribute="centerX" secondItem="x0Z-8U-si6" secondAttribute="centerX" id="ZAG-Wo-Iym"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
@@ -55,8 +54,8 @@
                     <exclude reference="x0Z-8U-si6"/>
                 </mask>
                 <mask key="constraints">
-                    <exclude reference="npX-ao-is0"/>
-                    <exclude reference="o1d-mh-cHW"/>
+                    <exclude reference="5Vr-MO-5JL"/>
+                    <exclude reference="ZAG-Wo-Iym"/>
                 </mask>
             </variation>
             <variation key="heightClass=regular-widthClass=compact">
@@ -64,8 +63,8 @@
                     <include reference="x0Z-8U-si6"/>
                 </mask>
                 <mask key="constraints">
-                    <include reference="npX-ao-is0"/>
-                    <include reference="o1d-mh-cHW"/>
+                    <include reference="5Vr-MO-5JL"/>
+                    <include reference="ZAG-Wo-Iym"/>
                 </mask>
             </variation>
             <point key="canvasLocation" x="548" y="455"/>
