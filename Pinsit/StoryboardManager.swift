@@ -11,10 +11,10 @@ import UIKit
 
 class StoryboardManager {
     class func segueRegistration(vc: UIViewController) {
-        let controller = LoginViewController()
-        controller.signUpController = SignUpViewController()
+        let board = UIStoryboard(name: "Registration", bundle: nil)
+        let initial = board.instantiateInitialViewController() as! UIViewController
         
-        vc.presentViewController(controller, animated: true, completion: nil)
+        vc.presentViewController(initial, animated: true, completion: nil)
     }
     
     class func segueMain(vc: UIViewController) {
