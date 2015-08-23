@@ -8,6 +8,8 @@
 
 import UIKit
 import AVFoundation
+import Parse
+import TSMessages
 
 class NewRecordingViewController: UIViewController {
     @IBOutlet var deleteRecordingButton: ToolbarButton!
@@ -46,6 +48,8 @@ class NewRecordingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        confirmEmailStatus()
         
         deleteRecordingButton.imageTintColor = UIColor.whiteColor()
         flipCameraButton.imageTintColor = UIColor.whiteColor()
@@ -133,6 +137,18 @@ class NewRecordingViewController: UIViewController {
             self.recordingView.stopCameraPreview()
             self.playbackView.playbackRecordedVideo()
         })
+    }
+    
+    private func confirmEmailStatus() {
+        if PFUser.currentUser()!["emailVerified"] as? NSNumber.BooleanLiteralType != true {
+            Email().isEmailVerified({ (confirmed) -> Void in
+                if !confirmed {
+                    ErrorReport(viewController: self).presentError("Watch Out", message: "Your phone and email must be verified before posting on Pinsit.  Confirm that they are in the \"More\" tab", type: TSMessageNotificationType.Warning)
+                }
+            })
+        } else if PFUser.currentUser()!["phone"] as? String == nil {
+            ErrorReport(viewController: self).presentError("Watch Out", message: "Your phone and email must be verified before posting on Pinsit.  Confirm that they are in the \"More\" tab", type: TSMessageNotificationType.Warning)
+        }
     }
 }
 
