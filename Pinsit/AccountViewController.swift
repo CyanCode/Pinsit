@@ -16,24 +16,28 @@ import Bolts
 import QuartzCore
 
 @IBDesignable class AccountViewController: UIViewController, UIGestureRecognizerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    
+    //MARK: Outlets
+    
     @IBOutlet var profileImage: UIImageView!
     @IBOutlet var usernameLabel: UILabel!
     @IBOutlet var profileActivity: UIActivityIndicatorView!
-    
     @IBOutlet var followingLabel: AccountInformationLabel!
     @IBOutlet var followerLabel: AccountInformationLabel!
     @IBOutlet var karmaLabel: AccountInformationLabel!
     
+    //MARK: Instance Variables
+    
     var user: String!
-    var locationManager: CLLocationManager!
     var detailManager: AccountDetails!
     var temporaryImg: UIImage?
-    var location: CLLocationCoordinate2D?
     var followTableView: FollowerQueryTableViewController {
         get {
             return self.childViewControllers.last as! FollowerQueryTableViewController
         }
     }
+    
+    //MARK: View loading
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,15 +51,14 @@ import QuartzCore
         
         loadInformation()
         prepareInterface()
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        AppDelegate.loginCheck(self)
         
         followTableView.username = user
         followTableView.loadObjects()
     }
     
+    /**
+    Readies the interface for username tapping and profile picture
+    */
     func prepareInterface() {
         if user == PFUser.currentUser()!.username! {
             let imageTap = UITapGestureRecognizer(target: self, action: Selector("profileTapped:"))
@@ -68,7 +71,11 @@ import QuartzCore
         }
     }
     
-    ///MARK: Information labels
+    //MARK: Information labels
+    
+    /**
+    Loads following, followers, and karma information for user
+    */
     func loadInformation() {
         let progress = JGProgressHUD(style: .Dark)
         progress.textLabel.text = "Loading"
@@ -84,6 +91,11 @@ import QuartzCore
         }
     }
     
+    /**
+    Sets default info labels as hidden or showing
+    
+    :param: hidden show or hide labels
+    */
     func setInfoHidden(hidden: Bool) {
         followingLabel.hidden = hidden
         followerLabel.hidden = hidden
@@ -110,7 +122,13 @@ import QuartzCore
         }
     }
     
-    ///MARK: Profile picture
+    //MARK: Profile picture
+    
+    /**
+    Profile picture tap gesture
+    
+    :param: gesture gesture recognizer
+    */
     func profileTapped(gesture: UITapGestureRecognizer) {
         let controller = UIAlertController(title: "Change Profile Picture", message: "", preferredStyle: .ActionSheet)
         
@@ -125,6 +143,11 @@ import QuartzCore
         self.presentViewController(controller, animated: true, completion: nil)
     }
     
+    /**
+    Sets the picture location for the profile
+    
+    :param: type image location type
+    */
     func profileWithType(type: UIImagePickerControllerSourceType) {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -133,6 +156,8 @@ import QuartzCore
         
         presentViewController(picker, animated: true, completion: nil)
     }
+    
+    //MARK: Image picker delegate
     
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         uploadNewProfile(image)
@@ -143,6 +168,11 @@ import QuartzCore
         picker.dismissViewControllerAnimated(false, completion: nil)
     }
     
+    /**
+    Upload a new profile picture to the server then cache
+    
+    :param: img image to save
+    */
     func uploadNewProfile(img: UIImage!) {
         let file = PFFile(data: UIImagePNGRepresentation(img.resize(CGSizeMake(100, 100)))!)
         let user = PFUser.currentUser()!
@@ -166,6 +196,11 @@ import QuartzCore
         }
     }
     
+    /**
+    Changes the profile image displayed in the imageView
+    
+    :param: editing if editing or not
+    */
     func changeProfileImage(editing: Bool) {
         if editing == true {
             temporaryImg = profileImage.image!
@@ -179,13 +214,13 @@ import QuartzCore
         }
     }
     
-    ///Status bar
+    //MARK: Status bar color
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }
 }
 
-///Designable circular profile picture
+/// Designable ImageView
 @IBDesignable class ExtendedImageView: UIImageView {
     @IBInspectable var cornerRadius: CGFloat = 0 {
         didSet {
@@ -205,6 +240,7 @@ import QuartzCore
     }
 }
 
+/// Information Label for Account View Controller
 class AccountInformationLabel: UILabel {
     var oldFont: UIFont?
     var alreadySelected: Bool = false
@@ -227,8 +263,8 @@ class AccountInformationLabel: UILabel {
     }
 }
 
+/// Query TableViewCell for Account Table View
 class AccountQueryCell: PFTableViewCell {
     @IBOutlet var usernameLabel: UILabel!
-    @IBOutlet var karmaLabel: UILabel!
     @IBOutlet var profileImage: FollowerImageView!
 }

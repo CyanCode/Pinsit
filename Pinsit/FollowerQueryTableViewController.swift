@@ -12,56 +12,70 @@ import ParseUI
 import AsyncImageView
 import DZNEmptyDataSet
 
-@IBDesignable class FollowerQueryTableViewController: PFQueryTableViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+@IBDesignable class FollowerQueryTableViewController: QueryTableViewController, QueryTableViewControllerDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     let identifier = "AccountQueryCell"
     var queryType: FollowerQuerySearchType = .Following
     var username = ""
     
-    override convenience init(style: UITableViewStyle, className: String?) {
-        self.init(style: style, className: className)
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
         self.tableView.emptyDataSetDelegate = self
         self.tableView.emptyDataSetSource = self
         
         self.tableView.separatorColor = UIColor.whiteColor()
-        self.tableView.backgroundView = nil
-        self.tableView.backgroundColor = UIColor(string: "#35A5D4")
-        //self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        self.tableView.backgroundColor = UIColor(string: "#2F394E")
+        self.tableView.tableFooterView = UIView(frame: CGRectZero)
+        
+        loadObjects()
     }
     
-    override func queryForTable() -> PFQuery {
+    override func queryForTableView() -> PFQuery {
         if queryType == .Following {
+            super.loadFromArrayColumn = "following"
             let query = PFQuery(className: "Followers")
             query.whereKey("username", equalTo: username)
-            query.selectKeys(["following"])
-            query.whereKeyExists("following")
             
             return query
         } else {
+            super.loadFromArrayColumn = nil
             let query = PFQuery(className: "Followers")
             query.whereKey("following", equalTo: username)
-            query.includeKey("following")
-
+            
             return query
         }
     }
     
-    override func objectsDidLoad(error: NSError?) {
-        super.objectsDidLoad(error)
+    override func objectsDidLoadSuccessfully() {
+        tableView.reloadEmptyDataSet()
+    }
+    
+    override func objectsDidFailToLoad(error: NSError?) {
         tableView.reloadEmptyDataSet()
     }
     
     override func objectsWillLoad() {
-        super.objectsWillLoad()
         tableView.reloadEmptyDataSet()
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath, object: PFObject?) -> PFTableViewCell? {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath, content: AnyObject) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(identifier) as! AccountQueryCell
-        let followerObject = object as! PFFollowers
-
-        cell.usernameLabel.text = followerObject.username
+        let username = content as! String
+        
+        cell.usernameLabel.text = username
+        cell.profileImage.username = username
         cell.profileImage.image = UIImage(named: "profile")
-        cell.profileImage.username = followerObject.username
+        cell.profileImage.loadUserImage()
+        
+        return cell
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath, object: PFObject) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCellWithIdentifier(identifier) as! AccountQueryCell
+        let following = object as! PFFollowers
+        
+        cell.usernameLabel.text = following.username
+        cell.profileImage.username = following.username
+        cell.profileImage.image = UIImage(named: "profile")
         cell.profileImage.loadUserImage()
         
         return cell
@@ -75,12 +89,18 @@ import DZNEmptyDataSet
         (view as! UITableViewHeaderFooterView).contentView.backgroundColor = UIColor(string: "#35A5D4")
     }
     
+    override func tableView(tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return UIView(frame: CGRectZero)
+    }
+    
+    //MARK: Empty dataset
+    
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let text = queryType == .Following ? "\(username) isn't following anyone yet!" : "\(username) has no followers yet!  You could change that.."
         
-        let attr = NSMutableAttributedString(string: "Sadly, \(username) has no followers yet!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 24)!])
+        let attr = NSMutableAttributedString(string: "Sadly, \(username) has no followers yet!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 16)!])
         attr.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(text)))
-
+        
         return attr
     }
     

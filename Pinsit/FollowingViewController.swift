@@ -13,6 +13,7 @@ import DZNEmptyDataSet
 
 class FollowingViewController: UIViewController, UISearchBarDelegate {
     @IBOutlet var searchBar: UISearchBar!
+    
     var followerController: FollowingQueryTableViewController {
         get {
             return self.childViewControllers[0] as! FollowingQueryTableViewController
@@ -41,14 +42,19 @@ class FollowingViewController: UIViewController, UISearchBarDelegate {
     }
 }
 
-class FollowingQueryTableViewController: PFQueryTableViewController, DZNEmptyDataSetDelegate, DZNEmptyDataSetSource {
+class FollowingQueryTableViewController: QueryTableViewController, DZNEmptyDataSetDelegate, DZNEmptyDataSetSource {
     let identifier = "FollowingTableViewCell"
     var followerCache = FollowerCache()
     var query: PFQuery?
     var searchQuery: Bool = false
     var awaitingReload: Bool = false
+    var tappedUser = ""
+    
+    //MARK: Overrides
     
     override func viewDidLoad() {
+        super.viewDidLoad()
+        
         followerCache.updateCache()
         loadObjects()
         
@@ -57,20 +63,25 @@ class FollowingQueryTableViewController: PFQueryTableViewController, DZNEmptyDat
         tableView.emptyDataSetSource = self
     }
     
-    override func queryForTable() -> PFQuery {
+    override func objectsDidFailToLoad(error: NSError?) {
+        tableView.reloadEmptyDataSet()
+    }
+    
+    override func objectsDidLoadSuccessfully() {
+        tableView.reloadEmptyDataSet()
+    }
+    
+    override func queryForTableView() -> PFQuery {
         if !searchQuery {
+            super.loadFromArrayColumn = "following"
+            
             query = PFQuery(className: "Followers")
             query?.whereKey("username", equalTo: PFUser.currentUser()!.username!)
-            query?.whereKeyExists("following")
-            query?.includeKey("following")
+        } else {
+            super.loadFromArrayColumn = nil
         }
         
         return query!
-    }
-    
-    override func objectsDidLoad(error: NSError?) {
-        super.objectsDidLoad(error)
-        tableView.reloadEmptyDataSet()
     }
     
     override func objectsWillLoad() {
@@ -89,38 +100,61 @@ class FollowingQueryTableViewController: PFQueryTableViewController, DZNEmptyDat
         return 62
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath, object: PFObject?) -> PFTableViewCell? {
-        let cell = tableView.dequeueReusableCellWithIdentifier(identifier) as! FollowingTableViewCell
-        followerCache = FollowerCache() //Refresh cache each time
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath, content: AnyObject) -> UITableViewCell {
+        let username = content as! String
+        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as! FollowingTableViewCell
         
-        if searchQuery {
-            let followerObject = object as! PFFollowers
-            
-            cell.usernameLabel.text = followerObject.username
-            cell.profileImage.username = followerObject.username
-            cell.addFollowerButton.hidden = followerCache.isFollowing(followerObject.username)
-            
-            awaitingReload = true
-        } else {
-            let followerObject = object as! PFFollowers
-            
-            cell.usernameLabel.text = followerObject.following![indexPath.row] as? String
-            cell.profileImage.username = followerObject.following![indexPath.row] as? String
-            cell.addFollowerButton.hidden = followerCache.isFollowing(followerObject.following![indexPath.row] as! String)
-        }
+        cell.usernameLabel.text = username
+        cell.profileImage.username = username
+        cell.addFollowerButton.hidden = FollowerCache().isFollowing(username)
         
-        //Add gesture recognizer
+        self.finishPreparingCell(&cell)
+        
+        return cell
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath, object: PFObject) -> UITableViewCell {
+        var cell = tableView.dequeueReusableCellWithIdentifier(identifier) as! FollowingTableViewCell
+        let followerObject = object as! PFFollowers
+        
+        cell.usernameLabel.text = followerObject.username
+        cell.profileImage.username = followerObject.username
+        cell.addFollowerButton.hidden = followerCache.isFollowing(followerObject.username)
+        
+        FollowerCache() //Refresh cache
+        self.finishPreparingCell(&cell)
+        
+        return cell
+    }
+    
+    private func finishPreparingCell(inout cell: FollowingTableViewCell) {
+        //Add gesture recognizers
         if cell.gestureRecognizers == nil || cell.gestureRecognizers!.count == 0 {
-            let press = UILongPressGestureRecognizer(target: self, action: "cellLongPress:")
+            let press = UITapGestureRecognizer(target: self, action: "cellPressed:")
+            let longPress = UILongPressGestureRecognizer(target: self, action: "cellLongPress:")
+            
+            cell.addGestureRecognizer(longPress)
             cell.addGestureRecognizer(press)
         }
         
         cell.profileImage.image = UIImage(named: "profile")
         cell.profileImage.loadUserImage()
         cell.separatorInset = UIEdgeInsetsZero
-        
-        return cell
     }
+    
+    //MARK: ViewController override
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "account" {
+            (segue.destinationViewController as! AccountViewController).user = tappedUser
+        }
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
+    
+    //MARK: Empty dataset
     
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         var text: NSMutableAttributedString!
@@ -140,6 +174,13 @@ class FollowingQueryTableViewController: PFQueryTableViewController, DZNEmptyDat
         return true
     }
     
+    //MARK: Cell gestures
+    
+    func cellPressed(gesture: UIGestureRecognizer) {
+        self.tappedUser = (gesture.view as! FollowingTableViewCell).usernameLabel.text!
+        self.performSegueWithIdentifier("account", sender: self)
+    }
+    
     func cellLongPress(gesture: UIGestureRecognizer) {
         let cell = gesture.view as! FollowingTableViewCell
         
@@ -154,6 +195,8 @@ class FollowingQueryTableViewController: PFQueryTableViewController, DZNEmptyDat
             self.presentViewController(confirmation, animated: true, completion: nil)
         }
     }
+    
+    //MARK: Buttons
     
     @IBAction func addButtonPressed(sender: UIButton) {
         let path = tableView.indexPathForRowAtPoint(sender.convertPoint(CGPointZero, toView: tableView))
