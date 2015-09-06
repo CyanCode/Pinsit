@@ -17,6 +17,7 @@ pod 'StaticDataTableViewController'
 pod 'AsyncImageView'
 pod 'DZNEmptyDataSet'
 pod 'VIMVideoPlayer'
+pod 'INSPullToRefresh'
 
 #Parse Dependencies
 pod 'Parse', '>= 1.8.1'
