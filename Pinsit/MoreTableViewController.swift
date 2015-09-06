@@ -38,6 +38,8 @@ import Parse
         self.manager.enableRequiredCells()
     }
     
+    //MARK: Buttons
+    
     @IBAction func upgradePressed(sender: AnyObject) {
         Upgrade().startPurchase(self) { () -> Void in
             if Upgrade().isUpgraded() {
@@ -70,8 +72,14 @@ import Parse
         manager.deleteAccount()
     }
     
+    //MARK: overrides
+    
     override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         (view as! UITableViewHeaderFooterView).textLabel.textColor = headerTextColor
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
     }
 }
 

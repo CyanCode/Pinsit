@@ -14,9 +14,9 @@ import TSMessages
 class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate, UITextFieldDelegate {
     @IBOutlet var videoView: ExpandedVideoView!
     @IBOutlet var commentsView: AnimateUpwardsView!
-    @IBOutlet var textField: TextLimitTextField!
     @IBOutlet var limitLabel: UILabel!
     @IBOutlet var usernameButton: UIButton!
+    @IBOutlet var textField: UITextField!
     
     var videoObject: PFSentData!
     private var dataHandler: PinVideoData!
@@ -28,6 +28,8 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate, 
         }
     }
     
+    //MARK: View loading
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,10 +38,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate, 
         
         self.startPlaying()
         self.dataHandler = PinVideoData(viewController: self)
-        self.usernameButton.titleLabel?.text = videoObject.username
-        
-        self.textField.delegate = self
-        self.textField.limitLabel = limitLabel
+        self.usernameButton.setTitle(videoObject.username, forState: .Normal)
         
         videoView.adjustGravityOnResize(manager.layer)
         commentController.videoId = videoObject.objectId!
@@ -67,6 +66,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate, 
     }
     
     ///MARK: Actions
+    
     var showingComments = false
     @IBAction func showCommentsButton(sender: UIButton) {
         if commentsView.hidden { //Reveal UIView but send to bottom
@@ -122,9 +122,9 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate, 
     }
     
     @IBAction func postCommentPressed(sender: UIButton) {
-        if count(textField.text) > 0 && count(textField.text) <= 300 {
+        if count(textField.text) > 0 {
             let comment = PFComments()
-            comment.username = videoObject.username
+            comment.username = PFUser.currentUser()!.username!
             comment.videoId = videoObject.objectId!
             comment.comment = textField.text
             
@@ -135,10 +135,8 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate, 
                     self.commentController.loadObjects()
                 }
             })
-        } else if count(textField.text) == 0 {
-            ErrorReport(viewController: self).presentError("Missing Something?", message: "You need to add some text before you post a comment!", type: .Error)
         } else {
-            ErrorReport(viewController: self).presentError("Bit Wordy..", message: "Comments cannot exede 300 characters!  Try rewording it.", type: .Error)
+            ErrorReport(viewController: self).presentError("Missing Something?", message: "You need to add some text before you post a comment!", type: .Error)
         }
     }
     
@@ -165,34 +163,21 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate, 
         }
     }
     
-    ///MARK: Textfield delegate
-    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
-        if range.length + range.location > count(textField.text) {
-            return false
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "accountSegue" {
+            let vc = segue.destinationViewController as! AccountViewController
+            vc.user = videoObject.username
         }
-        
-        let length = count(textField.text) + count(string) - range.length
-        self.textField.limitLabel.text = "\(self.textField.characterLimit - length)"
-        
-        if length > self.textField.characterLimit {
-            self.textField.limitLabel.textColor = self.textField.incorrectLengthColor
-        } else {
-            self.textField.limitLabel.textColor = self.textField.correctLengthColor
-        }
-        
-        return true
     }
+    
+    //MARK: Status bar
     
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "accountSegue" {
-            let vc = segue.destinationViewController as! AccountViewController
-            vc.user = videoObject.username
-            vc.location = videoObject.location.coordinate
-        }
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
     }
 }
 

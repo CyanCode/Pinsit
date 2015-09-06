@@ -37,14 +37,17 @@ class CommentsViewController: PFQueryTableViewController, DZNEmptyDataSetDelegat
         super.objectsWillLoad()
     }
     
-    ///MARK: Tableview
+    //MARK: Tableview
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath, object: PFObject?) -> PFTableViewCell? {
         let cell = tableView.dequeueReusableCellWithIdentifier(identifier) as! CommentsTableViewCell
+        let comment = object! as! PFComments
         
-        cell.username = object!["username"] as! String
-        cell.profileImage.username = object!["username"] as! String
-        cell.commentLabel.text = object!["comment"] as? String
+        cell.username = comment.username
+        cell.profileImage.username = comment.username
+        cell.commentLabel.text = comment.username + ": " + comment.comment
+        
+        cell.profileImage.loadUserImage()
         
         return cell
     }
