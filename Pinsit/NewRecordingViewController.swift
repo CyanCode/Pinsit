@@ -42,6 +42,12 @@ class NewRecordingViewController: UIViewController {
                 toggleTorchButton.enabled = true
                 recordingButton.selected = false
                 recordingButton.displayCheck = false
+            case .Disabled:
+                deleteRecordingButton.enabled = false
+                flipCameraButton.enabled = false
+                toggleTorchButton.enabled = false
+                recordingButton.selected = false
+                recordingButton.displayCheck = false
             }
         }
     }
@@ -62,8 +68,13 @@ class NewRecordingViewController: UIViewController {
         status = .Inactive
         if status == .Playback { playbackView.playbackRecordedVideo() }
         if status == .Inactive {
-            recordingView.recording.startSession({ () -> Void in
-                self.recordingView.startCameraPreview()
+            recordingView.recording.startSession({ (success) -> Void in
+                if success {
+                    self.recordingView.startCameraPreview()
+                } else {
+                    self.status = .Disabled
+                    ErrorReport(viewController: self).presentWithType(.CaptureSession)
+                }
             })
         }
     }
@@ -150,12 +161,17 @@ class NewRecordingViewController: UIViewController {
             ErrorReport(viewController: self).presentError("Watch Out", message: "Your phone and email must be verified before posting on Pinsit.  Confirm that they are in the \"More\" tab", type: TSMessageNotificationType.Warning)
         }
     }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
+    }
 }
 
 enum RecordingViewStatus {
     case Recording
     case Playback
     case Inactive
+    case Disabled
 }
 
 enum ActiveView {

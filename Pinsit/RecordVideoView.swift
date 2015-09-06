@@ -14,15 +14,16 @@ class RecordVideoView: UIView, AVCaptureFileOutputRecordingDelegate {
     var recordingSaved: RecordingSavedHandler?
     var recording: RecordingSession!
     var preview: AVCaptureVideoPreviewLayer?
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         recording = RecordingSession()
-        recording.startSession { () -> Void in }
+        recording.startSession { (success) -> Void in }
     }
     
     func startCameraPreview() {
-        recording.startSession { () -> Void in
+        recording.startSession { (success) -> Void in
             self.preview = AVCaptureVideoPreviewLayer(session: self.recording.session)
             self.preview!.videoGravity = AVLayerVideoGravityResizeAspectFill
             self.preview!.frame = self.bounds
@@ -71,7 +72,9 @@ class RecordingSession {
     
     var deviceOutput: AVCaptureMovieFileOutput!
     
-    func startSession(ready: () -> Void) {
+    func startSession(ready: (success: Bool) -> Void) {
+        var startSuccess: Bool = true
+        
         if session == nil {
             session = AVCaptureSession()
             
@@ -86,24 +89,26 @@ class RecordingSession {
                 self.deviceOutput = AVCaptureMovieFileOutput()
                 
                 if error != nil {
-                    fatalError("Failed to start capture session")
+                    println("Session unable to start.  Printing error description")
+                    println(error!.localizedDescription)
+                    
+                    startSuccess = false
+                } else {
+                    if self.session!.canAddInput(self.videoInput) {
+                        self.session!.addInput(self.videoInput)
+                    }; if self.session!.canAddInput(self.audioInput) {
+                        self.session!.addInput(self.audioInput)
+                    }; if self.session!.canAddOutput(self.deviceOutput) {
+                        self.session!.addOutput(self.deviceOutput)
+                    }
+                    
+                    self.session!.startRunning()
                 }
-                
-                if self.session!.canAddInput(self.videoInput) {
-                    self.session!.addInput(self.videoInput)
-                }; if self.session!.canAddInput(self.audioInput) {
-                    self.session!.addInput(self.audioInput)
-                }; if self.session!.canAddOutput(self.deviceOutput) {
-                    self.session!.addOutput(self.deviceOutput)
-                }
-                
-                self.session!.startRunning()
-                
                 }.main {
-                    ready()
+                    ready(success: startSuccess)
             }
         } else {
-            ready()
+            ready(success: true)
         }
     }
     
@@ -139,7 +144,7 @@ class RecordingSession {
             videoInput = AVCaptureDeviceInput(device: videoDevice, error: &error)
             
             if error == nil {
-            session!.addInput(videoInput)
+                session!.addInput(videoInput)
             } else {
                 println("Could not add capture device: \(error!.localizedDescription)")
             }
@@ -154,7 +159,7 @@ class RecordingSession {
         if (device.hasTorch) {
             var error: NSError?
             device.lockForConfiguration(&error)
-
+            
             if error != nil {
                 return
             }

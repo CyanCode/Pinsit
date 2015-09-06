@@ -32,6 +32,7 @@ class ErrorReport {
         case .Phone: presentError("Verify Phone", message: "Your phone number must be verified before you can post videos, do so through Settings", type: .Error)
         case .Username: presentError("Too Short", message: "Your username must be atleast 5 characters long!", type: .Warning)
         case .Password: presentError("Too Short", message: "Your password must be atleast 6 characters long!", type: .Warning)
+        case .CaptureSession: presentError("Capture Error", message: "Your device doesn't support recording, please try on a device with a camera!", type: .Error)
         }
     }
 }
@@ -43,4 +44,6 @@ enum ErrorReportType {
     
     case Username
     case Password
+    
+    case CaptureSession
 }
