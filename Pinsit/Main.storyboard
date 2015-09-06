@@ -25,7 +25,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U5n-Bs-zh5" userLabel="Container" customClass="RecordingView" customModule="Pinsit" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U5n-Bs-zh5" userLabel="Container">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MGF-c6-TA3" userLabel="Playback" customClass="PlaybackRecordingView" customModule="Pinsit" customModuleProvider="target">
@@ -34,7 +34,7 @@
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Tl-r9-2Ip" userLabel="Recording" customClass="RecordVideoView" customModule="Pinsit" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     </view>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hGe-rL-XIQ" customClass="RecordingButton" customModule="Pinsit" customModuleProvider="target">
                                         <rect key="frame" x="-23" y="-15" width="46" height="30"/>
@@ -614,7 +614,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </textField>
                                         </subviews>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                        <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstItem="car-dz-Vgs" firstAttribute="leading" secondItem="hCd-Fu-5g9" secondAttribute="trailing" constant="8" id="5a7-ba-8Yt"/>
                                             <constraint firstAttribute="bottom" secondItem="2zS-uS-263" secondAttribute="bottom" constant="13" id="Ffe-6w-t9B">
@@ -2043,12 +2043,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TUx-Cc-vVf">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <connections>
-                                    <segue destination="ufe-yS-OSp" kind="embed" id="OKI-Cq-FBh"/>
-                                </connections>
-                            </containerView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nHb-vg-7h7">
                                 <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                 <color key="backgroundColor" red="0.1843137255" green="0.22352941179999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -2431,6 +2425,12 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TUx-Cc-vVf">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <connections>
+                                    <segue destination="ufe-yS-OSp" kind="embed" id="OKI-Cq-FBh"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -2447,9 +2447,9 @@
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
-                                <exclude reference="TUx-Cc-vVf"/>
                                 <exclude reference="nHb-vg-7h7"/>
                                 <exclude reference="OIj-Uq-qua"/>
+                                <exclude reference="TUx-Cc-vVf"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="a4B-QT-9E8"/>
@@ -2466,9 +2466,9 @@
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
-                                <include reference="TUx-Cc-vVf"/>
                                 <include reference="nHb-vg-7h7"/>
                                 <include reference="OIj-Uq-qua"/>
+                                <include reference="TUx-Cc-vVf"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="a4B-QT-9E8"/>
@@ -2664,10 +2664,13 @@
                             <outlet property="delegate" destination="rrE-C6-adJ" id="ajE-i1-P2Q"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <segue destination="8um-kE-ekI" kind="showDetail" identifier="account" id="xJn-of-hw0"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Yx3-sk-Xa5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="726" y="872"/>
+            <point key="canvasLocation" x="852" y="872"/>
         </scene>
         <!--Follower Query Table View Controller-->
         <scene sceneID="gY2-1l-EHG">
@@ -2792,25 +2795,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6PO-Du-xbp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1521" y="27.5"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="oA3-O7-aBz">
-            <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="UJk-ag-Kgc" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="QW9-a4-8bR"/>
-                        <viewControllerLayoutGuide type="bottom" id="VpI-Qc-fOY"/>
-                    </layoutGuides>
-                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="9Kc-Am-pi5">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <toolbarItems/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="EKh-xU-hDG" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
+            <point key="canvasLocation" x="1506" y="27.5"/>
         </scene>
     </scenes>
     <resources>
@@ -2836,6 +2821,6 @@
         <image name="settings.png" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="pla-My-LgL"/>
+        <segue reference="xJn-of-hw0"/>
     </inferredMetricsTieBreakers>
 </document>
