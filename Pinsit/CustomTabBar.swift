@@ -17,8 +17,8 @@ class CustomTabBar: UITabBarController {
         tabBar.tintColor = UIColor.whiteColor()
         
         //Unselected image color
-        for item in tabBar.items! as! [UITabBarItem] {
-            item.image = item.selectedImage.imageWithColor(UIColor(string: "#7E827A")).imageWithRenderingMode(.AlwaysOriginal)
+        for item in tabBar.items! {
+            item.image = item.selectedImage!.imageWithColor(UIColor(string: "#7E827A")).imageWithRenderingMode(.AlwaysOriginal)
         }
                 
         UITabBarItem.appearance().setTitleTextAttributes([NSForegroundColorAttributeName : UIColor(string: "#7E827A")], forState: .Normal)

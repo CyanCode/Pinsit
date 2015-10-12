@@ -12,35 +12,36 @@ import UIKit
 
 class Image {
     func generateThumbnail() -> UIImage {
-        var error: NSError?
         let asset = AVURLAsset(URL: self.videoPath(), options: nil)
         let ima = AVAssetImageGenerator(asset: asset)
         ima.appliesPreferredTrackTransform = true
         
         let time = CMTimeMake(0, 60)
-        var imgRef: CGImage = ima.copyCGImageAtTime(time, actualTime: nil, error: &error)
+        var imgRef: CGImage?
         
-        if error != nil {
-            print("Error generating thumbnail\n \(error!.localizedDescription)")
+        do {
+            imgRef = try ima.copyCGImageAtTime(time, actualTime: nil)
+        } catch let error {
+            print("Error generating thumbnail: \(error)")
         }
         
-        return self.resizeImg(imgRef, size: 30)
+        return imgRef != nil ? self.resizeImg(imgRef!, size: 30) : UIImage()
     }
     
     func generateVideoImage() -> UIImage {
-        var error: NSError?
         let asset = AVURLAsset(URL: self.videoPath(), options: nil)
         let ima = AVAssetImageGenerator(asset: asset)
         ima.appliesPreferredTrackTransform = true
         
         let time = CMTimeMake(0, 60)
-        let imgRef: CGImage = ima.copyCGImageAtTime(time, actualTime: nil, error: &error)
-        
-        if error != nil {
-            print("Error generating video image\n \(error!.localizedDescription)")
+        var imgRef: CGImage?
+        do {
+            imgRef = try ima.copyCGImageAtTime(time, actualTime: nil)
+        } catch let error{
+            print("Error generating video image: \(error)")
         }
         
-        return self.resizeImg(imgRef, size: 600)
+        return imgRef != nil ? self.resizeImg(imgRef!, size: 30) : UIImage()
     }
     
     private func resizeImg(imgRef: CGImageRef, size: Int32) -> UIImage {
@@ -48,7 +49,7 @@ class Image {
         let rect = CGRectMake(0, 0, CGFloat(size), CGFloat(size))
         
         UIGraphicsBeginImageContext(rect.size)
-        image!.drawInRect(rect)
+        image.drawInRect(rect)
         let sizedImg = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
@@ -62,6 +63,6 @@ class Image {
         let videoInput = NSTemporaryDirectory() + "output.mov"
         let videoURL = NSURL.fileURLWithPath(videoInput)
         
-        return videoURL!
+        return videoURL
     }
 }

@@ -18,7 +18,7 @@ class TOSViewController: UIViewController {
     }
     var identifier = ""
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         self.agreement = .TOS
         super.init(coder: aDecoder)
     }
@@ -51,7 +51,7 @@ class TOSViewController: UIViewController {
     
     func loadPolicyFile(name: String) -> NSAttributedString {
         let rtf = NSBundle.mainBundle().URLForResource(name, withExtension: "rtf")
-        return NSAttributedString(fileURL: rtf!, options: [NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType], documentAttributes: nil, error: nil)!
+        return try! NSAttributedString(fileURL: rtf!, options: [NSDocumentTypeDocumentAttribute:NSRTFTextDocumentType], documentAttributes: nil)
     }
     
     override func prefersStatusBarHidden() -> Bool {

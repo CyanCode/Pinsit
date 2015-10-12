@@ -8,6 +8,7 @@
 
 import Foundation
 import Parse
+import Async
 
 ///Used for deleting the currentUser from the Pinsit database
 class DeleteAccount {
@@ -31,19 +32,18 @@ class DeleteAccount {
             let verificationQuery = PFQuery(className: "Verification").whereKey("username", equalTo: username)
             let followerQuery = PFQuery(className: "Followers").whereKey("following", equalTo: username)
             let followingQuery = PFQuery(className: "Followers").whereKey("username", equalTo: username)
-            var error: NSError?
             
-            PFUser.currentUser()!.delete(&error)
-            likesQuery.findAndDeleteObjects()
-            videoQuery.findAndDeleteObjects()
-            verificationQuery.findAndDeleteObjects()
-            followingQuery.findAndDeleteObjects()
-            self.handleFollowerObjects(followerQuery.findObjects() as? [PFFollowers])
-            
-            if error != nil {
-                Async.main { done(success: false) }
-            } else {
+            do {
+                try PFUser.currentUser()!.delete()
+                likesQuery.findAndDeleteObjects()
+                videoQuery.findAndDeleteObjects()
+                verificationQuery.findAndDeleteObjects()
+                followingQuery.findAndDeleteObjects()
+                try self.handleFollowerObjects(followerQuery.findObjects() as? [PFFollowers])
+                
                 Async.main { done(success: true) }
+            } catch {
+                Async.main { done(success: false) }
             }
         }
     }
@@ -63,28 +63,30 @@ class DeleteAccount {
         }
         
         Async.background {
-            var error: NSError?
             PFUser.logOut()
             
-            PFUser.logInWithUsername(username, password: password, error: &error)
-            PFUser.logOut()
-            PFUser.become(session, error: &error)
-            
-            //Error
-            if error != nil {
-                if error!.code == PFErrorCode.ErrorConnectionFailed.rawValue {
+            do {
+                try PFUser.logInWithUsername(username, password: password)
+                PFUser.logOut()
+                try PFUser.become(session)
+            } catch let error as NSError {
+                if error.code == PFErrorCode.ErrorConnectionFailed.rawValue {
                     RegistrationAlerts(vc: self.viewController).connectionIssue()
                 } else {
                     RegistrationAlerts(vc: self.viewController).loginFailure()
                 }
                 
-                PFUser.become(session)
+                do {
+                    try PFUser.become(session)
+                } catch {
+                    fatalError("Failed to re-become currentUser.. login required")
+                }
+                
                 Async.main { done(success: false) }
             }
             
             Async.main { done(success: true) }
         }
-        
     }
     
     private func handleFollowerObjects(objects: [PFFollowers]?) {
@@ -98,7 +100,11 @@ class DeleteAccount {
         }
         
         if toSave.count > 0 {
-            PFObject.saveAll(toSave)
+            do {
+            try PFObject.saveAll(toSave)
+            } catch let error {
+                print("Failed to save follwer objects: \(error)")
+            }
         }
     }
     
@@ -106,9 +112,5 @@ class DeleteAccount {
         let controller = UIAlertController(title: "Account Failed to Delete", message: "Your Pinsit account could not be deleted, please check your connection and try again.", preferredStyle: .Alert)
         controller.addAction(UIAlertAction(title: "Okay", style: .Cancel, handler: nil))
         viewController.presentViewController(controller, animated: true, completion: nil)
-    }
-    
-    private func loginFailure() {
-        
     }
 }

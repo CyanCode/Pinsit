@@ -22,15 +22,19 @@ class Stream {
     }
     
     func writeVideo() {
-        let vidPath = File.getVideoPathString()
+        let vidPath = File.getVideoPathURL().path!
         let fManager = NSFileManager.defaultManager()
         
         if (fManager.fileExistsAtPath(vidPath as String)) {
             var error: NSError?
-            fManager.removeItemAtPath(vidPath as String, error: &error)
+            do {
+                try fManager.removeItemAtPath(vidPath as String)
+            } catch let error1 as NSError {
+                error = error1
+            }
             
             if error != nil {
-                print("Error removing video file \(error!.localizedDescription)")
+                print("Error removing video file \(error!.localizedDescription)", terminator: "")
             }
         }
         
@@ -39,18 +43,21 @@ class Stream {
     }
     
     func writeVideoFromCache() {
-        let vidPath = File.getVideoPathString()
+        let vidPath = File.getVideoPathURL().path!
         let fManager = NSFileManager.defaultManager()
         
         if (fManager.fileExistsAtPath(vidPath as String)) {
-            var error: NSError?
-            fManager.removeItemAtPath(vidPath as String, error: &error)
-            
-            if error != nil {
-                print("Error removing video file \(error!.localizedDescription)")
+            do {
+                try fManager.removeItemAtPath(vidPath as String)
+            } catch let error {
+                print("Could not remove file at path '\(vidPath) error: \(error)")
             }
         }
         
-        annotation.object.video.getData()!.writeToFile(vidPath as String, atomically: true)
+        do {
+            try annotation.object.video.getData().writeToFile(vidPath as String, atomically: true)
+        } catch let error {
+            print("Failed to write video from cache: \(error)")
+        }
     }
 }

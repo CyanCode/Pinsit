@@ -165,7 +165,7 @@ class FollowingQueryTableViewController: QueryTableViewController, DZNEmptyDataS
             text = NSMutableAttributedString(string: "You aren't following any users!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 15)!])
         }
         
-        text.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(text.string)))
+        text.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, text.string.characters.count))
         
         return text
     }
@@ -211,6 +211,6 @@ class FollowingQueryTableViewController: QueryTableViewController, DZNEmptyDataS
 
 class FollowingTableViewCell: PFTableViewCell {
     @IBOutlet var usernameLabel: UILabel!
-    @IBOutlet var profileImage: FollowerImageView!
+    var profileImage: FollowerImageView!
     @IBOutlet var addFollowerButton: UIButton!
 }

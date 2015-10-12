@@ -29,14 +29,14 @@ class RecoverAccount {
         }
         controller.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: nil))
         controller.addAction(UIAlertAction(title: "Verify", style: .Default, handler: { (action) -> Void in
-            let text = (controller.textFields![0] as! UITextField).text
+            let text = (controller.textFields![0] ).text
             PFUser.currentUser()!.email = text
             
-            var regex = ".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
-            var test = NSPredicate(format:"SELF MATCHES \(regex)");
+            let regex = ".+@([A-Za-z0-9]+\\.)+[A-Za-z]{2}[A-Za-z]*";
+            let test = NSPredicate(format:"SELF MATCHES \(regex)");
             
             if test.evaluateWithObject(text) {
-                self.sendRecoveryEmail(text, done: { (error) -> Void in
+                self.sendRecoveryEmail(text!, done: { (error) -> Void in
                     if error != nil {
                         ErrorReport(viewController: self.viewController).presentError("Uh Oh..", message: "We were unable to send you a verification email, check your connection and try again!", type: .Error)
                     } else {

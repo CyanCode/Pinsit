@@ -16,15 +16,13 @@ class ExpandedVideoView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
-    required init(coder aDecoder: NSCoder) {
+
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        
-        //self.addHoldGesture()
     }
     
     private func adjustSublayers() {
-        for layer in self.layer.sublayers! as! [CALayer] {
+        for layer in self.layer.sublayers! {
             layer.frame = self.frame
         }
     }

@@ -122,7 +122,7 @@ class TappedVideoViewController: UIViewController, UIGestureRecognizerDelegate, 
     }
     
     @IBAction func postCommentPressed(sender: UIButton) {
-        if count(textField.text) > 0 {
+        if textField.text!.characters.count > 0 {
             let comment = PFComments()
             comment.username = PFUser.currentUser()!.username!
             comment.videoId = videoObject.objectId!

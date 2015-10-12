@@ -9,6 +9,7 @@
 import UIKit
 import MapKit
 import Parse
+import Async
 
 class MapControl: NSObject {
     var currentMap: MapViewController!
@@ -39,11 +40,13 @@ class MapControl: NSObject {
         
         Async.background {
             control = query == nil ? PinController() : PinController(query: query!)
-            }.main { //Return to the main thread
+            
+            Async.main {
                 control!.annotationsFromQuery({ (annotations) -> Void in
                     self.currentMap.mapView.removeAnnotations(self.currentMap.mapView.annotations)
                     self.currentMap.mapView.addAnnotations(annotations)
                 })
+            }
         }
     }
     
@@ -72,13 +75,11 @@ class MapControl: NSObject {
         Async.background {
             let following = PFQuery(className: "Followers")
             following.whereKey("username", equalTo: PFUser.getSafeUsername())
-            let user = following.findObjects()
             
-            if user == nil || (user!).count <= 0 {
-                allQueries = nil
-            } else {
+            do {
+                let user = try following.findObjects()
+                let followers = (user[0] as! PFFollowers).getFollowing()
                 var userQueries = [PFQuery]()
-                let followers = (user![0] as! PFFollowers).getFollowing()
                 
                 for follower in followers {
                     let userQuery = PFQuery(className: "SentData")
@@ -87,9 +88,13 @@ class MapControl: NSObject {
                 }
                 
                 allQueries = userQueries
+            } catch {
+                allQueries = nil
             }
-            }.main {
+            
+            Async.main {
                 completion(queries: allQueries)
+            }
         }
     }
     

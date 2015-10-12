@@ -32,11 +32,11 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
     
     ///MARK: Delegate methods
     func mapViewDidFailLoadingMap(mapView: MKMapView, withError error: NSError) {
-        print("Error loading map")
+        print("Error loading map", terminator: "")
     }
     
     func mapView(mapView: MKMapView, didFailToLocateUserWithError error: NSError) {
-        print("Error finding current location 😰")
+        print("Error finding current location 😰", terminator: "")
     }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
@@ -52,7 +52,11 @@ class MapResponder: NSObject, MKMapViewDelegate, MKAnnotation, UIGestureRecogniz
             let pointAnn = annotation as! PAnnotation
             var returnedImg = UIImage()
             
-            returnedImg = UIImage(data: pointAnn.object.thumbnail.getData()!)!
+            do {
+                returnedImg = try UIImage(data: pointAnn.object.thumbnail.getData())!
+            } catch {
+                returnedImg = UIImage() //Fill with blank image
+            }
             
             let following = followerCache.isFollowing(pointAnn.object.username as String)
             annView.pinColor = following ? .Green : .Red //If user is following, make pin green

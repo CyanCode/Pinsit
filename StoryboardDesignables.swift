@@ -73,16 +73,16 @@ import UIKit
     
     private func blurImage(amount: Int, image: UIImage) -> UIImage {
         let filter = CIFilter(name: "CIGaussianBlur")
-        filter.setDefaults()
+        filter!.setDefaults()
         
         let input = CIImage(image: image)
-        filter.setValue(input, forKey: kCIInputImageKey)
-        filter.setValue(amount, forKey: kCIInputRadiusKey)
+        filter!.setValue(input, forKey: kCIInputImageKey)
+        filter!.setValue(amount, forKey: kCIInputRadiusKey)
         
-        let output = filter.outputImage
+        let output = filter!.outputImage
         let context = CIContext(options: nil)
-        let ref = context.createCGImage(output, fromRect: input.extent())
+        let ref = context.createCGImage(output!, fromRect: input!.extent)
         
-        return UIImage(CGImage: ref)!
+        return UIImage(CGImage: ref)
     }
 }

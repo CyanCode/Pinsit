@@ -98,19 +98,24 @@ class NumberVerification {
         let generation: NSMutableString = "";
         
         for _ in 1...5 {
-            let random = 0 + Int(arc4random_uniform(UInt32(count(alphabet) + 1)))
-            let c = Array(alphabet)[random]
+            let random = 0 + Int(arc4random_uniform(UInt32(alphabet.characters.count + 1)))
+            let c = Array(alphabet.characters)[random]
             generation.appendString(String(c))
         }
         
         let query = PFQuery(className: "Verification")
         query.whereKey("verificationCode", equalTo: generation)
-        let total = query.countObjects()
         
-        if (total > 0) {
-            return generateCode()
-        } else {
-            self.generatedCode = generation as String
+        do {
+            let total = try query.countObjects()
+            
+            if (total > 0) {
+                return generateCode()
+            } else {
+                self.generatedCode = generation as String
+                return generation as String
+            }
+        } catch {
             return generation as String
         }
     }

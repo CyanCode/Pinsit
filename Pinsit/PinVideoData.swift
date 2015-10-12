@@ -38,7 +38,7 @@ class PinVideoData {
     }
     
     func downloadVideo() {
-        let path = File.pulledVideoPath()
+        let path = File.pulledVideoPath().path!
         
         if UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(path) {
             UISaveVideoAtPathToSavedPhotosAlbum(path, nil, nil, nil)
@@ -67,20 +67,24 @@ class PinVideoData {
     }
     
     func isAlreadyLiked(videoId: String) -> Bool {
-        let query = likeQuery.whereKey("videoId", equalTo: videoId)
-        let objects = query.findObjects()
-        
-        if objects == nil || (objects!).count < 1 {
+        do {
+            let query = likeQuery.whereKey("videoId", equalTo: videoId)
+            let objects = try query.findObjects()
+            
+            return objects.count > 0
+        } catch {
             return false
-        } else {
-            return true
         }
     }
     
     private func addLocalLiked(videoId: String) {
+        do {
         let obj = PFObject(className: "Likes")
         obj["videoId"] = videoId
-        obj.pin()
+        try obj.pin()
+        } catch let error {
+            print("Failed to pin object: \(error)")
+        }
     }
     
     ///Checks to see if the passed followers exist in current user's follower list

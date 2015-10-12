@@ -41,13 +41,15 @@ import AVFoundation
         
         for device in AVCaptureDevice.devicesWithMediaType(AVMediaTypeVideo) {
             if device.position == .Back {
-                var error: NSError?
-                let device = AVCaptureDeviceInput(device: device as! AVCaptureDevice, error: &error)
-                if error == nil {
-                    if session!.canAddInput(device){
-                        session!.addInput(device)
+                do {
+                    let dev = try AVCaptureDeviceInput(device: device as! AVCaptureDevice)
+                    
+                    if session!.canAddInput(dev){
+                        session!.addInput(dev)
                         print("Session camera input added successfully")
                     }
+                } catch let error {
+                    print("Could not add camera session: \(error)")
                 }
             }
         }

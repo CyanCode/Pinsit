@@ -8,6 +8,7 @@
 
 import Foundation
 import Parse
+import Async
 
 class VideoCache {
     let className = "PinnedVideos"
@@ -17,19 +18,31 @@ class VideoCache {
         query.whereKey("objectId", equalTo: id)
         query.fromLocalDatastore()
         
-        return (query.findObjects()!).count > 0 ? true : false
+        do {
+            return (try query.findObjects()).count > 0 ? true : false
+        } catch {
+            return false
+        }
     }
     
-    func getPinWithId(id: String) -> PFObject {
+    func getPinWithId(id: String) -> PFObject? {
         let query = PFQuery(className: className)
         query.whereKey("objectId", equalTo: id)
         query.fromLocalDatastore()
         
-        return (query.findObjects()![0] as! PFObject) as PFObject
+        do {
+            return (try query.findObjects()[0]) as PFObject
+        } catch {
+            return nil
+        }
     }
     
     func cachePin(pin: PFObject) {
-        pin.pin()
+        do {
+            try pin.pin()
+        } catch let error {
+            print("Failed to cache pin: \(error)")
+        }
     }
     
     ///Downloads the NSData for the provided NSURL then caches the data
@@ -45,17 +58,17 @@ class VideoCache {
             pin["objectId"] = id
             pin["videoURL"] = file.url!
             
-            var error: NSError?
-            data = file.getData(&error)
-            
-            if error != nil {
-                print("data error: \(error!.localizedDescription)")
-            } else {
+            do {
+                data = try file.getData()
                 pin["videoData"] = PFFile(data: data!)
-                pin.pin()
+                try pin.pin()
+            } catch let error {
+                print("Failed to cache server data: \(error)")
             }
-            }.main {
+            
+            Async.main {
                 completion(data: data)
+            }
         }
     }
 }

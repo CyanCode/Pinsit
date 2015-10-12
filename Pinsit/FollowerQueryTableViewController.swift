@@ -11,8 +11,9 @@ import Parse
 import ParseUI
 import AsyncImageView
 import DZNEmptyDataSet
+import Async
 
-@IBDesignable class FollowerQueryTableViewController: QueryTableViewController, QueryTableViewControllerDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+@IBDesignable class FollowerQueryTableViewController: QueryTableViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     let identifier = "AccountQueryCell"
     var queryType: FollowerQuerySearchType = .Following
     var username = ""
@@ -99,7 +100,7 @@ import DZNEmptyDataSet
         let text = queryType == .Following ? "\(username) isn't following anyone yet!" : "\(username) has no followers yet!  You could change that.."
         
         let attr = NSMutableAttributedString(string: "Sadly, \(username) has no followers yet!", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 16)!])
-        attr.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(text)))
+        attr.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, text.characters.count))
         
         return attr
     }

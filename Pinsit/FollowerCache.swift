@@ -86,7 +86,7 @@ class FollowerCache {
     ///
     ///- parameter user: Username to compare
     ///- returns: true or false depending on result
-    func isFollowing(user: String) -> Bool {   
+    func isFollowing(user: String) -> Bool {
         for follower in self.following {
             if user == follower {
                 return true
@@ -102,10 +102,17 @@ class FollowerCache {
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.fromLocalDatastore()
         
-        let objects = query.findObjects()
-        
-        for obj in objects as! [PFObject] {
-            obj.unpin()
+        do {
+            let objects = try query.findObjects()
+            for obj in objects as [PFObject] {
+                do {
+                    try obj.unpin()
+                } catch let error {
+                    print("Failed to unpin object: \(error)")
+                }
+            }
+        } catch let error {
+            print("Failed to query objects: \(error)")
         }
     }
     
@@ -113,12 +120,12 @@ class FollowerCache {
         let query = PFQuery(className: "Followers")
         query.whereKey("username", equalTo: PFUser.currentUser()!.username!)
         query.fromLocalDatastore()
-        let objects = query.findObjects()
         
-        if objects == nil || (objects!).count <= 0 {
+        do {
+            let objects = try query.findObjects()
+            return objects.count > 0 ? objects[0] as! PFObject : nil
+        } catch {
             return nil
-        } else {
-            return objects![0] as? PFObject
         }
     }
 }

@@ -42,7 +42,7 @@ class FollowerTableViewController: UIViewController, UITableViewDataSource, UITa
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(identifier) as! FollowersCell
         
-        print("row: \(indexPath.row)")
+        print("row: \(indexPath.row)", terminator: "")
         cell.userLabel.text = names[indexPath.row]
         
         if type == .Followers || type == .Search {

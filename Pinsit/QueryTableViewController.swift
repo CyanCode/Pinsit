@@ -76,12 +76,10 @@ class QueryTableViewController: UITableViewController, QueryTableViewControllerD
                  self.objectsDidFailToLoad(error)
             } else {
                 if self.loadFromArrayColumn != nil {
-                    println("Attempting to load from column: \(self.loadFromArrayColumn!)")
-                    
-                    let objs = objects as! [PFObject]
-                    self.columnContent = objs[0][self.loadFromArrayColumn!] as? [AnyObject]
+                    print("Attempting to load from column: \(self.loadFromArrayColumn!)")
+                    self.columnContent = objects![0][self.loadFromArrayColumn!] as? [AnyObject]
                 } else {
-                    self.objects = objects as! [PFObject]
+                    self.objects = objects!
                 }
                 
                 self.objectsDidLoadSuccessfully()
@@ -95,15 +93,15 @@ class QueryTableViewController: UITableViewController, QueryTableViewControllerD
     //MARK: Overriden
     
     func objectsDidFailToLoad(error: NSError?) {
-        println("objects failed to load: \(error?.localizedDescription)")
+        print("objects failed to load: \(error?.localizedDescription)", terminator: "")
     }
     
     func objectsDidLoadSuccessfully() {
-        println("objects loaded successfully")
+        print("objects loaded successfully", terminator: "")
     }
     
     func objectsWillLoad() {
-        println("objects will load")
+        print("objects will load", terminator: "")
     }
     
     func queryForTableView() -> PFQuery {

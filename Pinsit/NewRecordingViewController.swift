@@ -19,7 +19,7 @@ class NewRecordingViewController: UIViewController {
     @IBOutlet var recordingProgress: RecordingProgressView!
     
     @IBOutlet var recordingView: RecordVideoView!
-    @IBOutlet var playbackView: PlaybackRecordingView!
+    var playbackView: PlaybackRecordingView!
     
     var status: RecordingViewStatus = .Inactive {
         didSet {

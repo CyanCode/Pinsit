@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Async
 
 class TimeKeeper {
     var interTime: NSTimer!
@@ -36,7 +37,7 @@ class TimeKeeper {
     @objc func fireUpdate(timer: NSTimer) {
         currentProgress = currentProgress + 0.1
         progress!.setProgress(currentProgress / max, animated: true)
-        print("Time: \(currentProgress / max)")
+        print("Time: \(currentProgress / max)", terminator: "")
         
         if (currentProgress >= max) {
             dispatch_async(dispatch_get_main_queue()) {

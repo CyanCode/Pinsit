@@ -15,7 +15,8 @@ import Parse
     
     //Pinsit
     @IBOutlet var upgradeCell: UITableViewCell!
-
+    @IBOutlet var restorePurchaseCell: UITableViewCell!
+    
     //Verification
     @IBOutlet var resendEmailCell: UITableViewCell!
     @IBOutlet var verifyPhoneCell: UITableViewCell!
@@ -48,6 +49,10 @@ import Parse
         }
     }
     
+    @IBAction func recoverPurchasePressed(sender: AnyObject) {
+        Upgrade().recoverPurchase()
+    }
+    
     @IBAction func resendEmailPressed(sender: AnyObject) {
         manager.emailVerification()
     }
@@ -75,7 +80,7 @@ import Parse
     //MARK: overrides
     
     override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
-        (view as! UITableViewHeaderFooterView).textLabel.textColor = headerTextColor
+        (view as! UITableViewHeaderFooterView).textLabel!.textColor = headerTextColor
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {

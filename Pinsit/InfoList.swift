@@ -9,7 +9,7 @@
 import Foundation
 
 class InfoList {
-    let listLoc = File.documentsPath().stringByAppendingPathComponent("info.plist")
+    let listLoc = File.documentsPath().URLByAppendingPathComponent("info.plist").path!
     let fm = NSFileManager.defaultManager()
     var dictionary: NSDictionary {
         get {

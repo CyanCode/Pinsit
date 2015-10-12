@@ -42,9 +42,12 @@ class VideoManager {
         query.whereKey("objectId", equalTo: object.objectId!)
         query.fromLocalDatastore()
         
-        let objects = query.findObjects()
-        
-        return objects != nil && (objects!).count > 0 ? true : false
+        do {
+            let objects = try query.findObjects()
+            return objects.count > 0
+        } catch {
+            return false
+        }
     }
     
     ///Pull video data from cache, assumes data actually exists
@@ -55,15 +58,23 @@ class VideoManager {
         query.whereKey("objectId", equalTo: object["objectId"] as! String)
         query.fromLocalDatastore()
         
-        let file = query.findObjects()![0]["video"] as! PFFile
-        return file.getData()
+        do {
+            let file = try query.findObjects()[0]["video"] as! PFFile
+            return try file.getData()
+        } catch {
+            return nil
+        }
     }
     
     ///Writes passed NSData to initialized PFObject
     ///
     ///- parameter data: NSData to be written
     func cacheData(data: NSData) {
-        object["video"] = PFFile(data: data)
-        object.pin()
+        do {
+            object["video"] = PFFile(data: data)
+            try object.pin()
+        } catch let error{
+            print("Failed to pin NSData: \(error)")
+        }
     }
 }

@@ -8,6 +8,7 @@
 
 import Foundation
 import AVFoundation
+import Async
 
 class PinVideoManager: NSObject {
     var videoView: UIView!
@@ -30,17 +31,19 @@ class PinVideoManager: NSObject {
         Async.background {
             self.videoData = videoData
             self.player = self.playerFromData(self.videoData)
-            }.main {
+            
+            Async.main {
                 self.layer = AVPlayerLayer(player: self.player)
                 
                 self.layer.videoGravity = AVLayerVideoGravityResizeAspectFill
                 self.layer.frame = self.videoView.bounds
                 self.videoView.layer.insertSublayer(self.layer, atIndex: 1)
-
+                
                 self.player.play()
                 NSNotificationCenter.defaultCenter().addObserver(self, selector: "playerDidFinish:", name: AVPlayerItemDidPlayToEndTimeNotification, object: nil) //AVPlayer recording finished selection
                 
                 completion()
+            }
         }
     }
     
@@ -80,10 +83,9 @@ class PinVideoManager: NSObject {
     
     private func playerFromData(data: NSData) -> AVPlayer {
         let directory = File.pulledVideoPath()
-        data.writeToFile(directory, atomically: true)
+        data.writeToFile(directory.path!, atomically: true)
         
-        let url = NSURL(fileURLWithPath: directory)
-        return AVPlayer(URL: url)
+        return AVPlayer(URL: directory)
     }
     
     func endVideo() {

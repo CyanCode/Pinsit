@@ -11,7 +11,7 @@ import Parse
 
 class AccountDetails {
     let profilePic = PFUser.currentUser()!.username! + ".png"
-    let path = File.documentsPath().stringByAppendingPathComponent("account.plist")
+    let path = File.documentsPath().URLByAppendingPathComponent("account.plist").path!
     var viewController: AccountViewController!
     var user: String!
     
@@ -67,8 +67,8 @@ class AccountDetails {
         }
         karmaQuery.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error == nil && objects!.count > 0 {
-                let count = (objects! as! [PFUser])[0]["karma"] as! NSNumber
-                self.viewController.karmaLabel.text = "\(count) Karma"
+                let count = (objects! as! [PFUser])[0]["karma"] as? NSNumber
+                self.viewController.karmaLabel.text = "\(count != nil ? count! : 0) Karma"
             } else {
                 self.viewController.karmaLabel.text = "0 Karma"
             }
@@ -80,7 +80,7 @@ class AccountDetails {
     let defaultProfile = UIImage(named: "profile.png")!
     func loadProfileImage(completion: (img: UIImage) -> Void) {
         if user == PFUser.currentUser()!.username! {
-            let imgLoc = File.documentsPath().stringByAppendingPathComponent(profilePic)
+            let imgLoc = File.documentsPath().URLByAppendingPathComponent(profilePic).path!
             let img = UIImage(contentsOfFile: imgLoc) == nil ? defaultProfile : UIImage(contentsOfFile: imgLoc)
             
             if (img == nil) {
@@ -90,21 +90,32 @@ class AccountDetails {
             
             return completion(img: img!)
         } else {
-            PFUser.query()?.whereKey("username", equalTo: user).findObjectsInBackgroundWithBlock({ (objects, error) -> Void in
+            let query = PFUser.query()!.whereKey("username", equalTo: user)
+            query.findObjectsInBackgroundWithBlock({ (objs, error) -> Void in
                 if error != nil {
                     self.setImage(self.defaultProfile)
                     completion(img: self.defaultProfile)
                 } else {
-                    let file = objects![0]["profileImage"] as? PFFile
-                    completion(img: file == nil ? self.defaultProfile : UIImage(data: file!.getData()!)!)
+                    let obj = objs![0]
+                    let file = obj["profileImage"] as? PFFile
+                    
+                    if file == nil {
+                        completion(img: self.defaultProfile)
+                    } else {
+                        do {
+                            let data = try file!.getData()
+                            completion(img: UIImage(data: data)!)
+                        } catch let error {
+                            print("Failed to retrieve image data: \(error)")
+                        }
+                    }
                 }
             })
-            
         }
     }
     
     func setImage(img: UIImage) {
-        let imgLoc = File.documentsPath().stringByAppendingPathComponent(profilePic)
+        let imgLoc = File.documentsPath().URLByAppendingPathComponent(profilePic).path!
         UIImagePNGRepresentation(img)!.writeToFile(imgLoc, atomically: true)
     }
     

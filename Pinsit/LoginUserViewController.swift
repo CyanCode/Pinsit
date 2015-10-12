@@ -45,7 +45,7 @@ class LoginUserViewController: UIViewController {
     }
     
     func startLogin() {
-        PFUser.logInWithUsernameInBackground(usernameField.text, password: passwordField.text) { (user, error) -> Void in
+        PFUser.logInWithUsernameInBackground(usernameField.text!, password: passwordField.text!) { (user, error) -> Void in
             self.progress.dismiss()
             
             if error != nil {

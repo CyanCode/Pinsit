@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import Async
 
 class RecordVideoView: UIView, AVCaptureFileOutputRecordingDelegate {
     typealias RecordingSavedHandler = () -> Void
@@ -15,7 +16,7 @@ class RecordVideoView: UIView, AVCaptureFileOutputRecordingDelegate {
     var recording: RecordingSession!
     var preview: AVCaptureVideoPreviewLayer?
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         recording = RecordingSession()
@@ -53,9 +54,9 @@ class RecordVideoView: UIView, AVCaptureFileOutputRecordingDelegate {
     
     func captureOutput(captureOutput: AVCaptureFileOutput!, didFinishRecordingToOutputFileAtURL outputFileURL: NSURL!, fromConnections connections: [AnyObject]!, error: NSError!) {
         if error != nil {
-            print("Recording finished with errors: \(error.localizedDescription)")
+            print("Recording finished with errors: \(error.localizedDescription)", terminator: "")
         } else {
-            print("Recording finished successfully")
+            print("Recording finished successfully", terminator: "")
         }
         
         recordingSaved!()
@@ -84,13 +85,27 @@ class RecordingSession {
                 self.videoDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
                 self.audioDevice = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeAudio)
                 
-                self.videoInput =  AVCaptureDeviceInput(device: self.videoDevice, error: &error)
-                self.audioInput =  AVCaptureDeviceInput(device: self.audioDevice, error: &error)
+                do {
+                    self.videoInput =  try AVCaptureDeviceInput(device: self.videoDevice)
+                } catch let error1 as NSError {
+                    error = error1
+                    self.videoInput = nil
+                } catch {
+                    fatalError()
+                }
+                do {
+                    self.audioInput =  try AVCaptureDeviceInput(device: self.audioDevice)
+                } catch let error1 as NSError {
+                    error = error1
+                    self.audioInput = nil
+                } catch {
+                    fatalError()
+                }
                 self.deviceOutput = AVCaptureMovieFileOutput()
                 
                 if error != nil {
-                    println("Session unable to start.  Printing error description")
-                    println(error!.localizedDescription)
+                    print("Session unable to start.  Printing error description")
+                    print(error!.localizedDescription)
                     
                     startSuccess = false
                 } else {
@@ -104,8 +119,10 @@ class RecordingSession {
                     
                     self.session!.startRunning()
                 }
-                }.main {
+                
+                Async.main {
                     ready(success: startSuccess)
+                }
             }
         } else {
             ready(success: true)
@@ -141,12 +158,17 @@ class RecordingSession {
         
         if videoDevice != nil {
             var error: NSError?
-            videoInput = AVCaptureDeviceInput(device: videoDevice, error: &error)
+            do {
+                videoInput = try AVCaptureDeviceInput(device: videoDevice)
+            } catch let error1 as NSError {
+                error = error1
+                videoInput = nil
+            }
             
             if error == nil {
                 session!.addInput(videoInput)
             } else {
-                println("Could not add capture device: \(error!.localizedDescription)")
+                print("Could not add capture device: \(error!.localizedDescription)")
             }
         }
         
@@ -158,7 +180,11 @@ class RecordingSession {
         
         if (device.hasTorch) {
             var error: NSError?
-            device.lockForConfiguration(&error)
+            do {
+                try device.lockForConfiguration()
+            } catch let error1 as NSError {
+                error = error1
+            }
             
             if error != nil {
                 return
@@ -168,10 +194,14 @@ class RecordingSession {
             device.torchMode = torchOn ? AVCaptureTorchMode.Off : AVCaptureTorchMode.On
             
             if (torchOn == false) {
-                device.setTorchModeOnWithLevel(1.0, error: &error)
+                do {
+                    try device.setTorchModeOnWithLevel(1.0)
+                } catch let error1 as NSError {
+                    error = error1
+                }
                 
                 if error != nil {
-                    println("This device does not support torch")
+                    print("This device does not support torch")
                     return
                 }
             }

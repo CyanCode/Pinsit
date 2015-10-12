@@ -18,7 +18,7 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
     
     var responder: NewRecordingViewController!
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     
@@ -92,7 +92,7 @@ class PostDetailsView: SlideInView, UITextViewDelegate {
                 self.dismissSlide()
                 //self.popup.dismiss(true)
             } else {
-                print("Video post successful")
+                print("Video post successful", terminator: "")
 
                 self.dismissSlide()
                 self.responder.status = .Recording

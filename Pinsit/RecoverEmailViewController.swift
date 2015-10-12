@@ -24,7 +24,7 @@ class RecoverEmailViewController: UIViewController {
         progress.textLabel.text = "Sending Email"
         progress.showInView(self.view)
         
-        PFUser.requestPasswordResetForEmailInBackground(emailField.text, block: { (success, error) -> Void in
+        PFUser.requestPasswordResetForEmailInBackground(emailField.text!, block: { (success, error) -> Void in
             progress.dismiss()
             
             if error != nil {

@@ -23,10 +23,6 @@ class UIVerticalAlignLabel: UILabel {
         }
     }
     
-    required init(coder aDecoder: NSCoder){
-        super.init(coder: aDecoder)
-    }
-    
     override func textRectForBounds(bounds: CGRect, limitedToNumberOfLines: Int) -> CGRect {
         let rect = super.textRectForBounds(bounds, limitedToNumberOfLines: limitedToNumberOfLines)
         

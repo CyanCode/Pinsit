@@ -21,6 +21,7 @@ class MoreManager {
     func enableRequiredCells() {
         if Upgrade().isUpgraded() {
             moreVc.cell(moreVc.upgradeCell, setHidden: true)
+            moreVc.cell(moreVc.restorePurchaseCell, setHidden: true)
         }; if PFUser.currentUser()!["phone"] != nil && PFUser.currentUser()!["phone"] as! String != "" {
             moreVc.cell(moreVc.verifyPhoneCell, setHidden: true)
             moreVc.cell(moreVc.phoneNumberEntryCell, setHidden: true)
@@ -61,8 +62,8 @@ class MoreManager {
             textField.placeholder = "Password"
         }
         controller.addAction(UIAlertAction(title: "Continue", style: .Default, handler: { (action) -> Void in
-            let username = controller.textFields![0] as! UITextField
-            let password = controller.textFields![1]as! UITextField
+            let username = controller.textFields![0] 
+            let password = controller.textFields![1]
             
             DeleteAccount(viewController: self.moreVc).attemptAuthentication(username.text!, password: password.text!, done: { (success) -> Void in if success == true {
                 DeleteAccount(viewController: self.moreVc).beginDeletionInBackground { (success) -> Void in

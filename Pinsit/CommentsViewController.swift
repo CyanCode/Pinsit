@@ -54,9 +54,11 @@ class CommentsViewController: PFQueryTableViewController, DZNEmptyDataSetDelegat
     
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         let maxHeight = CGFloat(2000)
+        let size = CGSizeMake(tableView.frame.size.width, maxHeight)
         let font = UIFont.systemFontOfSize(14.0)
         let text = (objects! as! [PFObject])[indexPath.row]["comment"] as! NSString
-        let height = text.boundingRectWithSize(CGSizeMake(tableView.frame.size.width, maxHeight), options: .UsesLineFragmentOrigin | .UsesFontLeading, attributes: [NSFontAttributeName : font], context: nil).size.height
+        
+        let height = text.boundingRectWithSize(size, options: .UsesLineFragmentOrigin, attributes: [NSFontAttributeName : font], context: nil).size.height
         
         return height >= 64 ? height : 64
     }
@@ -65,7 +67,7 @@ class CommentsViewController: PFQueryTableViewController, DZNEmptyDataSetDelegat
     
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let text = NSMutableAttributedString(string: "This post has no comments", attributes: [NSFontAttributeName : UIFont(name: "Helvetica", size: 15)!])
-        text.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, count(text.string)))
+        text.addAttribute(NSForegroundColorAttributeName, value: UIColor.whiteColor(), range: NSMakeRange(0, text.string.characters.count))
         
         return text
     }
@@ -77,6 +79,6 @@ class CommentsViewController: PFQueryTableViewController, DZNEmptyDataSetDelegat
 
 @IBDesignable class CommentsTableViewCell: PFTableViewCell {
     var username: String!
-    @IBOutlet var profileImage: FollowerImageView!
+    var profileImage: FollowerImageView!
     @IBOutlet var commentLabel: UILabel!
 }

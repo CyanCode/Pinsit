@@ -94,7 +94,7 @@ import QuartzCore
     /**
     Sets default info labels as hidden or showing
     
-    :param: hidden show or hide labels
+    - parameter hidden: show or hide labels
     */
     func setInfoHidden(hidden: Bool) {
         followingLabel.hidden = hidden
@@ -127,7 +127,7 @@ import QuartzCore
     /**
     Profile picture tap gesture
     
-    :param: gesture gesture recognizer
+    - parameter gesture: gesture recognizer
     */
     func profileTapped(gesture: UITapGestureRecognizer) {
         let controller = UIAlertController(title: "Change Profile Picture", message: "", preferredStyle: .ActionSheet)
@@ -146,7 +146,7 @@ import QuartzCore
     /**
     Sets the picture location for the profile
     
-    :param: type image location type
+    - parameter type: image location type
     */
     func profileWithType(type: UIImagePickerControllerSourceType) {
         let picker = UIImagePickerController()
@@ -171,7 +171,7 @@ import QuartzCore
     /**
     Upload a new profile picture to the server then cache
     
-    :param: img image to save
+    - parameter img: image to save
     */
     func uploadNewProfile(img: UIImage!) {
         let file = PFFile(data: UIImagePNGRepresentation(img.resize(CGSizeMake(100, 100)))!)
@@ -199,7 +199,7 @@ import QuartzCore
     /**
     Changes the profile image displayed in the imageView
     
-    :param: editing if editing or not
+    - parameter editing: if editing or not
     */
     func changeProfileImage(editing: Bool) {
         if editing == true {
@@ -266,5 +266,5 @@ class AccountInformationLabel: UILabel {
 /// Query TableViewCell for Account Table View
 class AccountQueryCell: PFTableViewCell {
     @IBOutlet var usernameLabel: UILabel!
-    @IBOutlet var profileImage: FollowerImageView!
+    var profileImage: FollowerImageView!
 }

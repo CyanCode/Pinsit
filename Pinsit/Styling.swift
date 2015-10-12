@@ -45,7 +45,7 @@ class Styling {
     }
     
     func encircleButton(img: UIImage) -> UIButton {
-        var btn = UIButton(frame: CGRectMake(0, 0, 37, 37))
+        let btn = UIButton(frame: CGRectMake(0, 0, 37, 37))
         btn.setImage(img, forState: UIControlState.Normal)
         
         let frameSize = btn.imageView?.frame.size.height

@@ -61,7 +61,11 @@ class PinController {
     ///
     ///- parameter ann: PAnnotation to cache
     func cacheAnnotation(ann: PAnnotation) {
-        ann.object.pin()
+        do {
+        try ann.object.pin()
+        } catch let error {
+            print("Unable to cache annotation: \(error)")
+        }
     }
     
     ///Creates an annotation that has been cached in Parse LocalDatastore
@@ -73,14 +77,20 @@ class PinController {
         query.fromLocalDatastore()
         query.whereKey("id", equalTo: id)
         
-        let objects = query.findObjects()
-        if (objects!).count > 0 {
-            let obj = objects![0] as! PFSentData
+        do {
+            let objects = try query.findObjects()
+            if objects.count < 1 {
+                return nil
+            }
+            
+            let obj = objects[0] as! PFSentData
             let annotation = PAnnotation()
             
             annotation.object = obj
             return annotation
-        } else { return nil }
+        } catch {
+            return nil
+        }
     }
     
     ///Get the default annotations from the map refresh, removing private objects
