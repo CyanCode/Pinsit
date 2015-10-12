@@ -18,6 +18,7 @@ pod 'AsyncImageView'
 pod 'DZNEmptyDataSet'
 pod 'VIMVideoPlayer'
 pod 'INSPullToRefresh'
+pod 'Async', :git => 'https://github.com/duemunk/Async.git'
 
 #Parse Dependencies
 pod 'Parse', '>= 1.8.1'

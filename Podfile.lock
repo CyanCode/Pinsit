@@ -1,32 +1,34 @@
 PODS:
+  - Async (1.3.1)
   - AsyncImageView (1.5.1)
-  - Bolts/Tasks (1.2.1)
-  - DeviceGuru (1.2.0)
+  - Bolts/Tasks (1.2.2)
+  - DeviceGuru (1.2.1)
   - DZNEmptyDataSet (1.7.1)
   - FCCurrentLocationGeocoder (1.1.10):
     - FCIPAddressGeocoder (~> 1.0.0)
   - FCIPAddressGeocoder (1.0.2)
   - HexColors (2.3.0)
-  - INSPullToRefresh (1.0.11)
+  - INSPullToRefresh (1.0.12)
   - INTULocationManager (4.0.0)
-  - IQKeyboardManager (3.3.0)
+  - IQKeyboardManager (3.3.2)
   - JGProgressHUD (1.3)
   - KLCPopup (1.0)
-  - Parse (1.8.2):
-    - Bolts/Tasks (>= 1.2.1)
-  - ParseCrashReporting (1.8.2):
-    - Bolts/Tasks (>= 1.2.1)
-    - Parse (~> 1.8.2)
-  - ParseUI (1.1.5):
+  - Parse (1.8.5):
+    - Bolts/Tasks (>= 1.2.2)
+  - ParseCrashReporting (1.8.5):
+    - Bolts/Tasks (>= 1.2.2)
+    - Parse (~> 1.8.5)
+  - ParseUI (1.1.6):
     - Bolts/Tasks (~> 1.2)
     - Parse (~> 1.8)
   - PPTopMostController (0.0.1)
   - StaticDataTableViewController (2.0.5)
   - TSMessages (0.9.13):
     - HexColors (~> 2.3.0)
-  - VIMVideoPlayer (5.5.5)
+  - VIMVideoPlayer (5.6.0)
 
 DEPENDENCIES:
+  - Async (from `https://github.com/duemunk/Async.git`)
   - AsyncImageView
   - DeviceGuru
   - DZNEmptyDataSet
@@ -45,33 +47,39 @@ DEPENDENCIES:
   - VIMVideoPlayer
 
 EXTERNAL SOURCES:
+  Async:
+    :git: https://github.com/duemunk/Async.git
   TSMessages:
     :git: https://github.com/KrauseFx/TSMessages.git
 
 CHECKOUT OPTIONS:
+  Async:
+    :commit: b3864541c5bbee150d525556891dc7827f563dea
+    :git: https://github.com/duemunk/Async.git
   TSMessages:
     :commit: f7d0e8cece3ca79852e49807812601e2d89f5719
     :git: https://github.com/KrauseFx/TSMessages.git
 
 SPEC CHECKSUMS:
+  Async: 88b7eb5cb6d28771e05f0405d48fa4778e804d34
   AsyncImageView: db9433939160710b34a5c249479e03af2a2121b0
-  Bolts: 7686a5cb204d1ac54cee26f12d9b7622db3f80d1
-  DeviceGuru: 34cf5b30fd99e7e3a4cee4c77c03bc94a4362be4
+  Bolts: 20a2bd788273360cb1e31530dc19b8544eef2544
+  DeviceGuru: d887a4f5dc68002d2a8d1b38ade5e7a6c16cbcae
   DZNEmptyDataSet: 2a398066c2bf5848f7f693fb50954b5064debd12
   FCCurrentLocationGeocoder: e3f2cff7ffbbb09a9bc1603e1743650345927938
   FCIPAddressGeocoder: 2622f052eba06c78a707f8b9d9925a406d96ebbd
   HexColors: 6ad3947c3447a055a3aa8efa859def096351fe5f
-  INSPullToRefresh: fe1792e49a869f90389aa7761ef2a794309fe5aa
+  INSPullToRefresh: 3c3840b1837870d6553f749dab6520e31f551a76
   INTULocationManager: 754f2800415378b7bb2c07be103449e1f6a2cc70
-  IQKeyboardManager: c87b6600cbfca89d1fe6e8052d936e6c20f65375
+  IQKeyboardManager: d863eb0bca424d1f6dad6bdd1f856af52664add8
   JGProgressHUD: a58f62d3afac173d201250c3ba628fe44bd67017
   KLCPopup: 76c5a19227977f1e53d85236f9ef42257c168d98
-  Parse: 188601c6cd91fae55906badd283b513104a3a8c9
-  ParseCrashReporting: 437b722377462faaeba60ffde23af95fcc486c28
-  ParseUI: 2c53621ed028ee793f5ab92a551b099689265525
+  Parse: 17ad8e0677ed682f7f00503860fcda0f4eb74168
+  ParseCrashReporting: d912cb10b7997ef79ac475db30997e64d48c2c98
+  ParseUI: 8a22e448c03f825203d8c379c80523517f68baa3
   PPTopMostController: 4e6f1e5f8c645bdcc74cd837a20f607ff262c048
   StaticDataTableViewController: 7ea8d7bc8c7f0a4e9255a320224462c7346c1d4a
   TSMessages: 6e403b790139636c15ab4f51946537095e03e79c
-  VIMVideoPlayer: bbe4851f05bffded76f0c4da01d8db69bc2b5480
+  VIMVideoPlayer: a8e768f2ab1019564f45690411bc17d35ac932dc
 
 COCOAPODS: 0.38.2
