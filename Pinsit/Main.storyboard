@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E36b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="8NI-SP-eed">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14E36b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="8NI-SP-eed">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -815,8 +816,10 @@
                         <color key="separatorColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CommentsTableViewCell" rowHeight="64" id="PBC-yb-6Vv" customClass="CommentsTableViewCell" customModule="Pinsit" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="22" width="240" height="64"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="PBC-yb-6Vv" id="HVO-sF-1oH">
+                                    <rect key="frame" x="0.0" y="0.0" width="240" height="63"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile.png" translatesAutoresizingMaskIntoConstraints="NO" id="MaO-7j-j0v" customClass="FollowerImageView" customModule="Pinsit" customModuleProvider="target">
@@ -1314,6 +1317,91 @@
                                                     <include reference="6y1-CO-sw7"/>
                                                     <include reference="dvE-ht-ut7"/>
                                                     <include reference="pQ4-Kk-L15"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.1843137255" green="0.22352941179999999" blue="0.30588235289999999" alpha="1" colorSpace="calibratedRGB"/>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="APF-R2-nvJ">
+                                        <rect key="frame" x="0.0" y="50" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="APF-R2-nvJ" id="duR-eV-FJj">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eNS-sb-sdX">
+                                                    <rect key="frame" x="-23" y="-15" width="46" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <state key="normal" title="Recover Purchase">
+                                                        <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="recoverPurchasePressed:" destination="z7p-9X-UKZ" eventType="touchUpInside" id="m39-GP-wuQ"/>
+                                                        <action selector="upgradePressed:" destination="z7p-9X-UKZ" eventType="touchUpInside" id="hO0-ND-Cc1"/>
+                                                    </connections>
+                                                </button>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="appbar.star.png" translatesAutoresizingMaskIntoConstraints="NO" id="Vac-8A-42P" customClass="SettingsImageView" customModule="Pinsit" customModuleProvider="target">
+                                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="27" id="PGw-V0-22W"/>
+                                                        <constraint firstAttribute="width" constant="27" id="gfT-Ke-aMs"/>
+                                                    </constraints>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="color" keyPath="color">
+                                                            <color key="value" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="PGw-V0-22W"/>
+                                                            <exclude reference="gfT-Ke-aMs"/>
+                                                        </mask>
+                                                    </variation>
+                                                    <variation key="widthClass=compact">
+                                                        <mask key="constraints">
+                                                            <include reference="PGw-V0-22W"/>
+                                                            <include reference="gfT-Ke-aMs"/>
+                                                        </mask>
+                                                    </variation>
+                                                </imageView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Vac-8A-42P" firstAttribute="leading" secondItem="duR-eV-FJj" secondAttribute="leadingMargin" id="7AX-uK-dzW"/>
+                                                <constraint firstItem="eNS-sb-sdX" firstAttribute="top" secondItem="duR-eV-FJj" secondAttribute="topMargin" id="f8x-EJ-e2f"/>
+                                                <constraint firstItem="eNS-sb-sdX" firstAttribute="leading" secondItem="Vac-8A-42P" secondAttribute="trailing" constant="8" id="gFU-6F-keX"/>
+                                                <constraint firstItem="eNS-sb-sdX" firstAttribute="trailing" secondItem="duR-eV-FJj" secondAttribute="trailingMargin" id="hWx-Sb-gez"/>
+                                                <constraint firstItem="Vac-8A-42P" firstAttribute="bottom" secondItem="duR-eV-FJj" secondAttribute="bottomMargin" id="mYk-X0-Q88"/>
+                                                <constraint firstItem="eNS-sb-sdX" firstAttribute="bottom" secondItem="duR-eV-FJj" secondAttribute="bottomMargin" id="qCa-rY-VhW"/>
+                                                <constraint firstItem="Vac-8A-42P" firstAttribute="top" secondItem="duR-eV-FJj" secondAttribute="topMargin" id="wUz-Qm-3YF"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="subviews">
+                                                    <exclude reference="eNS-sb-sdX"/>
+                                                    <exclude reference="Vac-8A-42P"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <exclude reference="gFU-6F-keX"/>
+                                                    <exclude reference="hWx-Sb-gez"/>
+                                                    <exclude reference="f8x-EJ-e2f"/>
+                                                    <exclude reference="qCa-rY-VhW"/>
+                                                    <exclude reference="wUz-Qm-3YF"/>
+                                                    <exclude reference="mYk-X0-Q88"/>
+                                                    <exclude reference="7AX-uK-dzW"/>
+                                                </mask>
+                                            </variation>
+                                            <variation key="widthClass=compact">
+                                                <mask key="subviews">
+                                                    <include reference="eNS-sb-sdX"/>
+                                                    <include reference="Vac-8A-42P"/>
+                                                </mask>
+                                                <mask key="constraints">
+                                                    <include reference="gFU-6F-keX"/>
+                                                    <include reference="hWx-Sb-gez"/>
+                                                    <include reference="f8x-EJ-e2f"/>
+                                                    <include reference="qCa-rY-VhW"/>
+                                                    <include reference="wUz-Qm-3YF"/>
+                                                    <include reference="mYk-X0-Q88"/>
+                                                    <include reference="7AX-uK-dzW"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -1887,6 +1975,7 @@
                         <outlet property="receivedCodeCell" destination="GxU-Wk-My2" id="sJX-DK-dC0"/>
                         <outlet property="receivedCodeField" destination="gfA-ol-slU" id="EaY-5L-Ljw"/>
                         <outlet property="resendEmailCell" destination="feH-LQ-gCb" id="4pF-KF-Kkx"/>
+                        <outlet property="restorePurchaseCell" destination="APF-R2-nvJ" id="tda-wQ-8me"/>
                         <outlet property="sendTextCell" destination="Gf1-6b-5Wv" id="suO-RJ-7B8"/>
                         <outlet property="upgradeCell" destination="CPP-lR-awM" id="Hvr-8w-2Vw"/>
                         <outlet property="verifyPhoneCell" destination="IRa-g6-Cs9" id="45S-6M-jmH"/>
@@ -2006,12 +2095,6 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Following" image="following.png" id="T52-qx-5Zy"/>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" id="cUM-Uy-8aR" customClass="SettingsNavigationItem" customModule="Pinsit" customModuleProvider="target">
-                        <nil key="title"/>
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="showsSearch" value="YES"/>
-                        </userDefinedRuntimeAttributes>
-                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -2534,8 +2617,10 @@
                         <inset key="separatorInset" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FollowingTableViewCell" rowHeight="62" id="ub1-Eh-zbQ" customClass="FollowingTableViewCell" customModule="Pinsit" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="22" width="240" height="62"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ub1-Eh-zbQ" id="jLX-lM-M88">
+                                    <rect key="frame" x="0.0" y="0.0" width="240" height="61"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile.png" translatesAutoresizingMaskIntoConstraints="NO" id="ONQ-oa-pJ7" customClass="FollowerImageView" customModule="Pinsit" customModuleProvider="target">
