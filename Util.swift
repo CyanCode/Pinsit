@@ -13,10 +13,25 @@ extension PFQuery {
     func findAndDeleteObjects() {
         self.findObjectsInBackgroundWithBlock { (objects, error) -> Void in
             if error == nil {
-                for obj in objects as! [PFObject] {
-                    obj.delete()
+                for obj in objects! {
+                    do {
+                        try obj.delete()
+                    } catch let error {
+                        print("Failed to delete object: \(error)")
+                    }
                 }
             }
+        }
+    }
+    
+    func countObjects() throws -> Int {
+        var error: NSError?
+        let amt = self.countObjects(&error)
+        
+        if error != nil {
+            throw error!
+        } else {
+            return amt
         }
     }
 }
@@ -47,11 +62,11 @@ extension UIImage {
     func imageWithColor(color: UIColor) -> UIImage {
         UIGraphicsBeginImageContextWithOptions(self.size, false, self.scale)
         color.setFill()
-
+        
         let c = UIGraphicsGetCurrentContext()
         CGContextTranslateCTM(c, 0, size.height)
         CGContextScaleCTM(c, 1, -1)
-        CGContextSetBlendMode(c, kCGBlendModeNormal)
+        CGContextSetBlendMode(c, CGBlendMode.Normal)
         
         let rect = CGRectMake(0, 0, size.width, size.height)
         CGContextClipToMask(c, rect, self.CGImage)

@@ -30,8 +30,12 @@ public class AccountData {
         query.orderByAscending("updatedAt")
         query.cachePolicy = PFCachePolicy.CacheElseNetwork
         
-        let objects = query.findObjects() as! [PFObject]
-        distributeObjectData(objects)
+        do {
+            let objects = try query.findObjects()
+            distributeObjectData(objects)
+        } catch let error {
+            print("Failed to find information objects: \(error)")
+        }
     }
     
     private func distributeObjectData(objects: [PFObject]) {
