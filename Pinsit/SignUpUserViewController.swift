@@ -57,10 +57,10 @@ class SignUpUserViewController: UIViewController {
         let user = username == nil ? "" : username!
         let pass = password == nil ? "" : password!
         
-        if count(user) <= 4 {
+        if user.characters.count <= 4 {
             ErrorReport(viewController: self).presentWithType(.Username)
             return false
-        }; if count(pass) <= 5 {
+        }; if pass.characters.count <= 5 {
             ErrorReport(viewController: self).presentWithType(.Password)
             return false
         }; if user.containsAny([" ", "*", "%", "/", "\\", ":", ";", "\""]) {
